@@ -48,18 +48,9 @@ extern "C"
 #define SX126X_TCXO_WAKEUP_TIME  5  //  Time required for the TCXO to wakeup (milliseconds)
 #define SX126X_SPI_BAUDRATE  (200 * 1000)  //  SPI Frequency (200 kHz)
 
-#ifdef ARCH_RISCV
 //  Timer definition for BL602
 #include "nimble_npl.h"  //  For NimBLE Porting Layer (timer functions)
 typedef struct ble_npl_callout TimerEvent_t;
-
-#else
-//  Timer definition for Linux
-struct ble_npl_event {};
-struct ble_npl_callout {};
-typedef void ble_npl_event_fn(struct ble_npl_event *ev);
-typedef struct ble_npl_callout TimerEvent_t;
-#endif  //  ARCH_RISCV
 
 ///////////////////////////////////////////////////////////////////////////////
 //  BL602 Functions

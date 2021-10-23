@@ -34,7 +34,8 @@ CCFLAGS:= \
 	-Wno-old-style-declaration \
 	-I include \
 	-I npl/linux/include \
-
+	-I npl/linux/include/nimble \
+	
 LDFLAGS:= \
 	-pthread \
 	-lrt \
