@@ -84,9 +84,14 @@ int main(void) {
     //  TODO: Do we need to wait?
     sleep(1);
 
+#define SEND_MESSAGE
+#ifdef SEND_MESSAGE
     //  Send a LoRa message
-    //  send_message();
+    send_message();
+#endif  //  SEND_MESSAGE
 
+//#define RECEIVE_MESSAGE
+#ifdef RECEIVE_MESSAGE
     //  Loop forever receiving LoRa messages
     for (;;) {
         //  Receive a LoRa message
@@ -98,6 +103,7 @@ int main(void) {
         //  Sleep for 1000 milliseconds.
         usleep(1000 * 1000);
     }
+#endif  //  RECEIVE_MESSAGE
 
     //  TODO: Close the SPI Bus
     //  close(spi);
