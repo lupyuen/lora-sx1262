@@ -162,8 +162,9 @@ init_driver
 TODO: SX126xReset
 SX126xIoInit
 TODO: SX126X interrupt init
-TODO: SX126xWakeup
-TODO: SX126xWakeup
+SX126xWakeup
+sx126x_hal_write: command_length=1, data_length=1
+TODO: SX126xWaitOnBusy
 TODO: SX126xWaitOnBusy
 sx126x_hal_write: command_length=1, data_length=1
 TODO: SX126xWaitOnBusy
@@ -301,7 +302,7 @@ TODO: SX126xWaitOnBusy
 sx126x_hal_write: command_length=1, data_length=3
 TODO: SX126xWaitOnBusy
 TODO: TimerStart
-lora-sx1262: src/sx126x-linux.c:424: TimerStart: Assertion `false' failed.
+lora-sx1262: src/sx126x-linux.c:396: TimerStart: Assertion `false' failed.
 Aborted
 ```
 
