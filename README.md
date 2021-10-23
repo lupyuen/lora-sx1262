@@ -12,6 +12,10 @@ The design of the SX1262 Driver is similar to the SX1276 Driver, which is explai
 
 - ["PineCone BL602 RISC-V Board Receives LoRa Packets"](https://lupyuen.github.io/articles/lora2)
 
+__CAUTION: Sending a LoRa Message above 29 bytes will cause message corruption!__
+
+(CH341 SPI seems to have trouble transferring a block of 32 bytes)
+
 Ported from Semtech's Reference Implementation of SX1262 Driver...
 
 https://github.com/Lora-net/LoRaMac-node/tree/master/src/radio/sx126x
@@ -157,7 +161,9 @@ Register 0x0f = 0x00
 Done!
 ```
 
-Send Message (64 bytes):
+Send Message (29 bytes):
+
+__CAUTION: Sending a LoRa Message above 29 bytes will cause message corruption!__
 
 ```text
 init_driver
@@ -358,23 +364,23 @@ spi rx: a2 a2 a2 a2
 TODO: SX126xWaitOnBusy
 RadioSetRxConfig done
 send_message
-RadioSend: size=64
-50 49 4e 47 00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 10 11 12 13 14 15 16 17 18 19 1a 1b 1c 1d 1e 1f 20 21 22 23 24 25 26 27 28 29 2a 2b 2c 2d 2e 2f 30 31 32 33 34 35 36 37 38 39 3a 3b 
+RadioSend: size=29
+50 49 4e 47 00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 10 11 12 13 14 15 16 17 18 
 TODO: SX126xWaitOnBusy
 sx126x_hal_write: command_length=1, data_length=8
 spi tx: 08 02 01 02 01 00 00 00 00 
 spi rx: a2 a2 a2 a2 a2 a2 a2 a2 a2 
 TODO: SX126xWaitOnBusy
-RadioSend: PreambleLength=8, HeaderType=0, PayloadLength=64, CrcMode=1, InvertIQ=0
+RadioSend: PreambleLength=8, HeaderType=0, PayloadLength=29, CrcMode=1, InvertIQ=0
 TODO: SX126xWaitOnBusy
 sx126x_hal_write: command_length=1, data_length=6
-spi tx: 8c 00 08 00 40 01 00 
+spi tx: 8c 00 08 00 1d 01 00 
 spi rx: a2 a2 a2 a2 a2 a2 a2 
 TODO: SX126xWaitOnBusy
 TODO: SX126xWaitOnBusy
-sx126x_hal_write: command_length=2, data_length=64
-spi tx: 0e 00 50 49 4e 47 00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 10 11 12 13 14 15 16 17 18 19 1a 1b 1c 1d 1e 1f 20 21 22 23 24 25 26 27 28 29 2a 2b 2c 2d 2e 2f 30 31 32 33 34 35 36 37 38 39 3a 3b 
-spi rx: a2 a2 a2 a2 a2 a2 a2 a2 a2 3a a1 65 9a 05 00 00 00 00 04 03 01 00 00 00 49 00 01 00 00 00 00 00 07 00 03 00 6c 6f 00 00 08 00 0d 00 e8 03 00 00 05 00 10 00 00 00 00 00 05 00 11 00 00 00 00 00 08 00 
+sx126x_hal_write: command_length=2, data_length=29
+spi tx: 0e 00 50 49 4e 47 00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 10 11 12 13 14 15 16 17 18 
+spi rx: a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 
 TODO: SX126xWaitOnBusy
 TODO: SX126xWaitOnBusy
 sx126x_hal_write: command_length=1, data_length=3
@@ -382,11 +388,11 @@ spi tx: 83 00 00 00
 spi rx: a2 a2 a2 a2 
 TODO: SX126xWaitOnBusy
 TODO: TimerStart
-lora-sx1262: src/sx126x-linux.c:396: TimerStart: Assertion `false' failed.
+lora-sx1262: src/sx126x-linux.c:400: TimerStart: Assertion `false' failed.
 Aborted
 ```
 
-See below for the dmesg Log during transmission. The 64-byte packet seems to be missing from the dmesg Log.
+See below for the dmesg Log during transmission.
 
 # WisBlock Receiver Log
 
@@ -499,50 +505,55 @@ usbcore: registered new interface driver ch341
 usbserial: USB Serial support registered for ch341-uart
 ```
 
-dmesg Log when PineDio USB is transmitting 64-byte LoRa Packet...
+dmesg Log when PineDio USB is transmitting a 29-byte LoRa Packet...
+
+__CAUTION: Sending a LoRa Message above 29 bytes will cause message corruption!__
 
 ```text
-[15384.696677] spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=2, csChange=1, result=2
-[15384.717966] spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=2, csChange=1, result=2
-[15384.739290] spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=2, csChange=1, result=2
-[15384.760905] spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=2, csChange=1, result=2
-[15384.782860] spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=2, csChange=1, result=2
-[15384.804789] spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=3, csChange=1, result=3
-[15384.826593] spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=5, csChange=1, result=5
-[15384.848224] spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=4, csChange=1, result=4
-[15384.870015] spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=5, csChange=1, result=5
-[15384.891890] spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=4, csChange=1, result=4
-[15384.913519] spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=3, csChange=1, result=3
-[15384.935445] spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=9, csChange=1, result=9
-[15384.957219] spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=13, csChange=1, result=13
-[15384.978815] spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=13, csChange=1, result=13
-[15385.000343] spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=3, csChange=1, result=3
-[15385.021814] spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=5, csChange=1, result=5
-[15385.043011] spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=2, csChange=1, result=2
-[15385.064227] spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=2, csChange=1, result=2
-[15385.085395] spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=5, csChange=1, result=5
-[15385.106679] spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=7, csChange=1, result=7
-[15385.127779] spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=5, csChange=1, result=5
-[15385.149036] spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=4, csChange=1, result=4
-[15385.170706] spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=5, csChange=1, result=5
-[15385.192678] spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=4, csChange=1, result=4
-[15385.214065] spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=5, csChange=1, result=5
-[15385.235191] spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=4, csChange=1, result=4
-[15385.256585] spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=3, csChange=1, result=3
-[15385.279016] spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=2, csChange=1, result=2
-[15385.300703] spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=2, csChange=1, result=2
-[15385.322406] spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=2, csChange=1, result=2
-[15385.343993] spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=5, csChange=1, result=5
-[15385.365271] spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=7, csChange=1, result=7
-[15385.387183] spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=2, csChange=1, result=2
-[15385.409863] spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=5, csChange=1, result=5
-[15385.431570] spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=4, csChange=1, result=4
-[15386.453520] spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=9, csChange=1, result=9
-[15386.474811] spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=7, csChange=1, result=7
-[15386.517101] spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=4, csChange=1, result=4
+audit: type=1105 audit(1634994194.295:1270): pid=72110 uid=1000 auid=1000 ses=4 subj==unconfined msg='op=PAM:session_open grantors=pam_limits,pam_unix,pam_permit acct="root" exe="/usr/bin/sudo" hostname=? addr=? terminal=/dev/pts/3 res=success'
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=2, csChange=1, result=2
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=2, csChange=1, result=2
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=2, csChange=1, result=2
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=2, csChange=1, result=2
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=2, csChange=1, result=2
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=3, csChange=1, result=3
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=5, csChange=1, result=5
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=4, csChange=1, result=4
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=5, csChange=1, result=5
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=4, csChange=1, result=4
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=3, csChange=1, result=3
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=9, csChange=1, result=9
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=13, csChange=1, result=13
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=13, csChange=1, result=13
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=3, csChange=1, result=3
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=5, csChange=1, result=5
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=2, csChange=1, result=2
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=2, csChange=1, result=2
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=5, csChange=1, result=5
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=7, csChange=1, result=7
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=5, csChange=1, result=5
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=4, csChange=1, result=4
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=5, csChange=1, result=5
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=4, csChange=1, result=4
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=5, csChange=1, result=5
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=4, csChange=1, result=4
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=3, csChange=1, result=3
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=2, csChange=1, result=2
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=2, csChange=1, result=2
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=2, csChange=1, result=2
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=5, csChange=1, result=5
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=7, csChange=1, result=7
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=2, csChange=1, result=2
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=5, csChange=1, result=5
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=4, csChange=1, result=4
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=9, csChange=1, result=9
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=7, csChange=1, result=7
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=31, csChange=1, result=31
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=4, csChange=1, result=4
+audit: type=1701 audit(1634994203.075:1271): auid=1000 uid=0 gid=0 ses=4 subj==unconfined pid=72111 comm="lora-sx1262" exe="/home/luppy/lora-sx1262/lora-sx1262" sig=6 res=1
 ```
 
-Note that the 64-byte packet doesn't appear in the dmesg Log.
+Note that if we try to transmit a 64-byte packet, it won't appear in the dmesg Log.
 
 # Connect BL602 to SX1262
 

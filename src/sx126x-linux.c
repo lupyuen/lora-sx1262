@@ -170,7 +170,11 @@ void SX126xReset(void)
 void SX126xWaitOnBusy( void )
 {
     printf("TODO: SX126xWaitOnBusy\r\n");
-    usleep(10 * 1000); ////
+
+    //  TODO: Fix the GPIO check for busy state.
+    //  Meanwhile we sleep 100 milliseconds.
+    //  10 milliseconds is probably sufficient, but we want to be safe.
+    usleep(100 * 1000);
 
 #ifdef TODO
     while( bl_gpio_input_get_value( SX126X_BUSY_PIN ) == 1 );
@@ -661,6 +665,7 @@ static int init_spi(void) {
 static int transfer_spi(const uint8_t *tx_buf, uint8_t *rx_buf, uint16_t len) {
     assert(spi > 0);
     assert(len > 0);
+    assert(len <= 31);  //  CAUTION: CH341 SPI doesn't seem to support 32-byte SPI transfers 
 
     //  Prepare SPI Transfer
     struct spi_ioc_transfer spi_trans;
