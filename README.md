@@ -164,125 +164,195 @@ SX126xIoInit
 TODO: SX126X interrupt init
 SX126xWakeup
 sx126x_hal_write: command_length=1, data_length=1
+spi tx: c0 00 
+spi rx: ac 2c 
 TODO: SX126xWaitOnBusy
 TODO: SX126xWaitOnBusy
 sx126x_hal_write: command_length=1, data_length=1
+spi tx: 80 00 
+spi rx: ac ac 
 TODO: SX126xWaitOnBusy
 TODO: SX126xWaitOnBusy
 sx126x_hal_write: command_length=1, data_length=1
+spi tx: 9d 01 
+spi rx: a2 a2 
 TODO: SX126xWaitOnBusy
 TODO: SX126xWaitOnBusy
 sx126x_hal_write: command_length=1, data_length=1
+spi tx: 80 00 
+spi rx: a2 a2 
 TODO: SX126xWaitOnBusy
 TODO: SX126xWaitOnBusy
 sx126x_hal_write: command_length=1, data_length=1
+spi tx: 96 01 
+spi rx: a2 a2 
 TODO: SX126xWaitOnBusy
 TODO: SX126xWaitOnBusy
 sx126x_hal_write: command_length=1, data_length=2
+spi tx: 8f 00 00 
+spi rx: a2 a2 a2 
 TODO: SX126xWaitOnBusy
 SX126xSetTxParams: power=22, rampTime=7
 SX126xGetDeviceId: SX1262
 TODO: SX126xWaitOnBusy
 sx126x_hal_read: command_length=4, data_length=1
+spi tx: 1d 08 d8 00 00 
+spi rx: a2 a2 a2 a2 fe 
 TODO: SX126xWaitOnBusy
 TODO: SX126xWaitOnBusy
 sx126x_hal_write: command_length=3, data_length=1
+spi tx: 0d 08 d8 fe 
+spi rx: a2 a2 a2 a2 
 TODO: SX126xWaitOnBusy
 SX126xSetPaConfig: paDutyCycle=4, hpMax=7, deviceSel=0, paLut=1 
 TODO: SX126xWaitOnBusy
 sx126x_hal_write: command_length=1, data_length=4
+spi tx: 95 04 07 00 01 
+spi rx: a2 a2 a2 a2 a2 
 TODO: SX126xWaitOnBusy
 TODO: SX126xWaitOnBusy
 sx126x_hal_write: command_length=3, data_length=1
+spi tx: 0d 08 e7 38 
+spi rx: a2 a2 a2 a2 
 TODO: SX126xWaitOnBusy
 TODO: SX126xWaitOnBusy
 sx126x_hal_write: command_length=1, data_length=2
+spi tx: 8e 16 07 
+spi rx: a2 a2 a2 
 TODO: SX126xWaitOnBusy
 TODO: SX126xWaitOnBusy
 sx126x_hal_write: command_length=1, data_length=8
+spi tx: 08 ff ff ff ff 00 00 00 00 
+spi rx: a2 a2 a2 a2 a2 a2 a2 a2 a2 
 TODO: SX126xWaitOnBusy
 TODO: SX126xWaitOnBusy
 sx126x_hal_read: command_length=4, data_length=9
+spi tx: 1d 02 9f 00 00 00 00 00 00 00 00 00 00 
+spi rx: a2 a2 a2 a2 02 08 ac 08 89 3a a1 65 9a 
 TODO: SX126xWaitOnBusy
 TODO: SX126xWaitOnBusy
 sx126x_hal_read: command_length=4, data_length=9
+spi tx: 1d 02 9f 00 00 00 00 00 00 00 00 00 00 
+spi rx: a2 a2 a2 a2 02 08 ac 08 89 3a a1 65 9a 
 TODO: SX126xWaitOnBusy
 TODO: TimerInit
 TODO: TimerInit
 RadioSetChannel: freq=923000000
 TODO: SX126xWaitOnBusy
 sx126x_hal_write: command_length=1, data_length=2
+spi tx: 98 e1 e9 
+spi rx: a2 a2 a2 
 TODO: SX126xWaitOnBusy
 TODO: SX126xWaitOnBusy
 sx126x_hal_write: command_length=1, data_length=4
+spi tx: 86 39 b0 00 00 
+spi rx: a2 a2 a2 a2 a2 
 TODO: SX126xWaitOnBusy
 RadioSetTxConfig: modem=1, power=14, fdev=0, bandwidth=0, datarate=7, coderate=1, preambleLen=8, fixLen=0, crcOn=1, freqHopOn=0, hopPeriod=0, iqInverted=0, timeout=3000
 RadioSetTxConfig: SpreadingFactor=7, Bandwidth=4, CodingRate=1, LowDatarateOptimize=0, PreambleLength=8, HeaderType=0, PayloadLength=255, CrcMode=1, InvertIQ=0
 RadioStandby
 TODO: SX126xWaitOnBusy
 sx126x_hal_write: command_length=1, data_length=1
+spi tx: 80 00 
+spi rx: a2 a2 
 TODO: SX126xWaitOnBusy
 RadioSetModem
 TODO: SX126xWaitOnBusy
 sx126x_hal_write: command_length=1, data_length=1
+spi tx: 8a 01 
+spi rx: a2 a2 
 TODO: SX126xWaitOnBusy
 TODO: SX126xWaitOnBusy
 sx126x_hal_write: command_length=1, data_length=4
+spi tx: 8b 07 04 01 00 
+spi rx: a2 a2 a2 a2 a2 
 TODO: SX126xWaitOnBusy
 TODO: SX126xWaitOnBusy
 sx126x_hal_write: command_length=1, data_length=6
+spi tx: 8c 00 08 00 ff 01 00 
+spi rx: a2 a2 a2 a2 a2 a2 a2 
 TODO: SX126xWaitOnBusy
 TODO: SX126xWaitOnBusy
 sx126x_hal_read: command_length=4, data_length=1
+spi tx: 1d 08 89 00 00 
+spi rx: a2 a2 a2 a2 04 
 TODO: SX126xWaitOnBusy
 TODO: SX126xWaitOnBusy
 sx126x_hal_write: command_length=3, data_length=1
+spi tx: 0d 08 89 04 
+spi rx: a2 a2 a2 a2 
 TODO: SX126xWaitOnBusy
 SX126xSetRfTxPower
 SX126xSetTxParams: power=14, rampTime=7
 SX126xGetDeviceId: SX1262
 TODO: SX126xWaitOnBusy
 sx126x_hal_read: command_length=4, data_length=1
+spi tx: 1d 08 d8 00 00 
+spi rx: a2 a2 a2 a2 fe 
 TODO: SX126xWaitOnBusy
 TODO: SX126xWaitOnBusy
 sx126x_hal_write: command_length=3, data_length=1
+spi tx: 0d 08 d8 fe 
+spi rx: a2 a2 a2 a2 
 TODO: SX126xWaitOnBusy
 SX126xSetPaConfig: paDutyCycle=4, hpMax=7, deviceSel=0, paLut=1 
 TODO: SX126xWaitOnBusy
 sx126x_hal_write: command_length=1, data_length=4
+spi tx: 95 04 07 00 01 
+spi rx: a2 a2 a2 a2 a2 
 TODO: SX126xWaitOnBusy
 TODO: SX126xWaitOnBusy
 sx126x_hal_write: command_length=3, data_length=1
+spi tx: 0d 08 e7 38 
+spi rx: a2 a2 a2 a2 
 TODO: SX126xWaitOnBusy
 TODO: SX126xWaitOnBusy
 sx126x_hal_write: command_length=1, data_length=2
+spi tx: 8e 0e 07 
+spi rx: a2 a2 a2 
 TODO: SX126xWaitOnBusy
 RadioSetRxConfig
 TODO: SX126xWaitOnBusy
 sx126x_hal_write: command_length=1, data_length=1
+spi tx: 9f 00 
+spi rx: a2 a2 
 TODO: SX126xWaitOnBusy
 RadioStandby
 TODO: SX126xWaitOnBusy
 sx126x_hal_write: command_length=1, data_length=1
+spi tx: 80 00 
+spi rx: a2 a2 
 TODO: SX126xWaitOnBusy
 RadioSetModem
 TODO: SX126xWaitOnBusy
 sx126x_hal_write: command_length=1, data_length=1
+spi tx: 8a 01 
+spi rx: a2 a2 
 TODO: SX126xWaitOnBusy
 TODO: SX126xWaitOnBusy
 sx126x_hal_write: command_length=1, data_length=4
+spi tx: 8b 07 04 01 00 
+spi rx: a2 a2 a2 a2 a2 
 TODO: SX126xWaitOnBusy
 TODO: SX126xWaitOnBusy
 sx126x_hal_write: command_length=1, data_length=6
+spi tx: 8c 00 08 00 ff 01 00 
+spi rx: a2 a2 a2 a2 a2 a2 a2 
 TODO: SX126xWaitOnBusy
 TODO: SX126xWaitOnBusy
 sx126x_hal_write: command_length=1, data_length=1
+spi tx: a0 00 
+spi rx: a2 a2 
 TODO: SX126xWaitOnBusy
 TODO: SX126xWaitOnBusy
 sx126x_hal_read: command_length=4, data_length=1
+spi tx: 1d 07 36 00 00 
+spi rx: a2 a2 a2 a2 0d 
 TODO: SX126xWaitOnBusy
 TODO: SX126xWaitOnBusy
 sx126x_hal_write: command_length=3, data_length=1
+spi tx: 0d 07 36 0d 
+spi rx: a2 a2 a2 a2 
 TODO: SX126xWaitOnBusy
 RadioSetRxConfig done
 send_message
@@ -290,16 +360,24 @@ RadioSend: size=64
 50 49 4e 47 00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 10 11 12 13 14 15 16 17 18 19 1a 1b 1c 1d 1e 1f 20 21 22 23 24 25 26 27 28 29 2a 2b 2c 2d 2e 2f 30 31 32 33 34 35 36 37 38 39 3a 3b 
 TODO: SX126xWaitOnBusy
 sx126x_hal_write: command_length=1, data_length=8
+spi tx: 08 02 01 02 01 00 00 00 00 
+spi rx: a2 a2 a2 a2 a2 a2 a2 a2 a2 
 TODO: SX126xWaitOnBusy
 RadioSend: PreambleLength=8, HeaderType=0, PayloadLength=64, CrcMode=1, InvertIQ=0
 TODO: SX126xWaitOnBusy
 sx126x_hal_write: command_length=1, data_length=6
+spi tx: 8c 00 08 00 40 01 00 
+spi rx: a2 a2 a2 a2 a2 a2 a2 
 TODO: SX126xWaitOnBusy
 TODO: SX126xWaitOnBusy
 sx126x_hal_write: command_length=2, data_length=64
+spi tx: 0e 00 50 49 4e 47 00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 10 11 12 13 14 15 16 17 18 19 1a 1b 1c 1d 1e 1f 20 21 22 23 24 25 26 27 28 29 2a 2b 2c 2d 2e 2f 30 31 32 33 34 35 36 37 38 39 3a 3b 
+spi rx: a2 a2 a2 a2 a2 a2 a2 a2 a2 3a a1 65 9a 05 00 00 00 00 04 03 01 00 00 00 49 00 01 00 00 00 00 00 07 00 03 00 6c 6f 00 00 08 00 0d 00 e8 03 00 00 05 00 10 00 00 00 00 00 05 00 11 00 00 00 00 00 08 00 
 TODO: SX126xWaitOnBusy
 TODO: SX126xWaitOnBusy
 sx126x_hal_write: command_length=1, data_length=3
+spi tx: 83 00 00 00 
+spi rx: a2 a2 a2 a2 
 TODO: SX126xWaitOnBusy
 TODO: TimerStart
 lora-sx1262: src/sx126x-linux.c:396: TimerStart: Assertion `false' failed.
