@@ -20,7 +20,7 @@
 #include <errno.h>
 #include <pthread.h>
 
-#include "os/os.h"
+////#include "os/os.h"
 #include "nimble/nimble_npl.h"
 
 ble_npl_error_t

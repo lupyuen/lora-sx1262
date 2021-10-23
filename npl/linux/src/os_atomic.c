@@ -22,7 +22,7 @@
 
 #include "nimble/nimble_npl.h"
 
-static pthread_mutex_t s_mutex = PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP;
+static pthread_mutex_t s_mutex = PTHREAD_MUTEX_INITIALIZER; ////PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP;
 
 uint32_t ble_npl_hw_enter_critical(void)
 {

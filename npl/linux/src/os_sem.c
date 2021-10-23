@@ -21,7 +21,7 @@
 #include <errno.h>
 #include <semaphore.h>
 
-#include "os/os.h"
+////#include "os/os.h"
 #include "nimble/nimble_npl.h"
 
 ble_npl_error_t

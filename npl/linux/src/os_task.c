@@ -17,8 +17,12 @@
  * under the License.
  */
 
-#include "os/os.h"
+////#include "os/os.h"
+#define _GNU_SOURCE ////
+#include <pthread.h> ////
 #include "nimble/nimble_npl.h"
+
+#define OS_INVALID_PARM -1 ////
 
 #ifdef __cplusplus
 extern "C" {
