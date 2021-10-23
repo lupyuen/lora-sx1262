@@ -315,19 +315,6 @@ uint8_t SX126xGetDeviceId( void )
     //  For SX1261
     //  printf("SX126xGetDeviceId: SX1261\r\n");
     //  return SX1261;
-
-#ifdef NOTUSED
-    if( bl_gpio_input_get_value( SX126X_DEVICE_SEL_PIN ) == 1 )
-    {
-        printf("SX126xGetDeviceId: SX1261\r\n");
-        return SX1261;
-    }
-    else
-    {
-        printf("SX126xGetDeviceId: SX1262\r\n");
-        return SX1262;
-    }
-#endif  //  NOTUSED
 }
 
 void SX126xAntSwOn( void )
