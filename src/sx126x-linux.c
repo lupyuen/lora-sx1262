@@ -1,4 +1,4 @@
-//  Linux-Specific Functions
+//  SX1262 Board Functions for Linux
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -170,6 +170,7 @@ void SX126xReset(void)
 void SX126xWaitOnBusy( void )
 {
     printf("TODO: SX126xWaitOnBusy\r\n");
+    usleep(10 * 1000); ////
 
 #ifdef TODO
     while( bl_gpio_input_get_value( SX126X_BUSY_PIN ) == 1 );
