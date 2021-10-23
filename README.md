@@ -1,5 +1,7 @@
 # LoRa Driver for Semtech SX1262 on Linux (PineDio USB Adapter) and BL602 (PineDio Stack BL604)
 
+[(Follow the updates on Twitter)](https://twitter.com/MisterTechBlog/status/1451548895461326858)
+
 Read the article...
 
 - ["PineCone BL602 Talks LoRaWAN"](https://lupyuen.github.io/articles/lorawan)
@@ -386,7 +388,7 @@ Aborted
 
 # WisBlock Receiver Log
 
-When we run this LoRa Receiver on WisBlock...
+When we run this LoRa Receiver on RAKwireless WisBlock...
 
 https://github.com/lupyuen/wisblock-lora-receiver
 
@@ -404,6 +406,10 @@ OnRxDone: Timestamp=46, RssiValue=-41 dBm, SnrValue=13, Data=5A 2A 19 46 E2 A9 7
 
 OnRxDone: Timestamp=52, RssiValue=-42 dBm, SnrValue=12, Data=5A 2A 19 46 E2 A9 79 C4 B5 23 91 65 F2 66 39 57 FC BD F0 21 3A 2E 74 3C E2 0C 70 09 7D 0D D4 EC 62 D2 10 BF E3 05 91 8B 36 29 B2 65 61 B2 5D 39 B4 F2 3C 45 F7 4F 26 8B 54 B3 2C C7 37 62 30 3E 
 ```
+
+When we run the [`sdk_app_lora`](https://github.com/lupyuen/bl_iot_sdk/tree/tsen/customer_app/sdk_app_lora) firmware on PineDio Stack BL604, WisBlock receives the messages OK.
+
+Which is really strange because PineDio USB and PineDio Stack are running the same SX1262 Driver Code! 🤔
 
 # PineDio USB dmesg Log
 
