@@ -68,6 +68,8 @@ See https://wiki.pine64.org/wiki/JF%27s_note_on_PineDio_devices#RAW_LoRa_communi
 
 # PineDio USB Output Log
 
+Read Registers:
+
 ```text
 SX126xIoInit
 TODO: SX126xWakeup
@@ -151,6 +153,156 @@ sx126x_hal_read: command_length=4, data_length=1
 TODO: SX126xWaitOnBusy
 Register 0x0f = 0x00
 Done!
+```
+
+Send Message:
+
+```text
+init_driver
+TODO: SX126xReset
+SX126xIoInit
+TODO: SX126X interrupt init
+TODO: SX126xWakeup
+TODO: SX126xWakeup
+TODO: SX126xWaitOnBusy
+sx126x_hal_write: command_length=1, data_length=1
+TODO: SX126xWaitOnBusy
+TODO: SX126xWaitOnBusy
+sx126x_hal_write: command_length=1, data_length=1
+TODO: SX126xWaitOnBusy
+TODO: SX126xWaitOnBusy
+sx126x_hal_write: command_length=1, data_length=1
+TODO: SX126xWaitOnBusy
+TODO: SX126xWaitOnBusy
+sx126x_hal_write: command_length=1, data_length=1
+TODO: SX126xWaitOnBusy
+TODO: SX126xWaitOnBusy
+sx126x_hal_write: command_length=1, data_length=2
+TODO: SX126xWaitOnBusy
+SX126xSetTxParams: power=22, rampTime=7
+SX126xGetDeviceId: SX1262
+TODO: SX126xWaitOnBusy
+sx126x_hal_read: command_length=4, data_length=1
+TODO: SX126xWaitOnBusy
+TODO: SX126xWaitOnBusy
+sx126x_hal_write: command_length=3, data_length=1
+TODO: SX126xWaitOnBusy
+SX126xSetPaConfig: paDutyCycle=4, hpMax=7, deviceSel=0, paLut=1 
+TODO: SX126xWaitOnBusy
+sx126x_hal_write: command_length=1, data_length=4
+TODO: SX126xWaitOnBusy
+TODO: SX126xWaitOnBusy
+sx126x_hal_write: command_length=3, data_length=1
+TODO: SX126xWaitOnBusy
+TODO: SX126xWaitOnBusy
+sx126x_hal_write: command_length=1, data_length=2
+TODO: SX126xWaitOnBusy
+TODO: SX126xWaitOnBusy
+sx126x_hal_write: command_length=1, data_length=8
+TODO: SX126xWaitOnBusy
+TODO: SX126xWaitOnBusy
+sx126x_hal_read: command_length=4, data_length=9
+TODO: SX126xWaitOnBusy
+TODO: SX126xWaitOnBusy
+sx126x_hal_read: command_length=4, data_length=9
+TODO: SX126xWaitOnBusy
+TODO: TimerInit
+TODO: TimerInit
+RadioSetChannel: freq=923000000
+TODO: SX126xWaitOnBusy
+sx126x_hal_write: command_length=1, data_length=2
+TODO: SX126xWaitOnBusy
+TODO: SX126xWaitOnBusy
+sx126x_hal_write: command_length=1, data_length=4
+TODO: SX126xWaitOnBusy
+RadioSetTxConfig: modem=1, power=14, fdev=0, bandwidth=0, datarate=7, coderate=1, preambleLen=8, fixLen=0, crcOn=1, freqHopOn=0, hopPeriod=0, iqInverted=0, timeout=3000
+RadioSetTxConfig: SpreadingFactor=7, Bandwidth=4, CodingRate=1, LowDatarateOptimize=0, PreambleLength=8, HeaderType=0, PayloadLength=255, CrcMode=1, InvertIQ=0
+RadioStandby
+TODO: SX126xWaitOnBusy
+sx126x_hal_write: command_length=1, data_length=1
+TODO: SX126xWaitOnBusy
+RadioSetModem
+TODO: SX126xWaitOnBusy
+sx126x_hal_write: command_length=1, data_length=1
+TODO: SX126xWaitOnBusy
+TODO: SX126xWaitOnBusy
+sx126x_hal_write: command_length=1, data_length=4
+TODO: SX126xWaitOnBusy
+TODO: SX126xWaitOnBusy
+sx126x_hal_write: command_length=1, data_length=6
+TODO: SX126xWaitOnBusy
+TODO: SX126xWaitOnBusy
+sx126x_hal_read: command_length=4, data_length=1
+TODO: SX126xWaitOnBusy
+TODO: SX126xWaitOnBusy
+sx126x_hal_write: command_length=3, data_length=1
+TODO: SX126xWaitOnBusy
+SX126xSetRfTxPower
+SX126xSetTxParams: power=14, rampTime=7
+SX126xGetDeviceId: SX1262
+TODO: SX126xWaitOnBusy
+sx126x_hal_read: command_length=4, data_length=1
+TODO: SX126xWaitOnBusy
+TODO: SX126xWaitOnBusy
+sx126x_hal_write: command_length=3, data_length=1
+TODO: SX126xWaitOnBusy
+SX126xSetPaConfig: paDutyCycle=4, hpMax=7, deviceSel=0, paLut=1 
+TODO: SX126xWaitOnBusy
+sx126x_hal_write: command_length=1, data_length=4
+TODO: SX126xWaitOnBusy
+TODO: SX126xWaitOnBusy
+sx126x_hal_write: command_length=3, data_length=1
+TODO: SX126xWaitOnBusy
+TODO: SX126xWaitOnBusy
+sx126x_hal_write: command_length=1, data_length=2
+TODO: SX126xWaitOnBusy
+RadioSetRxConfig
+TODO: SX126xWaitOnBusy
+sx126x_hal_write: command_length=1, data_length=1
+TODO: SX126xWaitOnBusy
+RadioStandby
+TODO: SX126xWaitOnBusy
+sx126x_hal_write: command_length=1, data_length=1
+TODO: SX126xWaitOnBusy
+RadioSetModem
+TODO: SX126xWaitOnBusy
+sx126x_hal_write: command_length=1, data_length=1
+TODO: SX126xWaitOnBusy
+TODO: SX126xWaitOnBusy
+sx126x_hal_write: command_length=1, data_length=4
+TODO: SX126xWaitOnBusy
+TODO: SX126xWaitOnBusy
+sx126x_hal_write: command_length=1, data_length=6
+TODO: SX126xWaitOnBusy
+TODO: SX126xWaitOnBusy
+sx126x_hal_write: command_length=1, data_length=1
+TODO: SX126xWaitOnBusy
+TODO: SX126xWaitOnBusy
+sx126x_hal_read: command_length=4, data_length=1
+TODO: SX126xWaitOnBusy
+TODO: SX126xWaitOnBusy
+sx126x_hal_write: command_length=3, data_length=1
+TODO: SX126xWaitOnBusy
+RadioSetRxConfig done
+send_message
+RadioSend: size=64
+50 49 4e 47 00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 10 11 12 13 14 15 16 17 18 19 1a 1b 1c 1d 1e 1f 20 21 22 23 24 25 26 27 28 29 2a 2b 2c 2d 2e 2f 30 31 32 33 34 35 36 37 38 39 3a 3b 
+TODO: SX126xWaitOnBusy
+sx126x_hal_write: command_length=1, data_length=8
+TODO: SX126xWaitOnBusy
+RadioSend: PreambleLength=8, HeaderType=0, PayloadLength=64, CrcMode=1, InvertIQ=0
+TODO: SX126xWaitOnBusy
+sx126x_hal_write: command_length=1, data_length=6
+TODO: SX126xWaitOnBusy
+TODO: SX126xWaitOnBusy
+sx126x_hal_write: command_length=2, data_length=64
+TODO: SX126xWaitOnBusy
+TODO: SX126xWaitOnBusy
+sx126x_hal_write: command_length=1, data_length=3
+TODO: SX126xWaitOnBusy
+TODO: TimerStart
+lora-sx1262: src/sx126x-linux.c:424: TimerStart: Assertion `false' failed.
+Aborted
 ```
 
 # PineDio USB dmesg Log
