@@ -1,18 +1,18 @@
-# BL602 LoRa Driver for Semtech SX1262 / HopeRF RFM90 (Pine64 RFM90 LoRa Module)
+# LoRa Driver for Semtech SX1262 on Linux (PineDio USB Adapter) and BL602 (PineDio Stack BL604)
 
-Ported from Semtech's Reference Implementation of SX1262 Driver...
+Read the article...
 
-https://github.com/Lora-net/LoRaMac-node/tree/master/src/radio/sx126x
-
-The porting of the driver to BL602 is explained in this Twitter Thread...
-
-https://twitter.com/MisterTechBlog/status/1381870711124369413
+- ["PineCone BL602 Talks LoRaWAN"](https://lupyuen.github.io/articles/lorawan)
 
 The design of the SX1262 Driver is similar to the SX1276 Driver, which is explained in these articles...
 
 - ["Connect PineCone BL602 to LoRa Transceiver"](https://lupyuen.github.io/articles/lora)
 
 - ["PineCone BL602 RISC-V Board Receives LoRa Packets"](https://lupyuen.github.io/articles/lora2)
+
+Ported from Semtech's Reference Implementation of SX1262 Driver...
+
+https://github.com/Lora-net/LoRaMac-node/tree/master/src/radio/sx126x
 
 # Connect BL602 to SX1262
 
@@ -41,7 +41,7 @@ From [`include/sx126x-board.h`](include/sx126x-board.h):
 
 To transmit and receive LoRa packets with the driver, run the `sdk_app_lora` BL602 Demo Firmware...
 
-- [`sdk_app_lora`: BL602 Demo Firmware for LoRa SX1262 / SX1276 ](../../../customer_app/sdk_app_lora)
+- [`sdk_app_lora`: BL602 Demo Firmware for LoRa SX1262 / SX1276 ](https://github.com/lupyuen/bl_iot_sdk/tree/master/customer_app/sdk_app_lora)
 
 Here's a sample log...
 
