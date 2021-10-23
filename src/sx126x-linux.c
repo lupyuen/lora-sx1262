@@ -374,17 +374,14 @@ void TimerInit(
 void TimerStop(
     struct ble_npl_callout *timer)  //  Pointer to timer to stop. Cannot be NULL.
 {
-    puts("TODO: TimerStop");
+    puts("TimerStop");
     assert(timer != NULL);
 
-    assert(false);
-#ifdef TODO
     //  If Callout Timer is still running...
     if (ble_npl_callout_is_active(timer)) {
         //  Stop the Callout Timer
         ble_npl_callout_stop(timer);
     }
-#endif  //  TODO
 }
 
 /// Sets a timer that will expire ‘millisecs’ milliseconds from the current time.
@@ -392,11 +389,9 @@ void TimerStart(
     struct ble_npl_callout *timer,  //  Pointer to timer. Cannot be NULL.
     uint32_t millisecs)             //  The number of milliseconds from now at which the timer will expire.
 {
-    puts("TODO: TimerStart");
+    puts("TimerStart");
     assert(timer != NULL);
 
-    assert(false);
-#ifdef TODO
     //  Stop the timer if running
     TimerStop(timer);
 
@@ -414,14 +409,11 @@ void TimerStart(
         ticks   //  Number of ticks
     );
     assert(rc == 0);
-#endif  //  TODO
 }
 
 /// Wait until ‘millisecs’ milliseconds has elapsed. This is a blocking delay.
 void DelayMs(uint32_t millisecs)  //  The number of milliseconds to wait.
 {
-    assert(false);
-#ifdef TODO
     //  Implement with Timer Functions from NimBLE Porting Layer.
     //  Convert milliseconds to ticks.
     ble_npl_time_t ticks = ble_npl_time_ms_to_ticks32(
@@ -433,7 +425,6 @@ void DelayMs(uint32_t millisecs)  //  The number of milliseconds to wait.
 
     //  Wait for the ticks
     ble_npl_time_delay(ticks);
-#endif  //  TODO
 }
 
 /// Return current time in microseconds
