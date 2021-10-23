@@ -51,6 +51,12 @@ static int sx126x_write_register( const void* context, const uint16_t address, c
 static int sx126x_read_register( const void* context, const uint16_t address, uint8_t* buffer, const uint8_t size );
 static int sx126x_write_buffer( const void* context, const uint8_t offset, const uint8_t* buffer, const uint8_t size );
 static int sx126x_read_buffer( const void* context, const uint8_t offset, uint8_t* buffer, const uint8_t size );
+static int sx126x_hal_write( 
+    const void* context, const uint8_t* command, const uint16_t command_length,
+    const uint8_t* data, const uint16_t data_length );
+static int sx126x_hal_read( 
+    const void* context, const uint8_t* command, const uint16_t command_length,
+    uint8_t* data, const uint16_t data_length );
 static int init_spi(void);
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -210,21 +216,10 @@ void SX126xWriteCommand( RadioCommands_t command, uint8_t *buffer, uint16_t size
 {
     SX126xCheckDeviceReady( );
 
-    assert(false);
-#ifdef TODO
-    bl_gpio_output_set( SX126X_SPI_CS_PIN, 0 );
-    if (SX126X_DEBUG_CS_PIN >= 0) { bl_gpio_output_set( SX126X_DEBUG_CS_PIN, 0 ); }
-
-    SpiInOut( SX126X_SPI_IDX, ( uint8_t )command );
-
-    for( uint16_t i = 0; i < size; i++ )
-    {
-        SpiInOut( SX126X_SPI_IDX, buffer[i] );
-    }
-
-    bl_gpio_output_set( SX126X_SPI_CS_PIN, 1 );
-    if (SX126X_DEBUG_CS_PIN >= 0) { bl_gpio_output_set( SX126X_DEBUG_CS_PIN, 1 ); }
-#endif  //  TODO
+    //  Write the command followed by buffer
+    uint8_t commands[1] = { (uint8_t) command };
+    int rc = sx126x_hal_write(NULL, commands, sizeof(commands), buffer, size);
+    assert(rc == 0);
 
     if( command != RADIO_SET_SLEEP )
     {
@@ -505,13 +500,6 @@ typedef enum sx126x_commands_size_e
     // Full size: this value plus buffer size
     SX126X_SIZE_READ_BUFFER = 3,
 } sx126x_commands_size_t;
-
-static int sx126x_hal_write( 
-    const void* context, const uint8_t* command, const uint16_t command_length,
-    const uint8_t* data, const uint16_t data_length );
-static int sx126x_hal_read( 
-    const void* context, const uint8_t* command, const uint16_t command_length,
-    uint8_t* data, const uint16_t data_length );
 
 static int sx126x_write_register( const void* context, const uint16_t address, const uint8_t* buffer,
     const uint8_t size ) {
