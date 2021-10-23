@@ -1,2 +1,3 @@
 src/*.o
+npl/linux/src/*.o
 lora-sx1262
