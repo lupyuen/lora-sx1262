@@ -1,4 +1,5 @@
-//  SX1262 Board Functions for Linux
+//  LoRa SX1262 Board Functions for Linux (PineDio USB)
+#ifndef ARCH_RISCV  //  This file is for Linux only
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -684,3 +685,5 @@ static int transfer_spi(const uint8_t *tx_buf, uint8_t *rx_buf, uint16_t len) {
     printf("spi rx: "); for (int i = 0; i < len; i++) { printf("%02x ", rx_buf[i]); } printf("\n");
     return 0;
 }
+
+#endif  //  !ARCH_RISCV

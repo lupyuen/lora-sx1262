@@ -1,4 +1,5 @@
-#ifndef ARCH_RISCV
+//  Demo Program for LoRa SX1262 on Linux (PineDio USB)
+#ifndef ARCH_RISCV  //  This file is for Linux only
 #include <stdio.h>
 #include <string.h>
 #include <assert.h>
