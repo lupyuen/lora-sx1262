@@ -12,10 +12,10 @@ DEPS   := \
 	include/sx126x.h \
 	include/sx126x-utilities.h \
 
+# TODO: -Werror=all
 CCFLAGS:= \
 	-g \
 	-Wall \
-	-Werror=all \
 	-Wextra \
 	-Wno-unused-parameter \
 	-Wno-sign-compare \
