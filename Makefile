@@ -4,6 +4,7 @@ CSRCS  := \
 	src/main.c \
 	src/radio.c \
 	src/sx126x.c \
+	src/sx126x-linux.c \
 
 DEPS   := \
 	include/radio.h \
