@@ -204,7 +204,11 @@ static void send_once(int is_ping) {
 
     //  We send the transmit buffer, limited to 29 bytes.
     //  CAUTION: Anything more will cause message corruption!
-    Radio.Send(loraping_buffer, 29);
+    #define MAX_MESSAGE_SIZE 29
+    uint8_t size = sizeof loraping_buffer > MAX_MESSAGE_SIZE
+        ? MAX_MESSAGE_SIZE 
+        : sizeof loraping_buffer;
+    Radio.Send(loraping_buffer, size);
 
     //  TODO: Previously we send 64 bytes, which gets garbled consistently.
     //  Does CH341 limit SPI transfers to 31 bytes?

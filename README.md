@@ -166,6 +166,15 @@ Send Message (29 bytes):
 __CAUTION: Sending a LoRa Message on PineDio USB (not PineDio BL602) above 29 bytes will cause message corruption!__
 
 ```text
+gcc -o lora-sx1262 \
+npl/linux/src/os_eventq.cc \
+ \
+src/main.o src/radio.o src/sx126x.o src/sx126x-linux.o npl/linux/src/os_callout.o npl/linux/src/os_sem.o npl/linux/src/os_task.o npl/linux/src/os_atomic.o npl/linux/src/os_time.o npl/linux/src/os_mutex.o \
+-g -Wall -Wextra -Wno-unused-parameter -Wno-sign-compare -Wno-old-style-declaration -I include -I npl/linux/include -I npl/linux/include/nimble  \
+-pthread -lrt -lstdc++  \
+
+cc1plus: warning: command-line option ‘-Wno-old-style-declaration’ is valid for C/ObjC but not for C++
+create_task
 init_driver
 TODO: SX126xReset
 SX126xIoInit
@@ -243,8 +252,8 @@ sx126x_hal_read: command_length=4, data_length=9
 spi tx: 1d 02 9f 00 00 00 00 00 00 00 00 00 00 
 spi rx: a2 a2 a2 a2 02 08 ac 08 89 3a a1 65 9a 
 TODO: SX126xWaitOnBusy
-TODO: TimerInit
-TODO: TimerInit
+TimerInit
+TimerInit
 RadioSetChannel: freq=923000000
 TODO: SX126xWaitOnBusy
 sx126x_hal_write: command_length=1, data_length=2
@@ -387,9 +396,9 @@ sx126x_hal_write: command_length=1, data_length=3
 spi tx: 83 00 00 00 
 spi rx: a2 a2 a2 a2 
 TODO: SX126xWaitOnBusy
-TODO: TimerStart
-lora-sx1262: src/sx126x-linux.c:400: TimerStart: Assertion `false' failed.
-Aborted
+TimerStart
+TimerStop
+Done!
 ```
 
 See below for the dmesg Log during transmission.
