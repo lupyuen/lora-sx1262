@@ -384,7 +384,7 @@ lora-sx1262: src/sx126x-linux.c:396: TimerStart: Assertion `false' failed.
 Aborted
 ```
 
-# WisBlock Receive Log
+# WisBlock Receiver Log
 
 When we run this LoRa Receiver on WisBlock...
 
