@@ -69,13 +69,14 @@ static void read_registers(void);
 static void init_driver(void);
 static void send_message(void);
 static void receive_message(void);
+static void create_task(void);
 
 int main(void) {
     //  Read SX1262 registers 0x00 to 0x0F
     //  read_registers();
 
-    //  TODO: Create a Background Task to handle LoRa Events
-    //  create_task();
+    //  Create a Background Task to handle LoRa Events
+    create_task();
 
     //  Init SX1262 driver
     init_driver();
@@ -316,9 +317,19 @@ static void on_rx_error(void) {
 ///////////////////////////////////////////////////////////////////////////////
 //  Multitasking Commands
 
-#ifdef TODO
+/// Event Queue containing Events to be processed
+struct ble_npl_eventq event_queue;
+
+/// Event to be added to the Event Queue
+struct ble_npl_event event;
+
+static void task_callback(void *arg);
+static void handle_event(struct ble_npl_event *ev);
+
 /// Create a Background Task to handle LoRa Events
 static void create_task(void) {
+    puts("create_task");
+
     //  Init the Event Queue
     ble_npl_eventq_init(&event_queue);
 
@@ -329,17 +340,22 @@ static void create_task(void) {
         NULL           //  Argument to be passed to Event Handler
     );
 
-    //  Create a FreeRTOS Task to process the Event Queue
-    nimble_port_freertos_init(task_callback);
+    //  TODO: Create a FreeRTOS Task to process the Event Queue
+    //  nimble_port_freertos_init(task_callback);
 }
+
 /// Enqueue an Event into the Event Queue
 static void put_event(char *buf, int len, int argc, char **argv) {
+    puts("put_event");
+
     //  Add the Event to the Event Queue
     ble_npl_eventq_put(&event_queue, &event);
 }
 
 /// Task Function that dequeues Events from the Event Queue and processes the Events
 static void task_callback(void *arg) {
+    puts("task_callback");
+
     //  Loop forever handling Events from the Event Queue
     for (;;) {
         //  Get the next Event from the Event Queue
@@ -361,8 +377,8 @@ static void task_callback(void *arg) {
 
 /// Handle an Event
 static void handle_event(struct ble_npl_event *ev) {
+    puts("handle_event");
     printf("\r\nHandle an event\r\n");
 }
-#endif  //  TODO
 
 #endif  //  !ARCH_RISCV
