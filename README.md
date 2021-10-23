@@ -157,7 +157,7 @@ Register 0x0f = 0x00
 Done!
 ```
 
-Send Message:
+Send Message (64 bytes):
 
 ```text
 init_driver
@@ -385,6 +385,8 @@ TODO: TimerStart
 lora-sx1262: src/sx126x-linux.c:396: TimerStart: Assertion `false' failed.
 Aborted
 ```
+
+See below for the dmesg Log during transmission. The 64-byte packet seems to be missing from the dmesg Log.
 
 # WisBlock Receiver Log
 
