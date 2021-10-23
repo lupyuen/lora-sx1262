@@ -13,7 +13,12 @@ DEPS   := \
 
 CCFLAGS:= \
 	-g \
-	-Werror \
+	-Wall \
+	-Werror=all \
+	-Wextra \
+	-Wno-unused-parameter \
+	-Wno-sign-compare \
+	-Wno-old-style-declaration \
 	-I include \
 
 LDFLAGS:= 

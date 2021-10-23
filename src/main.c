@@ -14,7 +14,7 @@ static void read_registers(void);
 /// SPI Bus
 static int spi = 0;
 
-void main(void) {
+int main(void) {
     //  Open the SPI Bus
     spi = open("/dev/spidev1.0", O_RDWR);
     assert(spi > 0);
@@ -35,6 +35,7 @@ void main(void) {
     //  Close the SPI Bus
     close(spi);
     puts("Done!");
+    return 0;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -56,6 +57,7 @@ static void read_registers(void) {
     }
 }
 
+#ifdef NOTUSED
 ///////////////////////////////////////////////////////////////////////////////
 //  SPI HAL
 
@@ -199,4 +201,6 @@ static int transfer_spi(const uint8_t *tx_buf, uint8_t *rx_buf, uint16_t len) {
     //  printf("spi rx: "); for (int i = 0; i < len; i++) { printf("%02x ", rx_buf[i]); } printf("\n");
     return 0;
 }
+#endif  //  NOTUSED
+
 #endif  //  !ARCH_RISCV
