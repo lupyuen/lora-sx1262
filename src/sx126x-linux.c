@@ -173,9 +173,8 @@ void SX126xWaitOnBusy( void )
     printf("TODO: SX126xWaitOnBusy\r\n");
 
     //  TODO: Fix the GPIO check for busy state.
-    //  Meanwhile we sleep 100 milliseconds.
-    //  10 milliseconds is probably sufficient, but we want to be safe.
-    usleep(100 * 1000);
+    //  Meanwhile we sleep 10 milliseconds.
+    usleep(10 * 1000);
 
 #ifdef TODO
     while( bl_gpio_input_get_value( SX126X_BUSY_PIN ) == 1 );
