@@ -237,8 +237,7 @@ static void on_rx_done(
 }
 
 /// Callback Function that is called when our LoRa message couldn't be transmitted due to timeout
-static void on_tx_timeout(void)
-{
+static void on_tx_timeout(void) {
     printf("Tx timeout\r\n");
 
     //  Switch the LoRa Transceiver to low power, sleep mode
@@ -252,8 +251,7 @@ static void on_tx_timeout(void)
 }
 
 /// Callback Function that is called when no LoRa messages could be received due to timeout
-static void on_rx_timeout(void)
-{
+static void on_rx_timeout(void) {
     printf("Rx timeout\r\n");
 
     //  Switch the LoRa Transceiver to low power, sleep mode
@@ -268,8 +266,7 @@ static void on_rx_timeout(void)
 }
 
 /// Callback Function that is called when we couldn't receive a LoRa message due to error
-static void on_rx_error(void)
-{
+static void on_rx_error(void) {
     printf("Rx error\r\n");
 
     //  Log the error
