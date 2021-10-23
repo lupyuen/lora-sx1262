@@ -282,4 +282,56 @@ static void on_rx_error(void)
     //  os_eventq_put(os_eventq_dflt_get(), &loraping_ev_tx);
 }
 
+///////////////////////////////////////////////////////////////////////////////
+//  Multitasking Commands
+
+#ifdef TODO
+/// Create a Background Task to handle LoRa Events
+static void create_task(void) {
+    //  Init the Event Queue
+    ble_npl_eventq_init(&event_queue);
+
+    //  Init the Event
+    ble_npl_event_init(
+        &event,        //  Event
+        handle_event,  //  Event Handler Function
+        NULL           //  Argument to be passed to Event Handler
+    );
+
+    //  Create a FreeRTOS Task to process the Event Queue
+    nimble_port_freertos_init(task_callback);
+}
+/// Enqueue an Event into the Event Queue
+static void put_event(char *buf, int len, int argc, char **argv) {
+    //  Add the Event to the Event Queue
+    ble_npl_eventq_put(&event_queue, &event);
+}
+
+/// Task Function that dequeues Events from the Event Queue and processes the Events
+static void task_callback(void *arg) {
+    //  Loop forever handling Events from the Event Queue
+    for (;;) {
+        //  Get the next Event from the Event Queue
+        struct ble_npl_event *ev = ble_npl_eventq_get(
+            &event_queue,  //  Event Queue
+            1000           //  Timeout in 1,000 ticks
+        );
+
+        //  If no Event due to timeout, wait for next Event
+        if (ev == NULL) { continue; }
+
+        //  Remove the Event from the Event Queue
+        ble_npl_eventq_remove(&event_queue, ev);
+
+        //  Trigger the Event Handler Function (handle_event)
+        ble_npl_event_run(ev);
+    }
+}
+
+/// Handle an Event
+static void handle_event(struct ble_npl_event *ev) {
+    printf("\r\nHandle an event\r\n");
+}
+#endif  //  TODO
+
 #endif  //  !ARCH_RISCV
