@@ -707,7 +707,7 @@ But 64-byte messages sent by PineDio USB are consistently garbled when received 
 
 # PineDio USB dmesg Log
 
-## Connect PineDio USB
+## Connect USB
 
 dmesg Log when PineDio USB is connected to Pinebook Pro...
 
