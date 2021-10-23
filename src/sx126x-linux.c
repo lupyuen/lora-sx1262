@@ -378,11 +378,10 @@ void TimerInit(
     struct ble_npl_callout *timer,  //  The timer to initialize. Cannot be NULL.
     ble_npl_event_fn *f)            //  The timer callback function. Cannot be NULL.
 {
-    //  Implement with Callout Functions from NimBLE Porting Layer
+    puts("TODO: TimerInit");
     assert(timer != NULL);
     assert(f != NULL);
 
-    assert(false);
 #ifdef TODO
     //  Event Queue containing Events to be processed, defined in demo.c.  TODO: Move to header file.
     extern struct ble_npl_eventq event_queue;
@@ -401,7 +400,7 @@ void TimerInit(
 void TimerStop(
     struct ble_npl_callout *timer)  //  Pointer to timer to stop. Cannot be NULL.
 {
-    //  Implement with Callout Functions from NimBLE Porting Layer
+    puts("TODO: TimerStop");
     assert(timer != NULL);
 
     assert(false);
@@ -419,7 +418,7 @@ void TimerStart(
     struct ble_npl_callout *timer,  //  Pointer to timer. Cannot be NULL.
     uint32_t millisecs)             //  The number of milliseconds from now at which the timer will expire.
 {
-    //  Implement with Callout Functions from NimBLE Porting Layer.
+    puts("TODO: TimerStart");
     assert(timer != NULL);
 
     assert(false);
