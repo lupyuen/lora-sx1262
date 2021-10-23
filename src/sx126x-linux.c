@@ -674,6 +674,7 @@ static int transfer_spi(const uint8_t *tx_buf, uint8_t *rx_buf, uint16_t len) {
     //  Transfer and receive the SPI buffers
     int rc = ioctl(spi, SPI_IOC_MESSAGE(1), &spi_trans);
     assert(rc >= 0);
+    assert(rc == len);
 
     printf("spi rx: "); for (int i = 0; i < len; i++) { printf("%02x ", rx_buf[i]); } printf("\n");
     return 0;
