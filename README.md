@@ -14,6 +14,229 @@ Ported from Semtech's Reference Implementation of SX1262 Driver...
 
 https://github.com/Lora-net/LoRaMac-node/tree/master/src/radio/sx126x
 
+# Build PineDio USB Driver
+
+To build PineDio USB Driver on Pinebook Pro Manjaro Arm64...
+
+```bash
+## Install DKMS
+sudo pacman -Syu dkms base-devel --needed
+
+## Install Kernel Headers for Manjaro: https://linuxconfig.org/manjaro-linux-kernel-headers-installation
+uname -r 
+## Should show "5.14.12-1-MANJARO-ARM" or similar
+sudo pacman -S linux-headers
+pacman -Q | grep headers
+## Should show "linux-headers 5.14.12-1" or similar
+
+## Reboot to be safe
+sudo reboot now
+
+## Install CH341 SPI Driver
+git clone https://github.com/rogerjames99/spi-ch341-usb.git
+pushd spi-ch341-usb
+## TODO: Edit Makefile and change...
+##   KERNEL_DIR  = /usr/src/linux-headers-$(KVERSION)/
+## To...
+##   KERNEL_DIR  = /lib/modules/$(KVERSION)/build
+make
+sudo make install
+popd
+
+## Unload the module ch341 if it has been automatically loaded
+lsmod | grep ch341
+sudo rmmod ch341
+
+## Load the new module
+sudo modprobe spi-ch341-usb
+
+## Plug in PineDio USB and check that the module has been correctly loaded.
+## See dmesg Log below.
+dmesg
+
+## Build PineDio USB Driver
+git clone --recursive https://github.com/lupyuen/lora-sx1262
+cd lora-sx1262
+make
+
+## Run PineDio USB Driver Demo.
+## See Output Log below.
+sudo ./lora-sx1262
+```
+
+See https://wiki.pine64.org/wiki/JF%27s_note_on_PineDio_devices#RAW_LoRa_communication_between_USB_LoRa_adapter_and_PineDio_STACK
+
+# PineDio USB Output Log
+
+```text
+SX126xIoInit
+TODO: SX126xWakeup
+TODO: SX126xWaitOnBusy
+sx126x_hal_read: command_length=4, data_length=1
+TODO: SX126xWaitOnBusy
+Register 0x00 = 0x00
+TODO: SX126xWakeup
+TODO: SX126xWaitOnBusy
+sx126x_hal_read: command_length=4, data_length=1
+TODO: SX126xWaitOnBusy
+Register 0x01 = 0x00
+TODO: SX126xWakeup
+TODO: SX126xWaitOnBusy
+sx126x_hal_read: command_length=4, data_length=1
+TODO: SX126xWaitOnBusy
+Register 0x02 = 0x00
+TODO: SX126xWakeup
+TODO: SX126xWaitOnBusy
+sx126x_hal_read: command_length=4, data_length=1
+TODO: SX126xWaitOnBusy
+Register 0x03 = 0x00
+TODO: SX126xWakeup
+TODO: SX126xWaitOnBusy
+sx126x_hal_read: command_length=4, data_length=1
+TODO: SX126xWaitOnBusy
+Register 0x04 = 0x00
+TODO: SX126xWakeup
+TODO: SX126xWaitOnBusy
+sx126x_hal_read: command_length=4, data_length=1
+TODO: SX126xWaitOnBusy
+Register 0x05 = 0x00
+TODO: SX126xWakeup
+TODO: SX126xWaitOnBusy
+sx126x_hal_read: command_length=4, data_length=1
+TODO: SX126xWaitOnBusy
+Register 0x06 = 0x00
+TODO: SX126xWakeup
+TODO: SX126xWaitOnBusy
+sx126x_hal_read: command_length=4, data_length=1
+TODO: SX126xWaitOnBusy
+Register 0x07 = 0x00
+TODO: SX126xWakeup
+TODO: SX126xWaitOnBusy
+sx126x_hal_read: command_length=4, data_length=1
+TODO: SX126xWaitOnBusy
+Register 0x08 = 0x80
+TODO: SX126xWakeup
+TODO: SX126xWaitOnBusy
+sx126x_hal_read: command_length=4, data_length=1
+TODO: SX126xWaitOnBusy
+Register 0x09 = 0x00
+TODO: SX126xWakeup
+TODO: SX126xWaitOnBusy
+sx126x_hal_read: command_length=4, data_length=1
+TODO: SX126xWaitOnBusy
+Register 0x0a = 0x01
+TODO: SX126xWakeup
+TODO: SX126xWaitOnBusy
+sx126x_hal_read: command_length=4, data_length=1
+TODO: SX126xWaitOnBusy
+Register 0x0b = 0x00
+TODO: SX126xWakeup
+TODO: SX126xWaitOnBusy
+sx126x_hal_read: command_length=4, data_length=1
+TODO: SX126xWaitOnBusy
+Register 0x0c = 0x00
+TODO: SX126xWakeup
+TODO: SX126xWaitOnBusy
+sx126x_hal_read: command_length=4, data_length=1
+TODO: SX126xWaitOnBusy
+Register 0x0d = 0x00
+TODO: SX126xWakeup
+TODO: SX126xWaitOnBusy
+sx126x_hal_read: command_length=4, data_length=1
+TODO: SX126xWaitOnBusy
+Register 0x0e = 0x00
+TODO: SX126xWakeup
+TODO: SX126xWaitOnBusy
+sx126x_hal_read: command_length=4, data_length=1
+TODO: SX126xWaitOnBusy
+Register 0x0f = 0x00
+Done!
+```
+
+# PineDio USB dmesg Log
+
+```text
+usb 3-1:
+new full-speed USB device number 2 using xhci-hcd
+New USB device found, idVendor=1a86, idProduct=5512, bcdDevice= 3.04
+New USB device strings: Mfr=0, Product=2, SerialNumber=0
+Product: USB UART-LPT
+
+spi-ch341-usb 3-1:1.0:
+  ch341_usb_probe:
+    connect device
+    bNumEndpoints=3
+      endpoint=0 type=2 dir=1 addr=2
+      endpoint=1 type=2 dir=0 addr=2
+      endpoint=2 type=3 dir=1 addr=1
+
+  ch341_cfg_probe:
+    output cs0 SPI slave with cs=0
+    output cs0    gpio=0  irq=0 
+    output cs1 SPI slave with cs=1
+    output cs1    gpio=1  irq=1 
+    output cs2 SPI slave with cs=2
+    output cs2    gpio=2  irq=2 
+    input  gpio4  gpio=3  irq=3 
+    input  gpio6  gpio=4  irq=4 
+    input  err    gpio=5  irq=5 
+    input  pemp   gpio=6  irq=6 
+    input  int    gpio=7  irq=7 (hwirq)
+    input  slct   gpio=8  irq=8 
+    input  wait   gpio=9  irq=9 
+    input  autofd gpio=10 irq=10 
+    input  addr   gpio=11 irq=11 
+    output ini    gpio=12 irq=12 
+    output write  gpio=13 irq=13 
+    output scl    gpio=14 irq=14 
+    output sda    gpio=15 irq=15 
+
+  ch341_spi_probe:
+    start
+    SPI master connected to SPI bus 1
+    SPI device /dev/spidev1.0 created
+    SPI device /dev/spidev1.1 created
+    SPI device /dev/spidev1.2 created
+    done
+
+  ch341_irq_probe:
+    start
+    irq_base=94
+    done
+
+  ch341_gpio_probe: 
+    start
+
+  ch341_gpio_get_direction:
+    gpio=cs0    dir=0
+    gpio=cs1    dir=0
+    gpio=cs2    dir=0
+    gpio=gpio4  dir=1
+    gpio=gpio6  dir=1
+    gpio=err    dir=1
+    gpio=pemp   dir=1
+    gpio=int    dir=1
+    gpio=slct   dir=1
+    gpio=wait   dir=1
+    gpio=autofd dir=1
+    gpio=addr   dir=1
+    gpio=ini    dir=0
+    gpio=write  dir=0
+    gpio=scl    dir=0
+    gpio=sda    dir=0
+
+  ch341_gpio_probe:
+    registered GPIOs from 496 to 511
+    done
+    connected
+
+  ch341_gpio_poll_function:
+    start
+
+usbcore: registered new interface driver ch341
+usbserial: USB Serial support registered for ch341-uart
+```
+
 # Connect BL602 to SX1262
 
 The pins are defined here in [`include/sx126x-board.h`](include/sx126x-board.h)
@@ -37,7 +260,7 @@ From [`include/sx126x-board.h`](include/sx126x-board.h):
 #define SX126X_SPI_BAUDRATE  (200 * 1000)  //  SPI Frequency (200 kHz)
 ```
 
-# Demo Firmware
+# BL602 Demo Firmware
 
 To transmit and receive LoRa packets with the driver, run the `sdk_app_lora` BL602 Demo Firmware...
 
