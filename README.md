@@ -74,6 +74,8 @@ See https://wiki.pine64.org/wiki/JF%27s_note_on_PineDio_devices#RAW_LoRa_communi
 
 # PineDio USB Output Log
 
+## Read Registers
+
 Read Registers:
 
 ```text
@@ -160,6 +162,8 @@ TODO: SX126xWaitOnBusy
 Register 0x0f = 0x00
 Done!
 ```
+
+## Send Message
 
 Send Message (29 bytes):
 
@@ -402,6 +406,8 @@ Done!
 ```
 
 See below for the dmesg Log during transmission.
+
+## Receive Message
 
 Receive Message...
 
@@ -701,6 +707,8 @@ But 64-byte messages sent by PineDio USB are consistently garbled when received 
 
 # PineDio USB dmesg Log
 
+## Connect PineDio USB
+
 dmesg Log when PineDio USB is connected to Pinebook Pro...
 
 ```text
@@ -784,6 +792,8 @@ spi-ch341-usb 3-1:1.0:
 usbcore: registered new interface driver ch341
 usbserial: USB Serial support registered for ch341-uart
 ```
+
+## Send Message
 
 dmesg Log when PineDio USB is transmitting a 29-byte LoRa Packet...
 
