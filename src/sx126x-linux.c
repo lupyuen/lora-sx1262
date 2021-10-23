@@ -145,17 +145,6 @@ void SX126xSetOperatingMode( RadioOperatingModes_t mode )
 #endif
 }
 
-#ifdef TODO
-void SX126xReset( void )
-{
-    DelayMs( 10 );
-    GpioInitOutput( SX126X_NRESET, PIN_OUTPUT, PIN_PUSH_PULL, PIN_NO_PULL, 0 );
-    DelayMs( 20 );
-    GpioInitAnalogic( SX126X_NRESET, PIN_ANALOGIC, PIN_PUSH_PULL, PIN_NO_PULL, 0 ); // internal pull-up
-    DelayMs( 10 );
-}
-#endif  //  TODO
-
 void SX126xReset(void)
 {
     //// #warning Check SX126xReset
@@ -189,25 +178,20 @@ void SX126xWaitOnBusy( void )
 
 void SX126xWakeup( void )
 {
-    printf("TODO: SX126xWakeup\r\n");
+    printf("SX126xWakeup\r\n");
     CRITICAL_SECTION_BEGIN( );
 
-#ifdef TODO
-    bl_gpio_output_set( SX126X_SPI_CS_PIN, 0 );
-    if (SX126X_DEBUG_CS_PIN >= 0) { bl_gpio_output_set( SX126X_DEBUG_CS_PIN, 0 ); }
-
-    SpiInOut( SX126X_SPI_IDX, RADIO_GET_STATUS );
-    SpiInOut( SX126X_SPI_IDX, 0x00 );
-
-    bl_gpio_output_set( SX126X_SPI_CS_PIN, 1 );
-    if (SX126X_DEBUG_CS_PIN >= 0) { bl_gpio_output_set( SX126X_DEBUG_CS_PIN, 1 ); }
+    // Write RADIO_GET_STATUS command followed by 0
+    uint8_t commands[1] = { RADIO_GET_STATUS };
+    uint8_t buffer[1]   = { 0 };
+    int rc = sx126x_hal_write(NULL, commands, sizeof(commands), buffer, sizeof(buffer));
+    assert(rc == 0);
 
     // Wait for chip to be ready.
     SX126xWaitOnBusy( );
 
     // Update operating mode context variable
     SX126xSetOperatingMode( MODE_STDBY_RC );
-#endif  //  TODO
 
     CRITICAL_SECTION_END( );
 }

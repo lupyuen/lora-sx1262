@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <assert.h>
+#include <unistd.h>
 #include "radio.h"
 #include "sx126x-board.h"
 
@@ -77,6 +78,9 @@ int main(void) {
 
     //  Init SX1262 driver
     init_driver();
+
+    //  TODO: Do we need to wait?
+    sleep(1);
 
     //  Send a LoRa message
     send_message();
