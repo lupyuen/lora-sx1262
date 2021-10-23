@@ -85,10 +85,19 @@ int main(void) {
     sleep(1);
 
     //  Send a LoRa message
-    send_message();
+    //  send_message();
 
-    //  Receive a LoRa message
-    //  receive_message();
+    //  Loop forever receiving LoRa messages
+    for (;;) {
+        //  Receive a LoRa message
+        receive_message();
+
+        //  Process the received LoRa message, if any
+        RadioIrqProcess();
+        
+        //  Sleep for 1000 milliseconds.
+        usleep(1000 * 1000);
+    }
 
     //  TODO: Close the SPI Bus
     //  close(spi);
