@@ -24,7 +24,10 @@
 #include <string.h>
 #include <assert.h>
 #include <stdio.h>
+#ifdef ARCH_RISCV            //  If BL602...
 #include "nimble_npl.h"      //  For NimBLE Porting Layer (timer functions)
+#else                        //  If Linux...
+#endif  //  ARCH_RISCV
 #include "sx126x-utilities.h"
 #include "radio.h"
 #include "sx126x.h"
