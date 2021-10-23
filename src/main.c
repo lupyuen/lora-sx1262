@@ -64,10 +64,25 @@ struct {
 //  Main Function
 
 static void read_registers(void);
+static void init_driver(void);
+static void send_message(void);
+static void receive_message(void);
 
 int main(void) {
     //  Read SX1262 registers 0x00 to 0x0F
-    read_registers();
+    //  read_registers();
+
+    //  TODO: Create a Background Task to handle LoRa Events
+    //  create_task();
+
+    //  Init SX1262 driver
+    init_driver();
+
+    //  Send a LoRa message
+    send_message();
+
+    //  Receive a LoRa message
+    //  receive_message();
 
     //  TODO: Close the SPI Bus
     //  close(spi);
@@ -87,6 +102,8 @@ static void on_rx_error(void);
 
 /// Read SX1262 registers
 static void read_registers(void) {
+    puts("read_registers");
+
     //  Init the SPI port
     SX126xIoInit();
 
@@ -104,6 +121,8 @@ static void read_registers(void) {
 /// Initialise the SX1262 driver.
 /// Assume that create_task has been called to init the Event Queue.
 static void init_driver(void) {
+    puts("init_driver");
+
     //  Set the LoRa Callback Functions
     RadioEvents_t radio_events;
     memset(&radio_events, 0, sizeof(radio_events));  //  Must init radio_events to null, because radio_events lives on stack!
@@ -157,6 +176,8 @@ static void init_driver(void) {
 
 /// Send a LoRa message. Assume that SX1262 driver has been initialised.
 static void send_message(void) {
+    puts("send_message");
+
     //  Send the "PING" message
     send_once(1);
 }
@@ -182,6 +203,8 @@ static void send_once(int is_ping) {
 /// Receive a LoRa message. Assume that SX1262 driver has been initialised.
 /// Assume that create_task has been called to init the Event Queue.
 static void receive_message(void) {
+    puts("receive_message");
+
     //  Receive a LoRa message within the timeout period
     Radio.Rx(LORAPING_RX_TIMEOUT_MS);
 }
