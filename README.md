@@ -12,7 +12,7 @@ The design of the SX1262 Driver is similar to the SX1276 Driver, which is explai
 
 - ["PineCone BL602 RISC-V Board Receives LoRa Packets"](https://lupyuen.github.io/articles/lora2)
 
-__CAUTION: Sending a LoRa Message above 29 bytes will cause message corruption!__
+__CAUTION: Sending a LoRa Message on PineDio USB (not PineDio BL602) above 29 bytes will cause message corruption!__
 
 (CH341 SPI seems to have trouble transferring a block of 32 bytes)
 
@@ -163,7 +163,7 @@ Done!
 
 Send Message (29 bytes):
 
-__CAUTION: Sending a LoRa Message above 29 bytes will cause message corruption!__
+__CAUTION: Sending a LoRa Message on PineDio USB (not PineDio BL602) above 29 bytes will cause message corruption!__
 
 ```text
 init_driver
@@ -400,24 +400,29 @@ When we run this LoRa Receiver on RAKwireless WisBlock...
 
 https://github.com/lupyuen/wisblock-lora-receiver
 
-Message received by WisBlock is consistently garbled...
+29-byte message transmitted by PineDio USB is received OK by WisBlock...
 
 ```text
+> Executing task: platformio device monitor <
+
+--- Available filters and text transformations: colorize, debug, default, direct, hexlify, log2file, nocontrol, printable, send_on_enter, time
+--- More details at http://bit.ly/pio-monitor-filters
+--- Miniterm on /dev/cu.usbmodem14201  9600,8,N,1 ---
+--- Quit: Ctrl+C | Menu: Ctrl+T | Help: Ctrl+T followed by Ctrl+H ---
 =====================================
 LoRaP2P Rx Test
 =====================================
 Starting Radio.Rx
-
-OnRxDone: Timestamp=22, RssiValue=-39 dBm, SnrValue=13, Data=5A 2A 19 46 E2 A9 79 C4 B5 23 91 65 F2 66 39 57 FC BD F0 21 3A 2E 74 3C E2 0C 70 09 7D 0D D4 EC 62 D2 10 BF E3 05 91 8B 36 29 B2 65 61 B2 5D 39 B4 F2 3C 45 F7 4F 26 8B 54 B3 2C C7 37 62 30 3E 
-
-OnRxDone: Timestamp=46, RssiValue=-41 dBm, SnrValue=13, Data=5A 2A 19 46 E2 A9 79 C4 B5 23 91 65 F2 66 39 57 FC BD F0 21 3A 2E 74 3C E2 0C 70 09 7D 0D D4 EC 62 D2 10 BF E3 05 91 8B 36 29 B2 65 61 B2 5D 39 B4 F2 3C 45 F7 4F 26 8B 54 B3 2C C7 37 62 30 3E 
-
-OnRxDone: Timestamp=52, RssiValue=-42 dBm, SnrValue=12, Data=5A 2A 19 46 E2 A9 79 C4 B5 23 91 65 F2 66 39 57 FC BD F0 21 3A 2E 74 3C E2 0C 70 09 7D 0D D4 EC 62 D2 10 BF E3 05 91 8B 36 29 B2 65 61 B2 5D 39 B4 F2 3C 45 F7 4F 26 8B 54 B3 2C C7 37 62 30 3E 
+OnRxDone: Timestamp=18, RssiValue=-28 dBm, SnrValue=13, Data=50 49 4E 47 00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F 10 11 12 13 14 15 16 17 18 
 ```
 
-When we run the [`sdk_app_lora`](https://github.com/lupyuen/bl_iot_sdk/tree/tsen/customer_app/sdk_app_lora) firmware on PineDio Stack BL604, WisBlock receives the messages OK.
+__CAUTION: Sending a LoRa Message on PineDio USB (not PineDio BL602) above 29 bytes will cause message corruption!__
 
-Which is really strange because PineDio USB and PineDio Stack are running the same SX1262 Driver Code! 🤔
+When we run the [`sdk_app_lora`](https://github.com/lupyuen/bl_iot_sdk/tree/tsen/customer_app/sdk_app_lora) firmware on PineDio Stack BL604, WisBlock receives the 64-byte message OK.
+
+But 64-byte messages sent by PineDio USB are consistently garbled when received by WisBlock.
+
+(CH341 SPI seems to have trouble transferring a block of 32 bytes)
 
 # PineDio USB dmesg Log
 
@@ -507,7 +512,7 @@ usbserial: USB Serial support registered for ch341-uart
 
 dmesg Log when PineDio USB is transmitting a 29-byte LoRa Packet...
 
-__CAUTION: Sending a LoRa Message above 29 bytes will cause message corruption!__
+__CAUTION: Sending a LoRa Message on PineDio USB (not PineDio BL602) above 29 bytes will cause message corruption!__
 
 ```text
 audit: type=1105 audit(1634994194.295:1270): pid=72110 uid=1000 auid=1000 ses=4 subj==unconfined msg='op=PAM:session_open grantors=pam_limits,pam_unix,pam_permit acct="root" exe="/usr/bin/sudo" hostname=? addr=? terminal=/dev/pts/3 res=success'
