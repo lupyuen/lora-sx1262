@@ -130,31 +130,31 @@ Note that the CH341 GPIO programming is incomplete. We need to...
 
 1.  Init the GPIO Pins: `SX126xIoInit`
     
-    https://github.com/lupyuen/lora-sx1262/blob/master/src/sx126x-linux.c#L65-L77
+    src/sx126x-linux.c#L65-L77
 
 1.  Register GPIO Interrupt Handler for DIO1: `SX126xIoIrqInit`
 
-    https://github.com/lupyuen/lora-sx1262/blob/master/src/sx126x-linux.c#L79-L91
+    src/sx126x-linux.c#L79-L91
 
 1.  Reset SX1262 via GPIO: `SX126xReset`
 
     (For now we reset SX1262 by manually unplugging PineDio USB)
 
-    https://github.com/lupyuen/lora-sx1262/blob/master/src/sx126x-linux.c#L149-L169
+    src/sx126x-linux.c#L149-L169
 
 1.  Check SX1262 Busy State via GPIO: `SX126xWaitOnBusy`
 
     (For now we sleep 10 milliseconds)
 
-    https://github.com/lupyuen/lora-sx1262/blob/master/src/sx126x-linux.c#L171-L182
+    src/sx126x-linux.c#L171-L182
 
 1.  Get DIO1 Pin State: `SX126xGetDio1PinState`
 
-    https://github.com/lupyuen/lora-sx1262/blob/master/src/sx126x-linux.c#L337-L344
+    src/sx126x-linux.c#L337-L344
 
 We also need Background Threads to receive LoRa Messages in the background...
 
-https://github.com/lupyuen/lora-sx1262/blob/master/src/main.c#L355-L408
+src/main.c#L355-L408
 
 More about PineDio USB and CH341 GPIO:
 
