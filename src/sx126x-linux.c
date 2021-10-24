@@ -336,7 +336,8 @@ bool SX126xCheckRfFrequency( uint32_t frequency )
 
 uint32_t SX126xGetDio1PinState( void )
 {
-    assert(false); return 0;
+    puts("TODO: SX126xGetDio1PinState");
+    return 0;
 #ifdef TODO
     return bl_gpio_input_get_value( SX126X_DIO1 );
 #endif  //  TODO
