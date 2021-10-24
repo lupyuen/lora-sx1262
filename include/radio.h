@@ -410,6 +410,13 @@ struct Radio_s
  */
 extern const struct Radio_s Radio;
 
+struct ble_npl_event;
+
+/// Callback Function for Transmit and Receive Interrupts.
+/// This function runs in the context of the Background Application Task.
+/// So we are safe to call printf and SPI Functions now.
+void RadioOnDioIrq( struct ble_npl_event *ev );
+
 #ifdef __cplusplus
 }
 #endif
