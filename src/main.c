@@ -80,7 +80,7 @@ int main(void) {
     read_registers();
 #endif  //  READ_REGISTERS
 
-    //  Create a Background Thread to handle LoRa Events
+    //  TODO: Create a Background Thread to handle LoRa Events
     create_task();
 
     //  Init SX1262 driver
