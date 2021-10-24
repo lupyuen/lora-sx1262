@@ -77,7 +77,7 @@ int main(void) {
 //  #define READ_REGISTERS
 #ifdef READ_REGISTERS
     //  Read SX1262 registers 0x00 to 0x0F
-    //  read_registers();
+    read_registers();
 #endif  //  READ_REGISTERS
 
     //  Create a Background Task to handle LoRa Events
