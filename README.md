@@ -2,6 +2,8 @@
 
 [(Follow the updates on Twitter)](https://twitter.com/MisterTechBlog/status/1451548895461326858)
 
+![PineDio LoRa USB Adapter](https://lupyuen.github.io/images/usb-pinedio.jpg)
+
 Read the article...
 
 - ["PineCone BL602 Talks LoRaWAN"](https://lupyuen.github.io/articles/lorawan)
