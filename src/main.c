@@ -102,12 +102,12 @@ int main(void) {
     //  Prepare to receive a LoRa message
     receive_message();
 
-    //  Handle LoRa events
+    //  Handle LoRa events for the next 10 seconds
     for (int i = 0; i < 10; i++) {
         //  Process the received LoRa message, if any
         RadioOnDioIrq(NULL);
         
-        //  Sleep for 1000 milliseconds.
+        //  Sleep for 1 second
         usleep(1000 * 1000);
     }
 #endif  //  RECEIVE_MESSAGE

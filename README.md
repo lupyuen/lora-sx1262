@@ -14,6 +14,8 @@ The design of the SX1262 Driver is similar to the SX1276 Driver, which is explai
 
 __CAUTION: Sending a LoRa Message on PineDio USB (not PineDio BL602) above 29 bytes will cause message corruption!__
 
+__CAUTION: Receiving a LoRa Message on PineDio USB (not PineDio BL602) above 28 bytes will cause message corruption!__
+
 (CH341 SPI seems to have trouble transferring a block of 32 bytes)
 
 Ported from Semtech's Reference Implementation of SX1262 Driver...
@@ -115,7 +117,7 @@ The PineDio USB Demo supports 3 operations...
 
 ## Read Registers
 
-Read Registers:
+Read SX1262 Registers on PineDio USB:
 
 ```text
 SX126xIoInit
@@ -204,7 +206,7 @@ Done!
 
 ## Send Message
 
-Send Message (29 bytes):
+Transmit 29-byte LoRa Message on PineDio USB:
 
 __CAUTION: Sending a LoRa Message on PineDio USB (not PineDio BL602) above 29 bytes will cause message corruption!__
 
@@ -444,16 +446,40 @@ TimerStop
 Done!
 ```
 
-See below for the dmesg Log during transmission.
+Note that the 29-byte LoRa Message transmitted by PineDio USB is...
+
+```text
+send_message
+RadioSend: size=29
+50 49 4e 47 00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 10 11 12 13 14 15 16 17 18 
+```
+
+See below for the dmesg Send Message Log.
 
 ## Receive Message
 
-Receive Message...
+When we run this LoRa Transmitter on RAKwireless WisBlock...
 
-(Not working yet)
+https://github.com/lupyuen/wisblock-lora-transmitter/tree/pinedio
+
+28-byte message transmitted by WisBlock is received OK by PineDio USB.
+
+__CAUTION: Receiving a LoRa Message on PineDio USB (not PineDio BL602) above 28 bytes will cause message corruption!__
+
+Here is the PineDio USB Receive Message Log...
+
+(See below for the WisBlock Transmitter Log)
 
 ```text
-[luppy@pinebook lora-sx1262]$ sudo ./lora-sx1262 
+gcc -c -o src/sx126x-linux.o src/sx126x-linux.c -g -Wall -Wextra -Wno-unused-parameter -Wno-sign-compare -Wno-old-style-declaration -I include -I npl/linux/include -I npl/linux/include/nimble 
+gcc -o lora-sx1262 \
+npl/linux/src/os_eventq.cc \
+ \
+src/main.o src/radio.o src/sx126x.o src/sx126x-linux.o npl/linux/src/os_callout.o npl/linux/src/os_sem.o npl/linux/src/os_task.o npl/linux/src/os_atomic.o npl/linux/src/os_time.o npl/linux/src/os_mutex.o \
+-g -Wall -Wextra -Wno-unused-parameter -Wno-sign-compare -Wno-old-style-declaration -I include -I npl/linux/include -I npl/linux/include/nimble  \
+-pthread -lrt -lstdc++  \
+
+cc1plus: warning: command-line option ‘-Wno-old-style-declaration’ is valid for C/ObjC but not for C++
 create_task
 init_driver
 TODO: SX126xReset
@@ -462,12 +488,12 @@ TODO: SX126X interrupt init
 SX126xWakeup
 sx126x_hal_write: command_length=1, data_length=1
 spi tx: c0 00 
-spi rx: d4 54 
+spi rx: a2 22 
 TODO: SX126xWaitOnBusy
 TODO: SX126xWaitOnBusy
 sx126x_hal_write: command_length=1, data_length=1
 spi tx: 80 00 
-spi rx: d4 d4 
+spi rx: a2 a2 
 TODO: SX126xWaitOnBusy
 TODO: SX126xWaitOnBusy
 sx126x_hal_write: command_length=1, data_length=1
@@ -525,12 +551,12 @@ TODO: SX126xWaitOnBusy
 TODO: SX126xWaitOnBusy
 sx126x_hal_read: command_length=4, data_length=9
 spi tx: 1d 02 9f 00 00 00 00 00 00 00 00 00 00 
-spi rx: a2 a2 a2 a2 02 08 ac 08 89 3a a1 65 9a 
+spi rx: a2 a2 a2 a2 02 08 ac 08 89 aa a9 61 9b 
 TODO: SX126xWaitOnBusy
 TODO: SX126xWaitOnBusy
 sx126x_hal_read: command_length=4, data_length=9
 spi tx: 1d 02 9f 00 00 00 00 00 00 00 00 00 00 
-spi rx: a2 a2 a2 a2 02 08 ac 08 89 3a a1 65 9a 
+spi rx: a2 a2 a2 a2 02 08 ac 08 89 aa a9 61 9b 
 TODO: SX126xWaitOnBusy
 TimerInit
 TimerInit
@@ -671,48 +697,202 @@ sx126x_hal_write: command_length=1, data_length=3
 spi tx: 82 ff ff ff 
 spi rx: a2 a2 a2 a2 
 TODO: SX126xWaitOnBusy
+RadioOnDioIrq
 RadioIrqProcess
-receive_message
-RadioRx
+SX126xReadCommand: command=0x12, size=2
 TODO: SX126xWaitOnBusy
-sx126x_hal_write: command_length=1, data_length=8
-spi tx: 08 ff ff ff ff 00 00 00 00 
-spi rx: d2 d2 d2 d2 d2 d2 d2 d2 d2 
+sx126x_hal_read: command_length=2, data_length=2
+spi tx: 12 00 00 00 
+spi rx: d2 d2 00 00 
+status=0xd2
 TODO: SX126xWaitOnBusy
-TimerStart
+TODO: SX126xWaitOnBusy
+sx126x_hal_write: command_length=1, data_length=2
+spi tx: 02 00 00 
+spi rx: d2 d2 d2 
+TODO: SX126xWaitOnBusy
+TODO: SX126xGetDio1PinState
+RadioOnDioIrq
+RadioIrqProcess
+SX126xReadCommand: command=0x12, size=2
+TODO: SX126xWaitOnBusy
+sx126x_hal_read: command_length=2, data_length=2
+spi tx: 12 00 00 00 
+spi rx: d2 d2 00 00 
+status=0xd2
+TODO: SX126xWaitOnBusy
+TODO: SX126xWaitOnBusy
+sx126x_hal_write: command_length=1, data_length=2
+spi tx: 02 00 00 
+spi rx: d2 d2 d2 
+TODO: SX126xWaitOnBusy
+TODO: SX126xGetDio1PinState
+RadioOnDioIrq
+RadioIrqProcess
+SX126xReadCommand: command=0x12, size=2
+TODO: SX126xWaitOnBusy
+sx126x_hal_read: command_length=2, data_length=2
+spi tx: 12 00 00 00 
+spi rx: d2 d2 00 00 
+status=0xd2
+TODO: SX126xWaitOnBusy
+TODO: SX126xWaitOnBusy
+sx126x_hal_write: command_length=1, data_length=2
+spi tx: 02 00 00 
+spi rx: d2 d2 d2 
+TODO: SX126xWaitOnBusy
+TODO: SX126xGetDio1PinState
+RadioOnDioIrq
+RadioIrqProcess
+SX126xReadCommand: command=0x12, size=2
+TODO: SX126xWaitOnBusy
+sx126x_hal_read: command_length=2, data_length=2
+spi tx: 12 00 00 00 
+spi rx: d2 d2 00 00 
+status=0xd2
+TODO: SX126xWaitOnBusy
+TODO: SX126xWaitOnBusy
+sx126x_hal_write: command_length=1, data_length=2
+spi tx: 02 00 00 
+spi rx: d2 d2 d2 
+TODO: SX126xWaitOnBusy
+TODO: SX126xGetDio1PinState
+RadioOnDioIrq
+RadioIrqProcess
+SX126xReadCommand: command=0x12, size=2
+TODO: SX126xWaitOnBusy
+sx126x_hal_read: command_length=2, data_length=2
+spi tx: 12 00 00 00 
+spi rx: d4 d4 00 16 
+status=0xd4
+TODO: SX126xWaitOnBusy
+TODO: SX126xWaitOnBusy
+sx126x_hal_write: command_length=1, data_length=2
+spi tx: 02 00 16 
+spi rx: d4 d4 d4 
+TODO: SX126xWaitOnBusy
+TODO: SX126xGetDio1PinState
+IRQ_RX_DONE
 TimerStop
+SX126xReadCommand: command=0x13, size=2
 TODO: SX126xWaitOnBusy
-sx126x_hal_write: command_length=3, data_length=1
-spi tx: 0d 08 ac 94 
-spi rx: d2 d2 d2 d2 
+sx126x_hal_read: command_length=2, data_length=2
+spi tx: 13 00 00 00 
+spi rx: d4 d4 1c 00 
+status=0xd4
 TODO: SX126xWaitOnBusy
 TODO: SX126xWaitOnBusy
-sx126x_hal_write: command_length=1, data_length=3
-spi tx: 82 ff ff ff 
-spi rx: d2 d2 d2 d2 
+sx126x_hal_read: command_length=3, data_length=28
+spi tx: 1e 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+spi rx: d4 d4 d4 48 65 6c 6c 6f 00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 10 11 12 13 14 15 16 
 TODO: SX126xWaitOnBusy
+SX126xReadCommand: command=0x14, size=3
+TODO: SX126xWaitOnBusy
+sx126x_hal_read: command_length=2, data_length=3
+spi tx: 14 00 00 00 00 
+spi rx: d4 d4 1e 2f 1e 
+status=0xd4
+TODO: SX126xWaitOnBusy
+Rx done: 
+RadioSleep
+TODO: SX126xWaitOnBusy
+sx126x_hal_write: command_length=1, data_length=1
+spi tx: 84 04 
+spi rx: d4 d4 
+48 65 6c 6c 6f 00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 10 11 12 13 14 15 16 
+IRQ_PREAMBLE_DETECTED
+IRQ_HEADER_VALID
+RadioOnDioIrq
 RadioIrqProcess
-receive_message
-RadioRx
-TODO: SX126xWaitOnBusy
-sx126x_hal_write: command_length=1, data_length=8
-spi tx: 08 ff ff ff ff 00 00 00 00 
-spi rx: d2 d2 d2 d2 d2 d2 d2 d2 d2 
-TODO: SX126xWaitOnBusy
-TimerStart
-TimerStop
-TODO: SX126xWaitOnBusy
-sx126x_hal_write: command_length=3, data_length=1
-spi tx: 0d 08 ac 94 
-spi rx: d2 d2 d2 d2 
+SX126xReadCommand: command=0x12, size=2
+SX126xWakeup
+sx126x_hal_write: command_length=1, data_length=1
+spi tx: c0 00 
+spi rx: 80 80 
 TODO: SX126xWaitOnBusy
 TODO: SX126xWaitOnBusy
-sx126x_hal_write: command_length=1, data_length=3
-spi tx: 82 ff ff ff 
-spi rx: d2 d2 d2 d2 
+sx126x_hal_read: command_length=2, data_length=2
+spi tx: 12 00 00 00 
+spi rx: a2 a2 00 00 
+status=0xa2
 TODO: SX126xWaitOnBusy
+TODO: SX126xWaitOnBusy
+sx126x_hal_write: command_length=1, data_length=2
+spi tx: 02 00 00 
+spi rx: a2 a2 a2 
+TODO: SX126xWaitOnBusy
+TODO: SX126xGetDio1PinState
+RadioOnDioIrq
 RadioIrqProcess
+SX126xReadCommand: command=0x12, size=2
+TODO: SX126xWaitOnBusy
+sx126x_hal_read: command_length=2, data_length=2
+spi tx: 12 00 00 00 
+spi rx: a2 a2 00 00 
+status=0xa2
+TODO: SX126xWaitOnBusy
+TODO: SX126xWaitOnBusy
+sx126x_hal_write: command_length=1, data_length=2
+spi tx: 02 00 00 
+spi rx: a2 a2 a2 
+TODO: SX126xWaitOnBusy
+TODO: SX126xGetDio1PinState
+RadioOnDioIrq
+RadioIrqProcess
+SX126xReadCommand: command=0x12, size=2
+TODO: SX126xWaitOnBusy
+sx126x_hal_read: command_length=2, data_length=2
+spi tx: 12 00 00 00 
+spi rx: a2 a2 00 00 
+status=0xa2
+TODO: SX126xWaitOnBusy
+TODO: SX126xWaitOnBusy
+sx126x_hal_write: command_length=1, data_length=2
+spi tx: 02 00 00 
+spi rx: a2 a2 a2 
+TODO: SX126xWaitOnBusy
+TODO: SX126xGetDio1PinState
+RadioOnDioIrq
+RadioIrqProcess
+SX126xReadCommand: command=0x12, size=2
+TODO: SX126xWaitOnBusy
+sx126x_hal_read: command_length=2, data_length=2
+spi tx: 12 00 00 00 
+spi rx: a2 a2 00 00 
+status=0xa2
+TODO: SX126xWaitOnBusy
+TODO: SX126xWaitOnBusy
+sx126x_hal_write: command_length=1, data_length=2
+spi tx: 02 00 00 
+spi rx: a2 a2 a2 
+TODO: SX126xWaitOnBusy
+TODO: SX126xGetDio1PinState
+RadioOnDioIrq
+RadioIrqProcess
+SX126xReadCommand: command=0x12, size=2
+TODO: SX126xWaitOnBusy
+sx126x_hal_read: command_length=2, data_length=2
+spi tx: 12 00 00 00 
+spi rx: a2 a2 00 00 
+status=0xa2
+TODO: SX126xWaitOnBusy
+TODO: SX126xWaitOnBusy
+sx126x_hal_write: command_length=1, data_length=2
+spi tx: 02 00 00 
+spi rx: a2 a2 a2 
+TODO: SX126xWaitOnBusy
+TODO: SX126xGetDio1PinState
+Done!
 ```
+
+Note that the 28-byte LoRa Message received by PineDio USB is...
+
+```text
+Rx done: 
+48 65 6c 6c 6f 00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 10 11 12 13 14 15 16 
+```
+
+See below for the dmesg Receive Message Log.
 
 # WisBlock Receiver Log
 
@@ -741,6 +921,40 @@ __CAUTION: Sending a LoRa Message on PineDio USB (not PineDio BL602) above 29 by
 When we run the [`sdk_app_lora`](https://github.com/lupyuen/bl_iot_sdk/tree/tsen/customer_app/sdk_app_lora) firmware on PineDio Stack BL604, WisBlock receives the 64-byte message OK.
 
 But 64-byte messages sent by PineDio USB are consistently garbled when received by WisBlock.
+
+(CH341 SPI seems to have trouble transferring a block of 32 bytes)
+
+# WisBlock Transmitter Log
+
+When we run this LoRa Transmitter on RAKwireless WisBlock...
+
+https://github.com/lupyuen/wisblock-lora-transmitter/tree/pinedio
+
+28-byte message transmitted by WisBlock is received OK by PineDio USB.
+
+Here's the WisBlock Transmitter Log...
+
+```text
+> Executing task: platformio device monitor <
+
+--- Available filters and text transformations: colorize, debug, default, direct, hexlify, log2file, nocontrol, printable, send_on_enter, time
+--- More details at http://bit.ly/pio-monitor-filters
+--- Miniterm on /dev/cu.usbmodem14201  9600,8,N,1 ---
+--- Quit: Ctrl+C | Menu: Ctrl+T | Help: Ctrl+T followed by Ctrl+H ---
+=====================================
+LoRap2p Tx Test
+=====================================
+send: 48 65 6c 6c 6f 00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 10 11 12 13 14 15 16 
+OnTxDone
+send: 48 65 6c 6c 6f 00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 10 11 12 13 14 15 16 
+OnTxDone
+send: 48 65 6c 6c 6f 00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 10 11 12 13 14 15 16 
+OnTxDone
+send: 48 65 6c 6c 6f 00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 10 11 12 13 14 15 16 
+OnTxDone
+```
+
+__CAUTION: Receiving a LoRa Message on PineDio USB (not PineDio BL602) above 28 bytes will cause message corruption!__
 
 (CH341 SPI seems to have trouble transferring a block of 32 bytes)
 
@@ -922,6 +1136,80 @@ audit: type=1701 audit(1634994203.075:1271): auid=1000 uid=0 gid=0 ses=4 subj==u
 ```
 
 Note that if we try to transmit a 64-byte packet, it won't appear in the dmesg Log.
+
+## Receive Message
+
+dmesg Log when PineDio USB is receiving a 28-byte LoRa Packet...
+
+__CAUTION: Receiving a LoRa Message on PineDio USB (not PineDio BL602) above 28 bytes will cause message corruption!__
+
+```text
+audit: type=1105 audit(1635041245.570:352): pid=19949 uid=1000 auid=1000 ses=7 subj==unconfined msg='op=PAM:session_open grantors=pam_limits,pam_unix,pam_permit acct="root" exe="/usr/bin/sudo" hostname=? addr=? terminal=/dev/pts/5 res=success'
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=2, csChange=1, result=2
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=2, csChange=1, result=2
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=2, csChange=1, result=2
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=2, csChange=1, result=2
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=2, csChange=1, result=2
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=3, csChange=1, result=3
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=5, csChange=1, result=5
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=4, csChange=1, result=4
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=5, csChange=1, result=5
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=4, csChange=1, result=4
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=3, csChange=1, result=3
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=9, csChange=1, result=9
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=13, csChange=1, result=13
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=13, csChange=1, result=13
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=3, csChange=1, result=3
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=5, csChange=1, result=5
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=2, csChange=1, result=2
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=2, csChange=1, result=2
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=5, csChange=1, result=5
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=7, csChange=1, result=7
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=5, csChange=1, result=5
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=4, csChange=1, result=4
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=5, csChange=1, result=5
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=4, csChange=1, result=4
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=5, csChange=1, result=5
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=4, csChange=1, result=4
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=3, csChange=1, result=3
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=2, csChange=1, result=2
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=2, csChange=1, result=2
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=2, csChange=1, result=2
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=5, csChange=1, result=5
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=7, csChange=1, result=7
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=2, csChange=1, result=2
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=5, csChange=1, result=5
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=4, csChange=1, result=4
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=9, csChange=1, result=9
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=4, csChange=1, result=4
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=4, csChange=1, result=4
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=4, csChange=1, result=4
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=3, csChange=1, result=3
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=4, csChange=1, result=4
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=3, csChange=1, result=3
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=4, csChange=1, result=4
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=3, csChange=1, result=3
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=4, csChange=1, result=4
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=3, csChange=1, result=3
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=4, csChange=1, result=4
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=3, csChange=1, result=3
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=4, csChange=1, result=4
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=31, csChange=1, result=31
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=5, csChange=1, result=5
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=2, csChange=1, result=2
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=2, csChange=1, result=2
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=4, csChange=1, result=4
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=3, csChange=1, result=3
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=4, csChange=1, result=4
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=3, csChange=1, result=3
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=4, csChange=1, result=4
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=3, csChange=1, result=3
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=4, csChange=1, result=4
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=3, csChange=1, result=3
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=4, csChange=1, result=4
+spi-ch341-usb 3-1:1.0: ch341_spi_transfer_low: len=3, csChange=1, result=3
+audit: type=1106 audit(1635041257.940:353): pid=19949 uid=1000 auid=1000 ses=7 subj==unconfined msg='op=PAM:session_close grantors=pam_limits,pam_unix,pam_permit acct="root" exe="/usr/bin/sudo" hostname=? addr=? terminal=/dev/pts/5 res=success'
+```
 
 # Connect BL602 to SX1262
 
