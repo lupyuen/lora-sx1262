@@ -97,6 +97,8 @@ The PineDio USB Demo supports 3 operations...
     #define READ_REGISTERS
     ```
 
+    (See the Read Register Log below)
+
 1.  Send LoRa Message:
 
     Edit [`src/main.c`](src/main.c) and uncomment...
@@ -105,6 +107,8 @@ The PineDio USB Demo supports 3 operations...
     #define SEND_MESSAGE
     ```
 
+    (See the Send Message Log below)
+
 1.  Receive LoRa Message:
 
     Edit [`src/main.c`](src/main.c) and uncomment...
@@ -112,6 +116,8 @@ The PineDio USB Demo supports 3 operations...
     ```c
     #define RECEIVE_MESSAGE
     ```
+
+    (See the Receive Message Log below)
 
 # PineDio USB Output Log
 
