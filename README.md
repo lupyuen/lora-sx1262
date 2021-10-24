@@ -16,9 +16,9 @@ The design of the SX1262 Driver is similar to the SX1276 Driver, which is explai
 
 - ["PineCone BL602 RISC-V Board Receives LoRa Packets"](https://lupyuen.github.io/articles/lora2)
 
-__CAUTION: Sending a LoRa Message on PineDio USB (not PineDio BL602) above 29 bytes will cause message corruption!__
+__CAUTION: Sending a LoRa Message on PineDio USB (not BL602) above 29 bytes will cause message corruption!__
 
-__CAUTION: Receiving a LoRa Message on PineDio USB (not PineDio BL602) above 28 bytes will cause message corruption!__
+__CAUTION: Receiving a LoRa Message on PineDio USB (not BL602) above 28 bytes will cause message corruption!__
 
 (CH341 SPI seems to have trouble transferring a block of 32 bytes)
 
@@ -255,7 +255,7 @@ Done!
 
 Transmit 29-byte LoRa Message on PineDio USB:
 
-__CAUTION: Sending a LoRa Message on PineDio USB (not PineDio BL602) above 29 bytes will cause message corruption!__
+__CAUTION: Sending a LoRa Message on PineDio USB (not BL602) above 29 bytes will cause message corruption!__
 
 ```text
 gcc -o lora-sx1262 \
@@ -511,7 +511,7 @@ https://github.com/lupyuen/wisblock-lora-transmitter/tree/pinedio
 
 28-byte message transmitted by WisBlock is received OK by PineDio USB.
 
-__CAUTION: Receiving a LoRa Message on PineDio USB (not PineDio BL602) above 28 bytes will cause message corruption!__
+__CAUTION: Receiving a LoRa Message on PineDio USB (not BL602) above 28 bytes will cause message corruption!__
 
 Here is the PineDio USB Receive Message Log...
 
@@ -1205,7 +1205,7 @@ Starting Radio.Rx
 OnRxDone: Timestamp=18, RssiValue=-28 dBm, SnrValue=13, Data=50 49 4E 47 00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F 10 11 12 13 14 15 16 17 18 
 ```
 
-__CAUTION: Sending a LoRa Message on PineDio USB (not PineDio BL602) above 29 bytes will cause message corruption!__
+__CAUTION: Sending a LoRa Message on PineDio USB (not BL602) above 29 bytes will cause message corruption!__
 
 When we run the [`sdk_app_lora`](https://github.com/lupyuen/bl_iot_sdk/tree/tsen/customer_app/sdk_app_lora) firmware on PineDio Stack BL604, WisBlock receives the 64-byte message OK.
 
@@ -1243,7 +1243,7 @@ send: 48 65 6c 6c 6f 00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 10 11 12 13
 OnTxDone
 ```
 
-__CAUTION: Receiving a LoRa Message on PineDio USB (not PineDio BL602) above 28 bytes will cause message corruption!__
+__CAUTION: Receiving a LoRa Message on PineDio USB (not BL602) above 28 bytes will cause message corruption!__
 
 (CH341 SPI seems to have trouble transferring a block of 32 bytes)
 
@@ -1378,7 +1378,7 @@ To fix this...
 
 dmesg Log when PineDio USB is transmitting a 29-byte LoRa Packet...
 
-__CAUTION: Sending a LoRa Message on PineDio USB (not PineDio BL602) above 29 bytes will cause message corruption!__
+__CAUTION: Sending a LoRa Message on PineDio USB (not BL602) above 29 bytes will cause message corruption!__
 
 ```text
 audit: type=1105 audit(1634994194.295:1270): pid=72110 uid=1000 auid=1000 ses=4 subj==unconfined msg='op=PAM:session_open grantors=pam_limits,pam_unix,pam_permit acct="root" exe="/usr/bin/sudo" hostname=? addr=? terminal=/dev/pts/3 res=success'
@@ -1430,7 +1430,7 @@ Note that if we try to transmit a 64-byte packet, it won't appear in the dmesg L
 
 dmesg Log when PineDio USB is receiving a 28-byte LoRa Packet...
 
-__CAUTION: Receiving a LoRa Message on PineDio USB (not PineDio BL602) above 28 bytes will cause message corruption!__
+__CAUTION: Receiving a LoRa Message on PineDio USB (not BL602) above 28 bytes will cause message corruption!__
 
 ```text
 audit: type=1105 audit(1635046697.907:371): pid=29045 uid=1000 auid=1000 ses=7 subj==unconfined msg='op=PAM:session_open grantors=pam_limits,pam_unix,pam_permit acct="root" exe="/usr/bin/sudo" hostname=? addr=? terminal=/dev/pts/5 res=success'
