@@ -60,6 +60,10 @@ sudo modprobe spi-ch341-usb
 ## See dmesg Log below.
 dmesg
 
+## If we see "spi_ch341_usb: loading out-of-tree module taints kernel",
+## Unplug PineDio USB, run "sudo rmmod ch341", plug in PineDio USB again
+## and recheck dmesg.
+
 ## Build PineDio USB Driver
 git clone --recursive https://github.com/lupyuen/lora-sx1262
 cd lora-sx1262
@@ -709,7 +713,7 @@ But 64-byte messages sent by PineDio USB are consistently garbled when received 
 
 ## Connect USB
 
-dmesg Log when PineDio USB is connected to Pinebook Pro...
+dmesg Log when plugging PineDio USB to Pinebook Pro...
 
 ```text
 usb 3-1:
@@ -792,6 +796,45 @@ spi-ch341-usb 3-1:1.0:
 usbcore: registered new interface driver ch341
 usbserial: USB Serial support registered for ch341-uart
 ```
+
+This means that the newer CH341 SPI Driver has been loaded.
+
+If we see this instead...
+
+```text
+usb 3-1: new full-speed USB device number 2 using xhci-hcd
+usb 3-1: New USB device found, idVendor=1a86, idProduct=5512, bcdDevice= 3.04
+usb 3-1: New USB device strings: Mfr=0, Product=2, SerialNumber=0
+usb 3-1: Product: USB UART-LPT
+usbcore: registered new interface driver ch341
+usbserial: USB Serial support registered for ch341-uart
+ch341 3-1:1.0: ch341-uart converter detected
+usb 3-1: ch341-uart converter now attached to ttyUSB0
+spi_ch341_usb: loading out-of-tree module taints kernel.
+usbcore: registered new interface driver spi-ch341-usb
+```
+
+It means the older CH341 Non-SPI Driver has been loaded.
+
+To fix this...
+
+1.  Unplug PineDio USB
+
+1.  Enter...
+
+    ```bash
+    sudo rmmod ch341
+    ```
+
+1.  Plug in PineDio USB
+
+1.  Enter...
+
+    ```bash
+    dmesg
+    ```
+
+    And recheck the messages.
 
 ## Send Message
 
