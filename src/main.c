@@ -80,7 +80,7 @@ int main(void) {
     read_registers();
 #endif  //  READ_REGISTERS
 
-    //  Create a Background Task to handle LoRa Events
+    //  Create a Background Thread to handle LoRa Events
     create_task();
 
     //  Init SX1262 driver
@@ -99,11 +99,11 @@ int main(void) {
 //  Uncomment to receive a LoRa message
 #define RECEIVE_MESSAGE
 #ifdef RECEIVE_MESSAGE
-    //  Prepare to receive a LoRa message
-    receive_message();
-
     //  Handle LoRa events for the next 10 seconds
     for (int i = 0; i < 10; i++) {
+        //  Prepare to receive a LoRa message
+        receive_message();
+
         //  Process the received LoRa message, if any
         RadioOnDioIrq(NULL);
         
@@ -352,7 +352,8 @@ struct ble_npl_event event;
 static void task_callback(void *arg);
 static void handle_event(struct ble_npl_event *ev);
 
-/// Create a Background Task to handle LoRa Events
+/// TODO: Create a Background Task to handle LoRa Events
+/// This is unused because we don't have a Background Thread to process the Event Queue.
 static void create_task(void) {
     puts("create_task");
 
@@ -366,11 +367,12 @@ static void create_task(void) {
         NULL           //  Argument to be passed to Event Handler
     );
 
-    //  TODO: Create a FreeRTOS Task to process the Event Queue
+    //  TODO: Create a Background Thread to process the Event Queue
     //  nimble_port_freertos_init(task_callback);
 }
 
-/// Enqueue an Event into the Event Queue
+/// TODO: Enqueue an Event into the Event Queue.
+/// This is unused because we don't have a Background Thread to process the Event Queue.
 static void put_event(char *buf, int len, int argc, char **argv) {
     puts("put_event");
 
@@ -378,7 +380,8 @@ static void put_event(char *buf, int len, int argc, char **argv) {
     ble_npl_eventq_put(&event_queue, &event);
 }
 
-/// Task Function that dequeues Events from the Event Queue and processes the Events
+/// TODO: Task Function that dequeues Events from the Event Queue and processes the Events.
+/// This is unused because we don't have a Background Thread to process the Event Queue.
 static void task_callback(void *arg) {
     puts("task_callback");
 
@@ -401,7 +404,8 @@ static void task_callback(void *arg) {
     }
 }
 
-/// Handle an Event
+/// TODO: Handle an Event
+/// This is unused because we don't have a Background Thread to process the Event Queue.
 static void handle_event(struct ble_npl_event *ev) {
     puts("handle_event");
     printf("\r\nHandle an event\r\n");
