@@ -133,6 +133,8 @@ Note that the CH341 GPIO programming is incomplete. We need to...
 
 1.  Reset SX1262 via GPIO: `SX126xReset`
 
+    (For now we reset SX1262 by manually unplugging PineDio USB)
+
     https://github.com/lupyuen/lora-sx1262/blob/master/src/sx126x-linux.c#L149-L169
 
 1.  Check SX1262 Busy State via GPIO: `SX126xWaitOnBusy`
