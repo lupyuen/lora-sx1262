@@ -896,6 +896,8 @@ Note that the 28-byte LoRa Message received by PineDio USB is...
 ```text
 Rx done: 
 48 65 6c 6c 6f 00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 10 11 12 13 14 15 16 
+IRQ_PREAMBLE_DETECTED
+IRQ_HEADER_VALID
 ```
 
 See below for the dmesg Receive Message Log.
