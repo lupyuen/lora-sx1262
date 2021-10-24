@@ -42,7 +42,7 @@
 #define LORAPING_IQ_INVERSION_ON            false
 
 #define LORAPING_TX_TIMEOUT_MS              3000    /* ms */
-#define LORAPING_RX_TIMEOUT_MS              5000    /* ms */
+#define LORAPING_RX_TIMEOUT_MS              10000    /* ms */
 #define LORAPING_BUFFER_SIZE                64      /* LoRa message size */
 
 const uint8_t loraping_ping_msg[] = "PING";  //  We send a "PING" message
@@ -90,22 +90,22 @@ int main(void) {
     sleep(1);
 
 //  Uncomment to send a LoRa message
-#define SEND_MESSAGE
+//  #define SEND_MESSAGE
 #ifdef SEND_MESSAGE
     //  Send a LoRa message
     send_message();
 #endif  //  SEND_MESSAGE
 
 //  Uncomment to receive a LoRa message
-//  #define RECEIVE_MESSAGE
+#define RECEIVE_MESSAGE
 #ifdef RECEIVE_MESSAGE
-    //  Loop forever receiving LoRa messages
-    for (;;) {
-        //  Receive a LoRa message
-        receive_message();
+    //  Prepare to receive a LoRa message
+    receive_message();
 
+    //  Handle LoRa events
+    for (int i = 0; i < 10; i++) {
         //  Process the received LoRa message, if any
-        RadioIrqProcess();
+        RadioOnDioIrq(NULL);
         
         //  Sleep for 1000 milliseconds.
         usleep(1000 * 1000);

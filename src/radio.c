@@ -1298,7 +1298,7 @@ void RadioOnRxTimeoutIrq( struct ble_npl_event *ev )
 }
 
 /// Callback Function for Transmit and Receive Interrupts.
-/// This function runs in the context of the FreeRTOS Background Application Task.
+/// This function runs in the context of the Background Application Task.
 /// So we are safe to call printf and SPI Functions now.
 void RadioOnDioIrq( struct ble_npl_event *ev )
 {

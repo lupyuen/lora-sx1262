@@ -57,7 +57,7 @@ static int sx126x_hal_write(
     const uint8_t* data, const uint16_t data_length );
 static int sx126x_hal_read( 
     const void* context, const uint8_t* command, const uint16_t command_length,
-    uint8_t* data, const uint16_t data_length );
+    uint8_t* data, const uint16_t data_length, uint8_t *status );
 static int init_spi(void);
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -218,13 +218,21 @@ void SX126xWriteCommand( RadioCommands_t command, uint8_t *buffer, uint16_t size
 
 uint8_t SX126xReadCommand( RadioCommands_t command, uint8_t *buffer, uint16_t size )
 {
-    printf("SX126xReadCommand\r\n");
+    printf("SX126xReadCommand: command=0x%02x, size=%d\r\n", command, size);
     uint8_t status = 0;
 
     SX126xCheckDeviceReady( );
 
-    assert(false);
-#ifdef TODO
+    //  Write the command, read the status and read the buffer
+    uint8_t commandStatus[2] = { 
+        (uint8_t) command,  //  Command
+        0                   //  Status
+    };
+    int rc = sx126x_hal_read(NULL, commandStatus, sizeof(commandStatus), buffer, size, &status);
+    assert(rc == 0);
+    printf("status=0x%02x\n", status);
+
+#ifdef NOTUSED  //  Previously...
     bl_gpio_output_set( SX126X_SPI_CS_PIN, 0 );
     if (SX126X_DEBUG_CS_PIN >= 0) { bl_gpio_output_set( SX126X_DEBUG_CS_PIN, 0 ); }
 
@@ -237,7 +245,7 @@ uint8_t SX126xReadCommand( RadioCommands_t command, uint8_t *buffer, uint16_t si
 
     bl_gpio_output_set( SX126X_SPI_CS_PIN, 1 );
     if (SX126X_DEBUG_CS_PIN >= 0) { bl_gpio_output_set( SX126X_DEBUG_CS_PIN, 1 ); }
-#endif  //  TODO
+#endif  //  NOTUSED
 
     SX126xWaitOnBusy( );
 
@@ -481,7 +489,7 @@ static int sx126x_read_register( const void* context, const uint16_t address, ui
     buf[1] = ( uint8_t )( address >> 8 );
     buf[2] = ( uint8_t )( address >> 0 );
     buf[3] = 0;
-    status = sx126x_hal_read( context, buf, SX126X_SIZE_READ_REGISTER, buffer, size );
+    status = sx126x_hal_read( context, buf, SX126X_SIZE_READ_REGISTER, buffer, size, NULL );
     return status;
 }
 
@@ -499,7 +507,7 @@ static int sx126x_read_buffer( const void* context, const uint8_t offset, uint8_
     buf[0] = RADIO_READ_BUFFER;
     buf[1] = offset;
     buf[2] = 0;
-    status = sx126x_hal_read( context, buf, SX126X_SIZE_READ_BUFFER, buffer, size );
+    status = sx126x_hal_read( context, buf, SX126X_SIZE_READ_BUFFER, buffer, size, NULL );
     return status;
 }
 
@@ -569,12 +577,13 @@ static int sx126x_hal_write(
  * @param [in] command_length   Buffer size to be transmitted
  * @param [in] data             Pointer to the buffer to be received
  * @param [in] data_length      Buffer size to be received
+ * @param [out] status          If not null, return the second SPI byte received as status
  *
  * @returns Operation status
  */
 static int sx126x_hal_read( 
     const void* context, const uint8_t* command, const uint16_t command_length,
-    uint8_t* data, const uint16_t data_length ) {
+    uint8_t* data, const uint16_t data_length, uint8_t *status ) {
     printf("sx126x_hal_read: command_length=%d, data_length=%d\n", command_length, data_length);
 
     //  Total length is command + data length
@@ -595,6 +604,12 @@ static int sx126x_hal_read(
 
     //  Copy SPI Receive buffer to data buffer
     memcpy(data, &spi_rx_buf[command_length], data_length);
+
+    //  Return the second SPI byte received as status
+    if (status != NULL) {
+        assert(len >= 2);
+        *status = spi_rx_buf[1];
+    }
     return 0;
 }
 
