@@ -72,8 +72,13 @@ static void receive_message(void);
 static void create_task(void);
 
 int main(void) {
+
+//  Uncomment to read SX1262 registers
+//  #define READ_REGISTERS
+#ifdef READ_REGISTERS
     //  Read SX1262 registers 0x00 to 0x0F
     //  read_registers();
+#endif  //  READ_REGISTERS
 
     //  Create a Background Task to handle LoRa Events
     create_task();
@@ -84,13 +89,15 @@ int main(void) {
     //  TODO: Do we need to wait?
     sleep(1);
 
+//  Uncomment to send a LoRa message
 #define SEND_MESSAGE
 #ifdef SEND_MESSAGE
     //  Send a LoRa message
     send_message();
 #endif  //  SEND_MESSAGE
 
-//#define RECEIVE_MESSAGE
+//  Uncomment to receive a LoRa message
+//  #define RECEIVE_MESSAGE
 #ifdef RECEIVE_MESSAGE
     //  Loop forever receiving LoRa messages
     for (;;) {
