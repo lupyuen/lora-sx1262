@@ -4,9 +4,11 @@
 
 ![PineDio LoRa USB Adapter](https://lupyuen.github.io/images/usb-pinedio.jpg)
 
-Read the article...
+Read the articles...
 
 - ["PineCone BL602 Talks LoRaWAN"](https://lupyuen.github.io/articles/lorawan)
+
+- ["LoRaWAN on PineDio Stack BL604 RISC-V Board"](https://lupyuen.github.io/articles/lorawan2)
 
 The design of the SX1262 Driver is similar to the SX1276 Driver, which is explained in these articles...
 
@@ -61,7 +63,8 @@ sudo rmmod ch341
 sudo modprobe spi-ch341-usb
 
 ## Plug in PineDio USB and check that the module has been correctly loaded.
-## See dmesg Log below.
+## See dmesg Log below. This needs to be checked every time we reboot
+## our computer and when we plug in PineDio USB.
 dmesg
 
 ## If we see "spi_ch341_usb: loading out-of-tree module taints kernel",
