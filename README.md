@@ -6,15 +6,17 @@
 
 Read the articles...
 
-- ["PineCone BL602 Talks LoRaWAN"](https://lupyuen.github.io/articles/lorawan)
+-   ["Build a Linux Driver for PineDio LoRa SX1262 USB Adapter"](https://lupyuen.github.io/articles/usb)
 
-- ["LoRaWAN on PineDio Stack BL604 RISC-V Board"](https://lupyuen.github.io/articles/lorawan2)
+-   ["PineCone BL602 Talks LoRaWAN"](https://lupyuen.github.io/articles/lorawan)
+
+-   ["LoRaWAN on PineDio Stack BL604 RISC-V Board"](https://lupyuen.github.io/articles/lorawan2)
 
 The design of the SX1262 Driver is similar to the SX1276 Driver, which is explained in these articles...
 
-- ["Connect PineCone BL602 to LoRa Transceiver"](https://lupyuen.github.io/articles/lora)
+-   ["Connect PineCone BL602 to LoRa Transceiver"](https://lupyuen.github.io/articles/lora)
 
-- ["PineCone BL602 RISC-V Board Receives LoRa Packets"](https://lupyuen.github.io/articles/lora2)
+-   ["PineCone BL602 RISC-V Board Receives LoRa Packets"](https://lupyuen.github.io/articles/lora2)
 
 __CAUTION: Sending a LoRa Message on PineDio USB (not BL602) above 29 bytes will cause message corruption!__
 
