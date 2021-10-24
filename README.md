@@ -64,9 +64,14 @@ dmesg
 ## Unplug PineDio USB, run "sudo rmmod ch341", plug in PineDio USB again
 ## and recheck dmesg.
 
-## Build PineDio USB Driver
+## Download PineDio USB Driver
 git clone --recursive https://github.com/lupyuen/lora-sx1262
 cd lora-sx1262
+
+## TODO: Edit src/main.c and uncomment READ_REGISTERS, SEND_MESSAGE or RECEIVE_MESSAGE.
+## See "PineDio USB Operations" below
+
+## Build PineDio USB Driver
 make
 
 ## Run PineDio USB Driver Demo.
@@ -74,7 +79,37 @@ make
 sudo ./lora-sx1262
 ```
 
-See https://wiki.pine64.org/wiki/JF%27s_note_on_PineDio_devices#RAW_LoRa_communication_between_USB_LoRa_adapter_and_PineDio_STACK
+More about PineDio USB and CH341 SPI:
+
+https://wiki.pine64.org/wiki/JF%27s_note_on_PineDio_devices#RAW_LoRa_communication_between_USB_LoRa_adapter_and_PineDio_STACK
+
+# PineDio USB Operations
+
+The PineDio USB Demo supports 3 operations...
+
+1.  Read SX1262 Registers:
+
+    Edit [`src/main.c`](src/main.c) and uncomment...
+
+    ```c
+    #define READ_REGISTERS
+    ```
+
+1.  Send LoRa Message:
+
+    Edit [`src/main.c`](src/main.c) and uncomment...
+
+    ```c
+    #define SEND_MESSAGE
+    ```
+
+1.  Receive LoRa Message:
+
+    Edit [`src/main.c`](src/main.c) and uncomment...
+
+    ```c
+    #define RECEIVE_MESSAGE
+    ```
 
 # PineDio USB Output Log
 
