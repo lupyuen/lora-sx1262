@@ -1,22 +1,10 @@
 # LoRa Driver for Semtech SX1262 on Linux (PineDio USB Adapter) and BL602 (PineDio Stack BL604)
 
-[(Follow the updates on Twitter)](https://twitter.com/MisterTechBlog/status/1451548895461326858)
-
 ![PineDio LoRa USB Adapter](https://lupyuen.github.io/images/usb-pinedio.jpg)
 
-Read the articles...
+Read the article...
 
 -   ["Build a Linux Driver for PineDio LoRa SX1262 USB Adapter"](https://lupyuen.github.io/articles/usb)
-
--   ["PineCone BL602 Talks LoRaWAN"](https://lupyuen.github.io/articles/lorawan)
-
--   ["LoRaWAN on PineDio Stack BL604 RISC-V Board"](https://lupyuen.github.io/articles/lorawan2)
-
-The design of the SX1262 Driver is similar to the SX1276 Driver, which is explained in these articles...
-
--   ["Connect PineCone BL602 to LoRa Transceiver"](https://lupyuen.github.io/articles/lora)
-
--   ["PineCone BL602 RISC-V Board Receives LoRa Packets"](https://lupyuen.github.io/articles/lora2)
 
 __CAUTION: Sending a LoRa Message on PineDio USB (not BL602) above 29 bytes will cause message corruption!__
 
@@ -1338,6 +1326,8 @@ usbserial: USB Serial support registered for ch341-uart
 ```
 
 This means that the newer CH341 SPI Driver has been loaded.
+
+## Connect USB Failed
 
 If we see this instead...
 
