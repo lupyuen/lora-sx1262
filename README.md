@@ -157,89 +157,113 @@ Output Log from PineDio USB Demo...
 Read SX1262 Registers on PineDio USB:
 
 ```text
+read_registers
 SX126xIoInit
-TODO: SX126xWakeup
+SX126xWakeup
+sx126x_hal_write: command_length=1, data_length=1
+spi tx: c0 00 
+spi rx: a2 22 
+TODO: SX126xWaitOnBusy
 TODO: SX126xWaitOnBusy
 sx126x_hal_read: command_length=4, data_length=1
+spi tx: 1d 00 00 00 00 
+spi rx: a2 a2 a2 a2 00 
 TODO: SX126xWaitOnBusy
 Register 0x00 = 0x00
-TODO: SX126xWakeup
 TODO: SX126xWaitOnBusy
 sx126x_hal_read: command_length=4, data_length=1
+spi tx: 1d 00 01 00 00 
+spi rx: a2 a2 a2 a2 00 
 TODO: SX126xWaitOnBusy
 Register 0x01 = 0x00
-TODO: SX126xWakeup
 TODO: SX126xWaitOnBusy
 sx126x_hal_read: command_length=4, data_length=1
+spi tx: 1d 00 02 00 00 
+spi rx: a2 a2 a2 a2 00 
 TODO: SX126xWaitOnBusy
 Register 0x02 = 0x00
-TODO: SX126xWakeup
 TODO: SX126xWaitOnBusy
 sx126x_hal_read: command_length=4, data_length=1
+spi tx: 1d 00 03 00 00 
+spi rx: a2 a2 a2 a2 00 
 TODO: SX126xWaitOnBusy
 Register 0x03 = 0x00
-TODO: SX126xWakeup
 TODO: SX126xWaitOnBusy
 sx126x_hal_read: command_length=4, data_length=1
+spi tx: 1d 00 04 00 00 
+spi rx: a2 a2 a2 a2 00 
 TODO: SX126xWaitOnBusy
 Register 0x04 = 0x00
-TODO: SX126xWakeup
 TODO: SX126xWaitOnBusy
 sx126x_hal_read: command_length=4, data_length=1
+spi tx: 1d 00 05 00 00 
+spi rx: a2 a2 a2 a2 00 
 TODO: SX126xWaitOnBusy
 Register 0x05 = 0x00
-TODO: SX126xWakeup
 TODO: SX126xWaitOnBusy
 sx126x_hal_read: command_length=4, data_length=1
+spi tx: 1d 00 06 00 00 
+spi rx: a2 a2 a2 a2 00 
 TODO: SX126xWaitOnBusy
 Register 0x06 = 0x00
-TODO: SX126xWakeup
 TODO: SX126xWaitOnBusy
 sx126x_hal_read: command_length=4, data_length=1
+spi tx: 1d 00 07 00 00 
+spi rx: a2 a2 a2 a2 00 
 TODO: SX126xWaitOnBusy
 Register 0x07 = 0x00
-TODO: SX126xWakeup
 TODO: SX126xWaitOnBusy
 sx126x_hal_read: command_length=4, data_length=1
+spi tx: 1d 00 08 00 00 
+spi rx: a2 a2 a2 a2 80 
 TODO: SX126xWaitOnBusy
 Register 0x08 = 0x80
-TODO: SX126xWakeup
 TODO: SX126xWaitOnBusy
 sx126x_hal_read: command_length=4, data_length=1
+spi tx: 1d 00 09 00 00 
+spi rx: a2 a2 a2 a2 00 
 TODO: SX126xWaitOnBusy
 Register 0x09 = 0x00
-TODO: SX126xWakeup
 TODO: SX126xWaitOnBusy
 sx126x_hal_read: command_length=4, data_length=1
+spi tx: 1d 00 0a 00 00 
+spi rx: a2 a2 a2 a2 01 
 TODO: SX126xWaitOnBusy
 Register 0x0a = 0x01
-TODO: SX126xWakeup
 TODO: SX126xWaitOnBusy
 sx126x_hal_read: command_length=4, data_length=1
+spi tx: 1d 00 0b 00 00 
+spi rx: a2 a2 a2 a2 00 
 TODO: SX126xWaitOnBusy
 Register 0x0b = 0x00
-TODO: SX126xWakeup
 TODO: SX126xWaitOnBusy
 sx126x_hal_read: command_length=4, data_length=1
+spi tx: 1d 00 0c 00 00 
+spi rx: a2 a2 a2 a2 00 
 TODO: SX126xWaitOnBusy
 Register 0x0c = 0x00
-TODO: SX126xWakeup
 TODO: SX126xWaitOnBusy
 sx126x_hal_read: command_length=4, data_length=1
+spi tx: 1d 00 0d 00 00 
+spi rx: a2 a2 a2 a2 00 
 TODO: SX126xWaitOnBusy
 Register 0x0d = 0x00
-TODO: SX126xWakeup
 TODO: SX126xWaitOnBusy
 sx126x_hal_read: command_length=4, data_length=1
+spi tx: 1d 00 0e 00 00 
+spi rx: a2 a2 a2 a2 00 
 TODO: SX126xWaitOnBusy
 Register 0x0e = 0x00
-TODO: SX126xWakeup
 TODO: SX126xWaitOnBusy
 sx126x_hal_read: command_length=4, data_length=1
+spi tx: 1d 00 0f 00 00 
+spi rx: a2 a2 a2 a2 00 
 TODO: SX126xWaitOnBusy
 Register 0x0f = 0x00
 Done!
 ```
+
+See below for the dmesg Read Registers Log.
 
 ## Send Message
 
@@ -1365,6 +1389,32 @@ To fix this...
     ```
 
     And recheck the messages.
+
+## Read Registers
+
+dmesg Log when PineDio USB is reading SX1262 registers...
+
+```text
+audit: type=1105 audit(1635493969.129:144): pid=3122 uid=1000 auid=1000 ses=4 subj==unconfined msg='op=PAM:session_open grantors=pam_limits,pam_unix,pam_permit acct="root" exe="/usr/bin/sudo" hostname=? addr=? terminal=/dev/pts/3 res=success'
+spi-ch341-usb 1-1.1:1.0: ch341_spi_transfer_low: len=2, csChange=1, result=2
+spi-ch341-usb 1-1.1:1.0: ch341_spi_transfer_low: len=5, csChange=1, result=5
+spi-ch341-usb 1-1.1:1.0: ch341_spi_transfer_low: len=5, csChange=1, result=5
+spi-ch341-usb 1-1.1:1.0: ch341_spi_transfer_low: len=5, csChange=1, result=5
+spi-ch341-usb 1-1.1:1.0: ch341_spi_transfer_low: len=5, csChange=1, result=5
+spi-ch341-usb 1-1.1:1.0: ch341_spi_transfer_low: len=5, csChange=1, result=5
+spi-ch341-usb 1-1.1:1.0: ch341_spi_transfer_low: len=5, csChange=1, result=5
+spi-ch341-usb 1-1.1:1.0: ch341_spi_transfer_low: len=5, csChange=1, result=5
+spi-ch341-usb 1-1.1:1.0: ch341_spi_transfer_low: len=5, csChange=1, result=5
+spi-ch341-usb 1-1.1:1.0: ch341_spi_transfer_low: len=5, csChange=1, result=5
+spi-ch341-usb 1-1.1:1.0: ch341_spi_transfer_low: len=5, csChange=1, result=5
+spi-ch341-usb 1-1.1:1.0: ch341_spi_transfer_low: len=5, csChange=1, result=5
+spi-ch341-usb 1-1.1:1.0: ch341_spi_transfer_low: len=5, csChange=1, result=5
+spi-ch341-usb 1-1.1:1.0: ch341_spi_transfer_low: len=5, csChange=1, result=5
+spi-ch341-usb 1-1.1:1.0: ch341_spi_transfer_low: len=5, csChange=1, result=5
+spi-ch341-usb 1-1.1:1.0: ch341_spi_transfer_low: len=5, csChange=1, result=5
+spi-ch341-usb 1-1.1:1.0: ch341_spi_transfer_low: len=5, csChange=1, result=5
+audit: type=1106 audit(1635493969.499:145): pid=3122 uid=1000 auid=1000 ses=4 subj==unconfined msg='op=PAM:session_close grantors=pam_limits,pam_unix,pam_permit acct="root" exe="/usr/bin/sudo" hostname=? addr=? terminal=/dev/pts/3 res=success'
+```
 
 ## Send Message
 
