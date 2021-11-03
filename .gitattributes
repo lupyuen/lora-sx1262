@@ -1,0 +1,25 @@
+toolchain/* linguist-vendored
+
+# From https://code.visualstudio.com/docs/remote/troubleshooting#_resolving-git-line-ending-issues-in-wsl-resulting-in-many-modified-files
+* text=auto eol=lf
+*.{cmd,[cC][mM][dD]} text eol=crlf
+*.{bat,[bB][aA][tT]} text eol=crlf
+*.ch8   binary
+*.bin   binary
+*.cfg   binary
+*.conf  binary
+*.dll   binary
+*.exe   binary
+*.fzz   binary
+*.gif   binary
+*.jpg   binary
+*.jpeg  binary
+*.mp4   binary
+*.pdf   binary
+*.pem   binary
+*.png   binary
+*.pyd   binary
+*.txt   binary
+*.woff  binary
+flash_build binary
+genromfs_*  binary
