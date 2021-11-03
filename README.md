@@ -2,9 +2,13 @@
 
 ![PineDio LoRa USB Adapter](https://lupyuen.github.io/images/usb-pinedio.jpg)
 
-Read the article...
+Read the articles...
 
 -   ["Build a Linux Driver for PineDio LoRa SX1262 USB Adapter"](https://lupyuen.github.io/articles/usb)
+
+-   ["LoRaWAN on PineDio Stack BL604 RISC-V Board"](https://lupyuen.github.io/articles/lorawan2)
+
+-   ["PineCone BL602 Talks LoRaWAN"](https://lupyuen.github.io/articles/lorawan)
 
 __CAUTION: Sending a LoRa Message on PineDio USB (not BL602) above 29 bytes will cause message corruption!__
 
