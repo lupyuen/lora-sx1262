@@ -10,11 +10,20 @@ Read the articles...
 
 -   ["PineCone BL602 Talks LoRaWAN"](https://lupyuen.github.io/articles/lorawan)
 
+-   ["The Things Network on PineDio Stack BL604 RISC-V Board"](https://lupyuen.github.io/articles/ttn)
+
 __CAUTION: Sending a LoRa Message on PineDio USB (not BL602) above 29 bytes will cause message corruption!__
 
 __CAUTION: Receiving a LoRa Message on PineDio USB (not BL602) above 28 bytes will cause message corruption!__
 
 (CH341 SPI seems to have trouble transferring a block of 32 bytes)
+
+For BL602 / BL604: To add this driver to an existing BL602 / BL604 project:
+
+```bash
+cd bl_iot_sdk/components/3rdparty
+git submodule add https://github.com/lupyuen/lora-sx1262
+```
 
 Ported from Semtech's Reference Implementation of SX1262 Driver...
 
