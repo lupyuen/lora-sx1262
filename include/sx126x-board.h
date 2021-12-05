@@ -32,12 +32,12 @@ extern "C"
 #include <stdbool.h>
 #include "sx126x.h"
 
-//  Below are the pin numbers for PineDio Stack BL604 with onboard SX1262.
+//  Below are the pin numbers for PineDio Stack BL604 v2 (15 Sep 2021) with onboard SX1262.
 //  TODO: Change the pin numbers for your SX1262 connection to BL602 / BL604
 
 #define SX126X_SPI_IDX           0  //  SPI Port 0
 #define SX126X_SPI_SDI_PIN       0  //  SPI Serial Data In Pin  (formerly MISO)
-#define SX126X_SPI_SDO_PIN      17  //  SPI Serial Data Out Pin (formerly MOSI)
+#define SX126X_SPI_SDO_PIN      13  //  SPI Serial Data Out Pin (formerly MOSI)
 #define SX126X_SPI_CLK_PIN      11  //  SPI Clock Pin
 #define SX126X_SPI_CS_PIN       15  //  SPI Chip Select Pin
 #define SX126X_SPI_CS_OLD        8  //  Unused SPI Chip Select Pin
