@@ -1,0 +1,27 @@
+#
+# For a description of the syntax of this configuration file,
+# see the file kconfig-language.txt in the NuttX tools repository.
+#
+
+menuconfig LIBSX1262
+	bool "Semtech SX1262 Library"
+	default n
+	---help---
+		Enable build for Semtech SX1262 functions
+
+if LIBSX1262
+
+config LIBSX1262_DEBUG
+	bool "Libsx1262 debugging"
+	default n
+	---help---
+		Enable debugging for libsx1262
+
+config LIBSX1262_PRECISION
+	int "Libsx1262 precision [0/1/2]"
+	default 0
+
+config LIBSX1262_FOC_VABC
+	bool "Libsx1262 FOC includes voltage abc frame"
+
+endif # LIBSX1262
