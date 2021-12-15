@@ -50,8 +50,10 @@ extern "C"
 
 //  Timer definition for BL602
 ////TODO: #include "nimble_npl.h"  //  For NimBLE Porting Layer (timer functions)
-////TODO: typedef struct ble_npl_callout TimerEvent_t;
-typedef int TimerEvent_t;  ////TODO
+struct ble_npl_event {};  ////TODO
+struct ble_npl_callout {};  ////TODO
+typedef void ble_npl_event_fn(struct ble_npl_event *ev);  ////TODO
+typedef struct ble_npl_callout TimerEvent_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 //  BL602 Functions
