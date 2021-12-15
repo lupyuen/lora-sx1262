@@ -1,4 +1,4 @@
-[__UPDATE: Added to Apache NuttX OS as /libs/libsx1262__](https://github.com/lupyuen/incubator-nuttx/tree/sx1262/libs)
+[__UPDATE: This is a Git Submodule of Apache NuttX OS at /libs/libsx1262__](https://github.com/lupyuen/incubator-nuttx/tree/sx1262/libs)
 
 # LoRa Driver for Semtech SX1262 on Linux (PineDio USB Adapter) and BL602 (PineDio Stack BL604)
 
