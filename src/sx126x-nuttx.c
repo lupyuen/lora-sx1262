@@ -654,6 +654,8 @@ static int sx126x_hal_wakeup( const void* context ) {
 
 /// Init the SPI Bus. Return 0 on success.
 static int init_spi(void) {
+    puts("TODO: init_spi"); ////
+#ifdef TODO
     //  Open the SPI Bus
     spi = open("/dev/spidev1.0", O_RDWR);
     assert(spi > 0);
@@ -667,11 +669,14 @@ static int init_spi(void) {
     uint8_t lsb = 0;
     rc = ioctl(spi, SPI_IOC_WR_LSB_FIRST, &lsb);
     assert(rc == 0);
+#endif  //  TODO
     return 0;
 }
 
 /// Blocking call to transmit and receive buffers on SPI. Return 0 on success.
 static int transfer_spi(const uint8_t *tx_buf, uint8_t *rx_buf, uint16_t len) {
+    puts("TODO: transfer_spi"); ////
+#ifdef TODO
     assert(spi > 0);
     assert(len > 0);
     assert(len <= 31);  //  CAUTION: CH341 SPI doesn't seem to support 32-byte SPI transfers 
@@ -691,6 +696,7 @@ static int transfer_spi(const uint8_t *tx_buf, uint8_t *rx_buf, uint16_t len) {
     assert(rc == len);
 
     printf("spi rx: "); for (int i = 0; i < len; i++) { printf("%02x ", rx_buf[i]); } printf("\n");
+#endif  //  TODO
     return 0;
 }
 
