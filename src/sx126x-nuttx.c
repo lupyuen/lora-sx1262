@@ -1,5 +1,5 @@
-//  LoRa SX1262 Board Functions for Linux (PineDio USB)
-#ifndef ARCH_RISCV  //  This file is for Linux only
+//  LoRa SX1262 Board Functions for NuttX
+#ifdef __NuttX__  //  This file is for NuttX only
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -8,10 +8,9 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <sys/ioctl.h>
-#include <linux/spi/spidev.h>
-#include "radio.h"
-#include "sx126x.h"
-#include "sx126x-board.h"
+#include "../include/radio.h"
+#include "../include/sx126x.h"
+#include "../include/sx126x-board.h"
 
 #if defined( USE_RADIO_DEBUG )
 /*!
@@ -398,9 +397,10 @@ void TimerStart(
     struct ble_npl_callout *timer,  //  Pointer to timer. Cannot be NULL.
     uint32_t millisecs)             //  The number of milliseconds from now at which the timer will expire.
 {
-    puts("TimerStart");
+    puts("TODO: TimerStart");
     assert(timer != NULL);
 
+#ifdef TODO
     //  Stop the timer if running
     TimerStop(timer);
 
@@ -418,11 +418,14 @@ void TimerStart(
         ticks   //  Number of ticks
     );
     assert(rc == 0);
+#endif  //  TODO
 }
 
 /// Wait until ‘millisecs’ milliseconds has elapsed. This is a blocking delay.
 void DelayMs(uint32_t millisecs)  //  The number of milliseconds to wait.
 {
+    puts("TODO: DelayMs");  ////
+#ifdef TODO
     //  Implement with Timer Functions from NimBLE Porting Layer.
     //  Convert milliseconds to ticks.
     ble_npl_time_t ticks = ble_npl_time_ms_to_ticks32(
@@ -434,6 +437,7 @@ void DelayMs(uint32_t millisecs)  //  The number of milliseconds to wait.
 
     //  Wait for the ticks
     ble_npl_time_delay(ticks);
+#endif  //  TODO
 }
 
 /// Return current time in microseconds
@@ -690,4 +694,4 @@ static int transfer_spi(const uint8_t *tx_buf, uint8_t *rx_buf, uint16_t len) {
     return 0;
 }
 
-#endif  //  !ARCH_RISCV
+#endif  //  __NuttX__
