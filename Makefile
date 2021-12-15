@@ -21,6 +21,7 @@
 include $(TOPDIR)/Make.defs
 
 ifeq ($(CONFIG_LIBSX1262),y)
+CSRCS += src/radio.c
 CSRCS += src/sx126x.c
 CSRCS += lib_misc.c
 endif

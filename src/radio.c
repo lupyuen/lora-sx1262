@@ -24,11 +24,11 @@
 #include <string.h>
 #include <assert.h>
 #include <stdio.h>
-#include "nimble_npl.h"      //  For NimBLE Porting Layer (timer functions)
-#include "sx126x-utilities.h"
-#include "radio.h"
-#include "sx126x.h"
-#include "sx126x-board.h"
+////TODO #include "nimble_npl.h"      //  For NimBLE Porting Layer (timer functions)
+#include "../include/sx126x-utilities.h"
+#include "../include/radio.h"
+#include "../include/sx126x.h"
+#include "../include/sx126x-board.h"
 
 /*!
  * \brief Initializes the radio

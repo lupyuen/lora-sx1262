@@ -49,8 +49,9 @@ extern "C"
 #define SX126X_SPI_BAUDRATE  (200 * 1000)  //  SPI Frequency (200 kHz)
 
 //  Timer definition for BL602
-#include "nimble_npl.h"  //  For NimBLE Porting Layer (timer functions)
-typedef struct ble_npl_callout TimerEvent_t;
+////TODO: #include "nimble_npl.h"  //  For NimBLE Porting Layer (timer functions)
+////TODO: typedef struct ble_npl_callout TimerEvent_t;
+typedef int TimerEvent_t;  ////TODO
 
 ///////////////////////////////////////////////////////////////////////////////
 //  BL602 Functions

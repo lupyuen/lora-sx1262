@@ -22,10 +22,10 @@
  */
 #include <stdio.h>
 #include <string.h>
-#include "sx126x-utilities.h"
-#include "radio.h"
-#include "sx126x.h"
-#include "sx126x-board.h"
+#include "../include/sx126x-utilities.h"
+#include "../include/radio.h"
+#include "../include/sx126x.h"
+#include "../include/sx126x-board.h"
 
 /*!
  * \brief Internal frequency of the radio
