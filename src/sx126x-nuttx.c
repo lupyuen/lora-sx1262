@@ -362,10 +362,11 @@ void TimerInit(
     struct ble_npl_callout *timer,  //  The timer to initialize. Cannot be NULL.
     ble_npl_event_fn *f)            //  The timer callback function. Cannot be NULL.
 {
-    puts("TimerInit");
+    puts("TODO: TimerInit");
     assert(timer != NULL);
     assert(f != NULL);
 
+#ifdef TODO
     //  Event Queue containing Events to be processed, defined in demo.c.  TODO: Move to header file.
     extern struct ble_npl_eventq event_queue;
 
@@ -376,20 +377,23 @@ void TimerInit(
         f,             //  Callback Function
         NULL           //  Argument to be passed to Callback Function
     );
+#endif  //  TODO
 }
 
 /// Stops a timer from running.  Can be called even if timer is not running.
 void TimerStop(
     struct ble_npl_callout *timer)  //  Pointer to timer to stop. Cannot be NULL.
 {
-    puts("TimerStop");
+    puts("TODO: TimerStop");
     assert(timer != NULL);
 
+#ifdef TODO
     //  If Callout Timer is still running...
     if (ble_npl_callout_is_active(timer)) {
         //  Stop the Callout Timer
         ble_npl_callout_stop(timer);
     }
+#endif  //  TODO
 }
 
 /// Sets a timer that will expire ‘millisecs’ milliseconds from the current time.
