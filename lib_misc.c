@@ -23,7 +23,7 @@
  ****************************************************************************/
 
 #include <stdio.h>  /* TODO: Fix this for kernel mode */
-#include <dsp.h>    /* TODO: Fix header file */
+#include <sx1262.h>
 
 void test_libsx1262(void)
 {
