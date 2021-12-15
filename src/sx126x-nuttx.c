@@ -8,6 +8,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <sys/ioctl.h>
+#include <nuttx/ioexpander/gpio.h>
 #include "../include/radio.h"
 #include "../include/sx126x.h"
 #include "../include/sx126x-board.h"
@@ -526,6 +527,9 @@ static int sx126x_read_buffer( const void* context, const uint8_t offset, uint8_
 /// SPI Bus
 static int spi = 0;
 
+/// Chip Select Pin (GPIO Output)
+static int cs = 0;
+
 /// Max size of SPI transfers
 #define SPI_BUFFER_SIZE 1024
 
@@ -656,51 +660,45 @@ static int sx126x_hal_wakeup( const void* context ) {
 }
 #endif  //  TODO
 
-/// Init the SPI Bus. Return 0 on success.
+/// Init the SPI Bus and Chip Select Pin. Return 0 on success.
 static int init_spi(void) {
-    puts("TODO: init_spi"); ////
-#ifdef TODO
-    //  Open the SPI Bus
-    spi = open("/dev/spidev1.0", O_RDWR);
+    puts("init_spi");
+
+    //  Open the SPI Bus (SPI Test Driver)
+    spi = open("/dev/spitest0", O_RDWR);
     assert(spi > 0);
 
-    //  Set to SPI Mode 0
-    uint8_t mmode = SPI_MODE_0;
-    int rc = ioctl(spi, SPI_IOC_WR_MODE, &mmode);
-    assert(rc == 0);
-
-    //  Set LSB/MSB Mode
-    uint8_t lsb = 0;
-    rc = ioctl(spi, SPI_IOC_WR_LSB_FIRST, &lsb);
-    assert(rc == 0);
-#endif  //  TODO
+    //  Open GPIO Output for SPI Chip Select
+    cs = open("/dev/gpio1", O_RDWR);
+    assert(cs > 0);
     return 0;
 }
 
 /// Blocking call to transmit and receive buffers on SPI. Return 0 on success.
 static int transfer_spi(const uint8_t *tx_buf, uint8_t *rx_buf, uint16_t len) {
-    puts("TODO: transfer_spi"); ////
-#ifdef TODO
     assert(spi > 0);
+    assert(cs  > 0);
     assert(len > 0);
-    assert(len <= 31);  //  CAUTION: CH341 SPI doesn't seem to support 32-byte SPI transfers 
-
-    //  Prepare SPI Transfer
-    struct spi_ioc_transfer spi_trans;
-    memset(&spi_trans, 0, sizeof(spi_trans));
-    spi_trans.tx_buf = (unsigned long) tx_buf;  //  Transmit Buffer
-    spi_trans.rx_buf = (unsigned long) rx_buf;  //  Receive Buffer
-    spi_trans.cs_change = true;   //  Set SPI Chip Select to Low
-    spi_trans.len       = len;    //  How many bytes
+    assert(len <= SPI_BUFFER_SIZE);
     printf("spi tx: "); for (int i = 0; i < len; i++) { printf("%02x ", tx_buf[i]); } printf("\n");
 
-    //  Transfer and receive the SPI buffers
-    int rc = ioctl(spi, SPI_IOC_MESSAGE(1), &spi_trans);
-    assert(rc >= 0);
-    assert(rc == len);
+    //  Set SPI Chip Select to Low
+    int ret = ioctl(cs, GPIOC_WRITE, 0);
+    assert(ret >= 0);
+
+    //  Transmit data over SPI
+    int bytes_written = write(spi, tx_buf, len);
+    assert(bytes_written == len);
+
+    //  Receive SPI response
+    int bytes_read = read(spi, rx_buf, len);
+    assert(bytes_read == len);
+
+    //  Set SPI Chip Select to High
+    ret = ioctl(cs, GPIOC_WRITE, 1);
+    assert(ret >= 0);
 
     printf("spi rx: "); for (int i = 0; i < len; i++) { printf("%02x ", rx_buf[i]); } printf("\n");
-#endif  //  TODO
     return 0;
 }
 
