@@ -67,7 +67,7 @@ static int init_spi(void);
 /// which initialises the GPIO Pins and SPI Port at startup.
 void SX126xIoInit( void )
 {
-    printf("SX126xIoInit\r\n");
+    puts("SX126xIoInit");
 
     //  Init SPI Bus
     int rc = init_spi();
@@ -87,12 +87,12 @@ void SX126xIoIrqInit( DioIrqHandler dioIrq )
     SX126xIoInit();
 
     //  TODO: Register GPIO Interrupt Handler for DIO1
-    printf("TODO: SX126X interrupt init\r\n");
+    puts("TODO: SX126X interrupt init");
 }
 
 void SX126xIoDeInit( void )
 {
-    printf("SX126xIoDeInit\r\n");
+    puts("SX126xIoDeInit");
 }
 
 void SX126xIoDbgInit( void )
@@ -150,7 +150,7 @@ void SX126xReset(void)
 {
     //// #warning Check SX126xReset
 
-    printf("TODO: SX126xReset\r\n");
+    puts("TODO: SX126xReset");
 #ifdef TODO
     //  Set Reset pin to Low
     rc = bl_gpio_output_set(SX126X_NRESET, 1);
@@ -170,7 +170,7 @@ void SX126xReset(void)
 
 void SX126xWaitOnBusy( void )
 {
-    printf("TODO: SX126xWaitOnBusy\r\n");
+    puts("TODO: SX126xWaitOnBusy");
 
     //  TODO: Fix the GPIO check for busy state.
     //  Meanwhile we sleep 10 milliseconds.
@@ -183,7 +183,7 @@ void SX126xWaitOnBusy( void )
 
 void SX126xWakeup( void )
 {
-    printf("SX126xWakeup\r\n");
+    puts("SX126xWakeup");
     CRITICAL_SECTION_BEGIN( );
 
     // Write RADIO_GET_STATUS command followed by 0
@@ -218,7 +218,7 @@ void SX126xWriteCommand( RadioCommands_t command, uint8_t *buffer, uint16_t size
 
 uint8_t SX126xReadCommand( RadioCommands_t command, uint8_t *buffer, uint16_t size )
 {
-    printf("SX126xReadCommand: command=0x%02x, size=%d\r\n", command, size);
+    printf("SX126xReadCommand: command=0x%02x, size=%d\n", command, size);
     uint8_t status = 0;
 
     SX126xCheckDeviceReady( );
@@ -298,7 +298,7 @@ void SX126xReadBuffer( uint8_t offset, uint8_t *buffer, uint8_t size )
 
 void SX126xSetRfTxPower( int8_t power )
 {
-    printf("SX126xSetRfTxPower\r\n");
+    puts("SX126xSetRfTxPower");
     ////TODO: SX126xSetTxParams( power, RADIO_RAMP_40_US );
     SX126xSetTxParams( power, RADIO_RAMP_3400_US );////TODO
 }
@@ -306,11 +306,11 @@ void SX126xSetRfTxPower( int8_t power )
 uint8_t SX126xGetDeviceId( void )
 {
     //  For SX1262
-    printf("SX126xGetDeviceId: SX1262\r\n");
+    puts("SX126xGetDeviceId: SX1262");
     return SX1262;
 
     //  For SX1261
-    //  printf("SX126xGetDeviceId: SX1261\r\n");
+    //  puts("SX126xGetDeviceId: SX1261");
     //  return SX1261;
 }
 
