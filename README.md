@@ -1,10 +1,12 @@
-[__UPDATE: This is a Git Submodule of Apache NuttX OS at /libs/libsx1262__](https://github.com/lupyuen/incubator-nuttx/tree/sx1262/libs)
+# LoRa Driver for Semtech SX1262 on Apache NuttX OS, Linux (PineDio USB Adapter) and BL602 (PineDio Stack BL604)
 
-# LoRa Driver for Semtech SX1262 on Linux (PineDio USB Adapter) and BL602 (PineDio Stack BL604)
+![PineDio Stack BL604 RISC-V Board with onboard Semtech SX1262 LoRa Transceiver (left)... Sniffed wirelessly with Airspy R2 Software Defined Radio (right)](https://lupyuen.github.io/images/sx1262-title.jpg)
 
 ![PineDio LoRa USB Adapter](https://lupyuen.github.io/images/usb-pinedio.jpg)
 
 Read the articles...
+
+-   ["LoRa SX1262 on Apache NuttX OS"](https://lupyuen.github.io/articles/sx1262)
 
 -   ["Build a Linux Driver for PineDio LoRa SX1262 USB Adapter"](https://lupyuen.github.io/articles/usb)
 
@@ -14,13 +16,14 @@ Read the articles...
 
 -   ["The Things Network on PineDio Stack BL604 RISC-V Board"](https://lupyuen.github.io/articles/ttn)
 
-__CAUTION: Sending a LoRa Message on PineDio USB (not BL602) above 29 bytes will cause message corruption!__
+__For Apache NuttX OS:__ To add this driver to an existing NuttX project:
 
-__CAUTION: Receiving a LoRa Message on PineDio USB (not BL602) above 28 bytes will cause message corruption!__
+```bash
+cd nuttx/nuttx/libs
+git submodule add --branch nuttx https://github.com/lupyuen/lora-sx1262 libsx1262
+```
 
-(CH341 SPI seems to have trouble transferring a block of 32 bytes)
-
-For BL602 / BL604: To add this driver to an existing BL602 / BL604 project:
+__For BL602 / BL604:__ To add this driver to an existing BL602 / BL604 project:
 
 ```bash
 cd bl_iot_sdk/components/3rdparty
@@ -29,7 +32,13 @@ git submodule add https://github.com/lupyuen/lora-sx1262
 
 Ported from Semtech's Reference Implementation of SX1262 Driver...
 
-https://github.com/Lora-net/LoRaMac-node/tree/master/src/radio/sx126x
+[Lora-net/LoRaMac-node/src/radio/sx126x](https://github.com/Lora-net/LoRaMac-node/tree/master/src/radio/sx126x)
+
+__CAUTION: Sending a LoRa Message on PineDio USB (not BL602) above 29 bytes will cause message corruption!__
+
+__CAUTION: Receiving a LoRa Message on PineDio USB (not BL602) above 28 bytes will cause message corruption!__
+
+(CH341 SPI seems to have trouble transferring a block of 32 bytes)
 
 # Build PineDio USB Driver
 
