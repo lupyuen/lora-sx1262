@@ -397,12 +397,35 @@ void TimerStop(
 #endif  //  TODO
 }
 
+/*!
+ * \brief Set timer new timeout value
+ *
+ * \param [IN] obj   Structure containing the timer object parameters
+ * \param [IN] value New timer timeout value
+ */
+void TimerSetValue( struct ble_npl_callout *timer, uint32_t value ) {
+    puts("TODO: TimerSetValue");
+    assert(timer != NULL);
+    assert(false);
+}
+
+/*!
+ * \brief Starts and adds the timer object to the list of timer events
+ *
+ * \param [IN] obj Structure containing the timer object parameters
+ */
+void TimerStart( struct ble_npl_callout *timer ) {
+    puts("TODO: TimerStart");
+    assert(timer != NULL);
+    assert(false);
+}
+
 /// Sets a timer that will expire ‘millisecs’ milliseconds from the current time.
 void TimerStart2(
     struct ble_npl_callout *timer,  //  Pointer to timer. Cannot be NULL.
     uint32_t millisecs)             //  The number of milliseconds from now at which the timer will expire.
 {
-    puts("TODO: TimerStart");
+    puts("TODO: TimerStart2");
     assert(timer != NULL);
 
 #ifdef TODO
