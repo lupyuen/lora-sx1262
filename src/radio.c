@@ -1094,7 +1094,7 @@ void RadioSend( uint8_t *buffer, uint8_t size )
     SX126xSetPacketParams( &SX126x.PacketParams );
 
     SX126xSendPayload( buffer, size, 0 );
-    TimerStart( &TxTimeoutTimer, TxTimeout );
+    TimerStart2( &TxTimeoutTimer, TxTimeout );
 }
 
 void RadioSleep( void )
@@ -1124,7 +1124,7 @@ void RadioRx( uint32_t timeout )
 
     if( timeout != 0 )
     {
-        TimerStart( &RxTimeoutTimer, timeout );
+        TimerStart2( &RxTimeoutTimer, timeout );
     }
 
     if( RxContinuous == true )
@@ -1146,7 +1146,7 @@ void RadioRxBoosted( uint32_t timeout )
 
     if( timeout != 0 )
     {
-        TimerStart( &RxTimeoutTimer, timeout );
+        TimerStart2( &RxTimeoutTimer, timeout );
     }
 
     if( RxContinuous == true )
@@ -1208,7 +1208,7 @@ void RadioSetTxContinuousWave( uint32_t freq, int8_t power, uint16_t time )
     SX126xSetRfTxPower( power );
     SX126xSetTxContinuousWave( );
 
-    TimerStart( &TxTimeoutTimer, timeout );
+    TimerStart2( &TxTimeoutTimer, timeout );
 }
 
 int16_t RadioRssi( RadioModems_t modem )

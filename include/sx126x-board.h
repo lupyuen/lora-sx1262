@@ -57,8 +57,23 @@ void TimerInit(
 void TimerStop(
     struct ble_npl_callout *timer); //  Pointer to timer to stop. Cannot be NULL.
 
+/*!
+ * \brief Set timer new timeout value
+ *
+ * \param [IN] obj   Structure containing the timer object parameters
+ * \param [IN] value New timer timeout value
+ */
+void TimerSetValue( struct ble_npl_callout *obj, uint32_t value );
+
+/*!
+ * \brief Starts and adds the timer object to the list of timer events
+ *
+ * \param [IN] obj Structure containing the timer object parameters
+ */
+void TimerStart( struct ble_npl_callout *obj );
+
 /// Sets a timer that will expire ‘usecs’ microseconds from the current time.
-void TimerStart(
+void TimerStart2(
     struct ble_npl_callout *timer,  //  Pointer to timer. Cannot be NULL.
     uint32_t microsecs);            //  The number of microseconds from now at which the timer will expire.
 

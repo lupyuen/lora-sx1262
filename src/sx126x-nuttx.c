@@ -398,7 +398,7 @@ void TimerStop(
 }
 
 /// Sets a timer that will expire ‘millisecs’ milliseconds from the current time.
-void TimerStart(
+void TimerStart2(
     struct ble_npl_callout *timer,  //  Pointer to timer. Cannot be NULL.
     uint32_t millisecs)             //  The number of milliseconds from now at which the timer will expire.
 {
