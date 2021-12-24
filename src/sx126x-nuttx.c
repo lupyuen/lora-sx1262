@@ -406,7 +406,6 @@ void TimerStop(
 void TimerSetValue( struct ble_npl_callout *timer, uint32_t value ) {
     puts("TODO: TimerSetValue");
     assert(timer != NULL);
-    assert(false);
 }
 
 /*!
@@ -417,7 +416,6 @@ void TimerSetValue( struct ble_npl_callout *timer, uint32_t value ) {
 void TimerStart( struct ble_npl_callout *timer ) {
     puts("TODO: TimerStart");
     assert(timer != NULL);
-    assert(false);
 }
 
 /// Sets a timer that will expire ‘millisecs’ milliseconds from the current time.
@@ -471,7 +469,7 @@ void DelayMs(uint32_t millisecs)  //  The number of milliseconds to wait.
 /// Return current time in microseconds
 uint32_t TimerGetCurrentTime(void)
 {
-    assert(false); return 0;
+    puts("TODO: TimerGetCurrentTime"); return 0;  ////
 #ifdef TODO
     //  Convert ticks to milliseconds then microseconds
     return xTaskGetTickCount() * portTICK_PERIOD_MS * 1000;
@@ -481,7 +479,7 @@ uint32_t TimerGetCurrentTime(void)
 /// Return elased time in microseconds
 uint32_t TimerGetElapsedTime(uint32_t saved_time)
 {
-    assert(false); return 0;
+    puts("TODO: TimerGetElapsedTime"); return 0;  ////
 #ifdef TODO
     return TimerGetCurrentTime() - saved_time;
 #endif  //  TODO
