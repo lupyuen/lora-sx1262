@@ -24,7 +24,6 @@
 #include <string.h>
 #include <assert.h>
 #include <stdio.h>
-////TODO #include "nimble_npl.h"      //  For NimBLE Porting Layer (timer functions)
 #include "../include/sx126x-utilities.h"
 #include "../include/radio.h"
 #include "../include/sx126x.h"

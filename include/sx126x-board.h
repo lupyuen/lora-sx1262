@@ -35,10 +35,7 @@ extern "C"
 #define SX126X_TCXO_WAKEUP_TIME  5  //  Time required for the TCXO to wakeup (milliseconds)
 
 //  Timer definition for BL602
-////TODO: #include "nimble_npl.h"  //  For NimBLE Porting Layer (timer functions)
-struct ble_npl_event {};  ////TODO
-struct ble_npl_callout {};  ////TODO
-typedef void ble_npl_event_fn(struct ble_npl_event *ev);  ////TODO
+#include "../../libnpl/nimble/include/nimble/nimble_npl.h"  //  For NimBLE Porting Layer (timer functions)
 typedef struct ble_npl_callout TimerEvent_t;
 
 ///////////////////////////////////////////////////////////////////////////////
