@@ -363,11 +363,10 @@ void TimerInit(
     struct ble_npl_callout *timer,  //  The timer to initialize. Cannot be NULL.
     ble_npl_event_fn *f)            //  The timer callback function. Cannot be NULL.
 {
-    puts("TODO: TimerInit");
+    puts("TimerInit");
     assert(timer != NULL);
     assert(f != NULL);
 
-#ifdef TODO
     //  Event Queue containing Events to be processed, defined in demo.c.  TODO: Move to header file.
     extern struct ble_npl_eventq event_queue;
 
@@ -378,23 +377,20 @@ void TimerInit(
         f,             //  Callback Function
         NULL           //  Argument to be passed to Callback Function
     );
-#endif  //  TODO
 }
 
 /// Stops a timer from running.  Can be called even if timer is not running.
 void TimerStop(
     struct ble_npl_callout *timer)  //  Pointer to timer to stop. Cannot be NULL.
 {
-    puts("TODO: TimerStop");
+    puts("TimerStop");
     assert(timer != NULL);
 
-#ifdef TODO
     //  If Callout Timer is still running...
     if (ble_npl_callout_is_active(timer)) {
         //  Stop the Callout Timer
         ble_npl_callout_stop(timer);
     }
-#endif  //  TODO
 }
 
 /*!
@@ -423,10 +419,9 @@ void TimerStart2(
     struct ble_npl_callout *timer,  //  Pointer to timer. Cannot be NULL.
     uint32_t millisecs)             //  The number of milliseconds from now at which the timer will expire.
 {
-    puts("TODO: TimerStart2");
+    puts("TimerStart2");
     assert(timer != NULL);
 
-#ifdef TODO
     //  Stop the timer if running
     TimerStop(timer);
 
@@ -444,14 +439,12 @@ void TimerStart2(
         ticks   //  Number of ticks
     );
     assert(rc == 0);
-#endif  //  TODO
 }
 
 /// Wait until ‘millisecs’ milliseconds has elapsed. This is a blocking delay.
 void DelayMs(uint32_t millisecs)  //  The number of milliseconds to wait.
 {
-    puts("TODO: DelayMs");  ////
-#ifdef TODO
+    puts("DelayMs");  ////
     //  Implement with Timer Functions from NimBLE Porting Layer.
     //  Convert milliseconds to ticks.
     ble_npl_time_t ticks = ble_npl_time_ms_to_ticks32(
@@ -463,7 +456,6 @@ void DelayMs(uint32_t millisecs)  //  The number of milliseconds to wait.
 
     //  Wait for the ticks
     ble_npl_time_delay(ticks);
-#endif  //  TODO
 }
 
 /// Return current time in microseconds
