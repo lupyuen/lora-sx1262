@@ -747,9 +747,20 @@ static int init_gpio(void) {
     ret = ioctl(dio1, GPIOC_PINTYPE, (unsigned long)((uintptr_t)&pintype));
     assert(ret >= 0);
 
+    //  Verify that SX1262 DIO1 Pin is GPIO Input (not GPIO Output or GPIO Interrupt)
+    assert(pintype == GPIO_INPUT_PIN);
+
+    //  Change DIO1 Pin from GPIO Input to GPIO Interrupt (Trigger interrupt on rising edge)
+    puts("init_gpio: change DIO1 from GPIO Input to GPIO Interrupt");
+    ret = ioctl(dio1, GPIOC_SETPINTYPE, (unsigned long) GPIO_INTERRUPT_RISING_PIN);
+    assert(ret >= 0);
+
+    //  Get SX1262 DIO1 Pin Type
+    ret = ioctl(dio1, GPIOC_PINTYPE, (unsigned long)((uintptr_t)&pintype));
+    assert(ret >= 0);
+
     //  Verify that SX1262 DIO1 Pin is GPIO Interrupt (not GPIO Input or GPIO Output)
-    //  assert(pintype == GPIO_INTERRUPT_RISING_PIN);  //  Trigger interrupt on rising edge
-    printf("dio1 pin type=%d\n", pintype); ////
+    assert(pintype == GPIO_INTERRUPT_RISING_PIN);  //  Trigger interrupt on rising edge
 
     //  Init the Background Thread Attributes
     static pthread_attr_t attr;
@@ -761,7 +772,7 @@ static int init_gpio(void) {
     static pthread_t thread;
     ret = pthread_create(&thread, &attr, process_dio1, 0);
     assert(ret == 0);
-    
+
     return 0;
 }
 
