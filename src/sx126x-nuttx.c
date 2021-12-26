@@ -384,9 +384,6 @@ void TimerInit(
     assert(timer != NULL);
     assert(f != NULL);
 
-    //  Event Queue containing Events to be processed, defined in demo.c.  TODO: Move to header file.
-    extern struct ble_npl_eventq event_queue;
-
     //  Init the Callout Timer with the Callback Function
     ble_npl_callout_init(
         timer,         //  Callout Timer
