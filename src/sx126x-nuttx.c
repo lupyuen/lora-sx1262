@@ -753,7 +753,7 @@ static int init_gpio(void) {
 
     //  Change DIO1 Pin to Trigger GPIO Interrupt on Rising Edge
     //  TODO: Crashes at ioexpander/gpio.c (line 544) because change failed apparently
-    puts("init_gpio: change DIO1 from GPIO Input to GPIO Interrupt");
+    puts("init_gpio: change DIO1 to Trigger GPIO Interrupt on Rising Edge");
     ret = ioctl(dio1, GPIOC_SETPINTYPE, (unsigned long) GPIO_INTERRUPT_RISING_PIN);
     assert(ret >= 0);
 
