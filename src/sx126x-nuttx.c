@@ -823,9 +823,10 @@ static int transfer_spi(const uint8_t *tx_buf, uint8_t *rx_buf, uint16_t len) {
     return 0;
 }
 
+/// Handle DIO1 Interrupt by adding to Event Queue
 void *process_dio1(void *arg) {
     assert(dio1 > 0);
-    printf("CHILD: started with arg=%d\n", (int)((intptr_t)arg));
+    puts("process_dio1 started");
 
     //  Define the DIO1 Interrupt Event
     static struct ble_npl_event ev;
@@ -835,22 +836,22 @@ void *process_dio1(void *arg) {
         NULL              //  Argument to be passed to Event Handler
     );
 
+    //  Define the signal
+    #define SIG_DIO1 1
     struct sigevent notify;
-    struct timespec ts;
-    sigset_t set;
-    int signo = 1;
-
     notify.sigev_notify = SIGEV_SIGNAL;
-    notify.sigev_signo = signo;
+    notify.sigev_signo = SIG_DIO1;
 
     //  Set up to receive signal from GPIO Interrupt (DIO1 rising edge)
     int ret = ioctl(dio1, GPIOC_REGISTER, (unsigned long)&notify);
     assert(ret >= 0);
 
     //  Wait up to 5 seconds for the signal
+    sigset_t set;
     sigemptyset(&set);
-    sigaddset(&set, signo);
+    sigaddset(&set, SIG_DIO1);
 
+    struct timespec ts;
     ts.tv_sec = 5;
     ts.tv_nsec = 0;
 
@@ -862,7 +863,7 @@ void *process_dio1(void *arg) {
         assert(ret >= 0);
         printf("DIO1 before=%u\n", (unsigned int)invalue);
 
-        //  Wait for the signal
+        //  Wait up to 5 seconds for the signal
         ret = sigtimedwait(&set, NULL, &ts);
 
         if (ret >= 0) {
@@ -873,7 +874,7 @@ void *process_dio1(void *arg) {
             //  We were not signalled
             int errcode = errno;
             if (errcode == EAGAIN) { puts("DIO1 timeout"); }
-            else { fprintf(stderr, "ERROR: Failed to wait signal %d: %d\n", signo, errcode); return NULL; }
+            else { fprintf(stderr, "ERROR: Failed to wait signal %d: %d\n", SIG_DIO1, errcode); return NULL; }
         }
 
         //  Re-read the pin value
