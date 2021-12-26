@@ -751,18 +751,19 @@ static int init_gpio(void) {
     //  Verify that SX1262 DIO1 Pin is GPIO Interrupt (not GPIO Input or GPIO Output)
     assert(pintype == GPIO_INTERRUPT_PIN);
 
-    //  Change DIO1 Pin from GPIO Input to GPIO Interrupt (Trigger interrupt on rising edge)
+    //  Change DIO1 Pin to Trigger GPIO Interrupt on Rising Edge
     //  TODO: Crashes at ioexpander/gpio.c (line 544) because change failed apparently
     puts("init_gpio: change DIO1 from GPIO Input to GPIO Interrupt");
     ret = ioctl(dio1, GPIOC_SETPINTYPE, (unsigned long) GPIO_INTERRUPT_RISING_PIN);
     assert(ret >= 0);
 
-    //  Get SX1262 DIO1 Pin Type to GPIO Interrupt on Rising Edge
+    //  Set SX1262 DIO1 Pin Type to GPIO Interrupt on Rising Edge
     ret = ioctl(dio1, GPIOC_PINTYPE, (unsigned long)((uintptr_t)&pintype));
     assert(ret >= 0);
     printf("DIO1 pintype after=%d\n", pintype);
 
     //  Verify that SX1262 DIO1 Pin is GPIO Interrupt on Rising Edge
+    //  TODO: This fails because the Pin Type remains as GPIO_INTERRUPT_PIN
     //  assert(pintype == GPIO_INTERRUPT_RISING_PIN);  //  Trigger interrupt on rising edge
 
     //  Init the Background Thread Attributes
