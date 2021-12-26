@@ -393,15 +393,34 @@ void TimerStop(
     }
 }
 
+/// Timer Table: Maps Timer Address to Timeout Value (millisecs)
+#define MAX_TIMERS 16
+static struct ble_npl_callout *timer_addr[MAX_TIMERS];
+static uint32_t timer_timeout[MAX_TIMERS];
+
 /*!
  * \brief Set timer new timeout value
  *
  * \param [IN] obj   Structure containing the timer object parameters
- * \param [IN] value New timer timeout value
+ * \param [IN] millisecs New timer timeout value
  */
-void TimerSetValue( struct ble_npl_callout *timer, uint32_t value ) {
-    puts("TODO: TimerSetValue");
+void TimerSetValue( struct ble_npl_callout *timer, uint32_t millisecs ) {
+    printf("TimerSetValue: &d ms\n", millisecs);
     assert(timer != NULL);
+    assert(millisecs > 0);
+
+    //  Find the timer in the Timer Table, or an empty slot
+    int i;
+    for (i = 0; i < MAX_TIMERS; i++) {
+        if (timer_addr[i] == NULL || timer_addr[i] == timer) {
+            timer_addr[i] = timer;
+            break;
+        }
+    }
+    assert(i < MAX_TIMERS);  //  No space in the Timer Table, increase MAX_TIMERS
+
+    //  Set the new timeout value
+    timer_timeout[i] = millisecs;
 }
 
 /*!
@@ -410,8 +429,22 @@ void TimerSetValue( struct ble_npl_callout *timer, uint32_t value ) {
  * \param [IN] obj Structure containing the timer object parameters
  */
 void TimerStart( struct ble_npl_callout *timer ) {
-    puts("TODO: TimerStart");
+    puts("TimerStart");
     assert(timer != NULL);
+
+    //  Find the timer in the Timer Table
+    int i;
+    for (i = 0; i < MAX_TIMERS; i++) {
+        if (timer_addr[i] == timer) { break; }
+    }
+    assert(i < MAX_TIMERS);  //  Not found in the Timer Table
+
+    //  Get the timeout value
+    uint32_t millisecs = timer_timeout[i];
+    assert(millisecs > 0);
+
+    //  Start the timer
+    TimerStart2(timer, millisecs);
 }
 
 /// Sets a timer that will expire ‘millisecs’ milliseconds from the current time.
@@ -419,7 +452,7 @@ void TimerStart2(
     struct ble_npl_callout *timer,  //  Pointer to timer. Cannot be NULL.
     uint32_t millisecs)             //  The number of milliseconds from now at which the timer will expire.
 {
-    puts("TimerStart2");
+    printf("TimerStart2: &d ms\n", millisecs);
     assert(timer != NULL);
 
     //  Stop the timer if running
@@ -461,20 +494,22 @@ void DelayMs(uint32_t millisecs)  //  The number of milliseconds to wait.
 /// Return current time in microseconds
 uint32_t TimerGetCurrentTime(void)
 {
-    puts("TODO: TimerGetCurrentTime"); return 0;  ////
-#ifdef TODO
-    //  Convert ticks to milliseconds then microseconds
-    return xTaskGetTickCount() * portTICK_PERIOD_MS * 1000;
-#endif  //  TODO
+    //  Get ticks (ms) since system start
+    ble_npl_time_t ticks = ble_npl_time_get();
+
+    //  Convert ticks to milliseconds
+    uint32_t millisecs = ble_npl_time_ticks_to_ms32(ticks);
+    printf("TimerGetCurrentTime: %d ms\n", millisecs);
+
+    //  Return as microseconds
+    return millisecs * 1000;
 }
 
 /// Return elased time in microseconds
 uint32_t TimerGetElapsedTime(uint32_t saved_time)
 {
-    puts("TODO: TimerGetElapsedTime"); return 0;  ////
-#ifdef TODO
+    puts("TimerGetElapsedTime");
     return TimerGetCurrentTime() - saved_time;
-#endif  //  TODO
 }
 
 ///////////////////////////////////////////////////////////////////////////////
