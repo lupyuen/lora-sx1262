@@ -48,6 +48,12 @@ Gpio_t DbgPinTx;
 Gpio_t DbgPinRx;
 #endif
 
+/// SX1262 Busy Pin (GPIO Input)
+static int busy = 0;
+
+/// SX1262 DIO1 Pin (GPIO Interrupt)
+static int dio1 = 0;
+
 static int sx126x_write_register( const void* context, const uint16_t address, const uint8_t* buffer, const uint8_t size );
 static int sx126x_read_register( const void* context, const uint16_t address, uint8_t* buffer, const uint8_t size );
 static int sx126x_write_buffer( const void* context, const uint8_t offset, const uint8_t* buffer, const uint8_t size );
@@ -173,15 +179,19 @@ void SX126xReset(void)
 
 void SX126xWaitOnBusy( void )
 {
-    puts("TODO: SX126xWaitOnBusy");
+    puts("SX126xWaitOnBusy");
+    assert(busy > 0);
 
-    //  TODO: Fix the GPIO check for busy state.
-    //  Meanwhile we sleep 10 milliseconds.
-    usleep(10 * 1000);
+    //  Loop until Busy Pin is Low
+    for (;;) {
+        //  Read Busy Pin
+        bool invalue;
+        int ret = ioctl(busy, GPIOC_READ, (unsigned long)((uintptr_t)&invalue));
+        assert(ret >= 0);
 
-#ifdef TODO
-    while( bl_gpio_input_get_value( SX126X_BUSY_PIN ) == 1 );
-#endif  //  TODO
+        //  Exit if Busy Pin is Low
+        if (invalue == 0) { break; }
+    }
 }
 
 void SX126xWakeup( void )
@@ -581,12 +591,6 @@ static int spi = 0;
 /// SPI Chip Select Pin (GPIO Output)
 static int cs = 0;
 
-/// SX1262 Busy Pin (GPIO Input)
-static int busy = 0;
-
-/// SX1262 DIO1 Pin (GPIO Interrupt)
-static int dio1 = 0;
-
 /// Max size of SPI transfers
 #define SPI_BUFFER_SIZE 1024
 
@@ -725,10 +729,12 @@ static int init_gpio(void) {
     busy = open("/dev/gpio0", O_RDWR);
     assert(busy > 0);
 
-    //  Verify that SX1262 Busy Pin is GPIO Input (not GPIO Output or GPIO Interrupt)
+    //  Get SX1262 Busy Pin Type
     enum gpio_pintype_e pintype;
     int ret = ioctl(busy, GPIOC_PINTYPE, (unsigned long)((uintptr_t)&pintype));
     assert(ret >= 0);
+
+    //  Verify that SX1262 Busy Pin is GPIO Input (not GPIO Output or GPIO Interrupt)
     assert(pintype == GPIO_INPUT_PIN);  //  No pullup / pulldown
 
     //  Open GPIO Interrupt for SX1262 DIO1 Pin
@@ -736,9 +742,11 @@ static int init_gpio(void) {
     assert(dio1 > 0);
     return 0;
 
-    //  Verify that SX1262 DIO1 Pin is GPIO Interrupt (not GPIO Input or GPIO Output)
+    //  Get SX1262 DIO1 Pin Type
     ret = ioctl(dio1, GPIOC_PINTYPE, (unsigned long)((uintptr_t)&pintype));
     assert(ret >= 0);
+
+    //  Verify that SX1262 DIO1 Pin is GPIO Interrupt (not GPIO Input or GPIO Output)
     assert(pintype == GPIO_INTERRUPT_RISING_PIN);  //  Trigger interrupt on rising edge
 }
 
@@ -754,11 +762,15 @@ static int init_spi(void) {
     cs = open("/dev/gpio1", O_RDWR);
     assert(cs > 0);
 
-    //  Verify that SPI Chip Select is GPIO Output (not GPIO Input or GPIO Interrupt)
+    //  Get SPI Chip Select Pin Type
     enum gpio_pintype_e pintype;
     int ret = ioctl(cs, GPIOC_PINTYPE, (unsigned long)((uintptr_t)&pintype));
     assert(ret >= 0);
+
+    //  Verify that SPI Chip Select is GPIO Output (not GPIO Input or GPIO Interrupt)
     assert(pintype == GPIO_OUTPUT_PIN);
+
+    //  TODO: Set SPI Chip Select to High for all SPI Devices
     return 0;
 }
 
