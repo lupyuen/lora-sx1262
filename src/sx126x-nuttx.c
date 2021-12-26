@@ -395,8 +395,8 @@ void TimerStop(
 
 /// Timer Table: Maps Timer Address to Timeout Value (millisecs)
 #define MAX_TIMERS 16
-static struct ble_npl_callout *timer_addr[MAX_TIMERS];
-static uint32_t timer_timeout[MAX_TIMERS];
+static struct ble_npl_callout *timer_addr[MAX_TIMERS];  //  Timer Address
+static uint32_t timer_timeout[MAX_TIMERS];  //  Timeout Value (millisecs)
 
 /*!
  * \brief Set timer new timeout value
