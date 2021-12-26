@@ -75,7 +75,7 @@ void SX126xIoInit( void )
     assert(rc == 0);
 
     //  Init SPI Bus
-    int rc = init_spi();
+    rc = init_spi();
     assert(rc == 0);
 }
 
@@ -578,13 +578,13 @@ static int sx126x_read_buffer( const void* context, const uint8_t offset, uint8_
 /// SPI Bus
 static int spi = 0;
 
-/// Chip Select Pin (GPIO Output)
+/// SPI Chip Select Pin (GPIO Output)
 static int cs = 0;
 
-/// Busy Pin (GPIO Input)
+/// SX1262 Busy Pin (GPIO Input)
 static int busy = 0;
 
-/// DIO1 Pin (GPIO Interrupt)
+/// SX1262 DIO1 Pin (GPIO Interrupt)
 static int dio1 = 0;
 
 /// Max size of SPI transfers
@@ -717,6 +717,31 @@ static int sx126x_hal_wakeup( const void* context ) {
 }
 #endif  //  TODO
 
+/// Init the GPIO Pins. Return 0 on success.
+static int init_gpio(void) {
+    puts("init_gpio");
+
+    //  Open GPIO Input for SX1262 Busy Pin
+    busy = open("/dev/gpio0", O_RDWR);
+    assert(busy > 0);
+
+    //  Verify that SX1262 Busy Pin is GPIO Input (not GPIO Output or GPIO Interrupt)
+    enum gpio_pintype_e pintype;
+    int ret = ioctl(busy, GPIOC_PINTYPE, (unsigned long)((uintptr_t)&pintype));
+    assert(ret >= 0);
+    assert(pintype == GPIO_INPUT_PIN);  //  No pullup / pulldown
+
+    //  Open GPIO Interrupt for SX1262 DIO1 Pin
+    dio1 = open("/dev/gpio2", O_RDWR);
+    assert(dio1 > 0);
+    return 0;
+
+    //  Verify that SX1262 DIO1 Pin is GPIO Interrupt (not GPIO Input or GPIO Output)
+    ret = ioctl(dio1, GPIOC_PINTYPE, (unsigned long)((uintptr_t)&pintype));
+    assert(ret >= 0);
+    assert(pintype == GPIO_INTERRUPT_RISING_PIN);  //  Trigger interrupt on rising edge
+}
+
 /// Init the SPI Bus and Chip Select Pin. Return 0 on success.
 static int init_spi(void) {
     puts("init_spi");
@@ -733,10 +758,7 @@ static int init_spi(void) {
     enum gpio_pintype_e pintype;
     int ret = ioctl(cs, GPIOC_PINTYPE, (unsigned long)((uintptr_t)&pintype));
     assert(ret >= 0);
-    assert(
-        pintype == GPIO_OUTPUT_PIN || 
-        pintype == GPIO_OUTPUT_PIN_OPENDRAIN
-    );
+    assert(pintype == GPIO_OUTPUT_PIN);
     return 0;
 }
 
