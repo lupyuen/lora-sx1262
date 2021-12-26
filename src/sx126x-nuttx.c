@@ -58,6 +58,7 @@ static int sx126x_hal_write(
 static int sx126x_hal_read( 
     const void* context, const uint8_t* command, const uint16_t command_length,
     uint8_t* data, const uint16_t data_length, uint8_t *status );
+static int init_gpio(void);
 static int init_spi(void);
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -69,11 +70,13 @@ void SX126xIoInit( void )
 {
     puts("SX126xIoInit");
 
+    //  Init GPIO Pins
+    int rc = init_gpio();
+    assert(rc == 0);
+
     //  Init SPI Bus
     int rc = init_spi();
     assert(rc == 0);
-
-    //  TODO: Init GPIO Pins
 }
 
 /// Initialise GPIO Pins and SPI Port. Register GPIO Interrupt Handler for DIO1.
@@ -570,13 +573,19 @@ static int sx126x_read_buffer( const void* context, const uint8_t offset, uint8_
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-//  SPI Functions
+//  SPI and GPIO Functions
 
 /// SPI Bus
 static int spi = 0;
 
 /// Chip Select Pin (GPIO Output)
 static int cs = 0;
+
+/// Busy Pin (GPIO Input)
+static int busy = 0;
+
+/// DIO1 Pin (GPIO Interrupt)
+static int dio1 = 0;
 
 /// Max size of SPI transfers
 #define SPI_BUFFER_SIZE 1024
