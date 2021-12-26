@@ -754,21 +754,15 @@ static int init_gpio(void) {
     //  Verify that SX1262 DIO1 Pin is GPIO Interrupt (not GPIO Input or GPIO Output)
     assert(pintype == GPIO_INTERRUPT_RISING_PIN);  //  Trigger interrupt on rising edge
 
-    //  Start the background thread to process DIO1 interrupts
-    pthread_attr_t attr;
-    pthread_t thread;
+    //  Init the Background Thread Attributes
+    static pthread_attr_t attr;
+    ret = pthread_attr_init(&attr);
+    assert(ret == 0);
 
-    int status = pthread_attr_init(&attr);
-    if (status != 0) {
-        printf("pthread_attr_init() returned %d\n", status);
-        assert(false);
-    }
-    printf("pthread_start with arg=%d\n", 0);
-    status = pthread_create(&thread, &attr, process_dio1, 0);
-    if (status != 0) {
-        printf("pthread_create() returned %d\n", status);
-        assert(false);
-    }
+    //  Start the Background Thread to process DIO1 interrupts
+    static pthread_t thread;
+    ret = pthread_create(&thread, &attr, process_dio1, 0);
+    assert(ret == 0);
 }
 
 /// Init the SPI Bus and Chip Select Pin. Return 0 on success.
