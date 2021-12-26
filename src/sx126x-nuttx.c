@@ -7,6 +7,7 @@
 #include <assert.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <pthread.h>
 #include <sys/ioctl.h>
 #include <nuttx/ioexpander/gpio.h>
 #include "../include/radio.h"
@@ -601,6 +602,7 @@ static uint8_t spi_tx_buf[SPI_BUFFER_SIZE];
 static uint8_t spi_rx_buf[SPI_BUFFER_SIZE];
 
 static int transfer_spi(const uint8_t *tx_buf, uint8_t *rx_buf, uint16_t len);
+void *process_dio1(void *arg);
 
 /**
  * Radio data transfer - write
@@ -748,6 +750,22 @@ static int init_gpio(void) {
 
     //  Verify that SX1262 DIO1 Pin is GPIO Interrupt (not GPIO Input or GPIO Output)
     assert(pintype == GPIO_INTERRUPT_RISING_PIN);  //  Trigger interrupt on rising edge
+
+    //  Start the background thread to process DIO1 interrupts
+    pthread_attr_t attr;
+    pthread_t thread;
+
+    int status = pthread_attr_init(&attr);
+    if (status != 0) {
+        printf("pthread_attr_init() returned %d\n", status);
+        assert(false);
+    }
+    printf("pthread_start with arg=%d\n", 0);
+    status = pthread_create(&thread, &attr, process_dio1, 0);
+    if (status != 0) {
+        printf("pthread_create() returned %d\n", status);
+        assert(false);
+    }
 }
 
 /// Init the SPI Bus and Chip Select Pin. Return 0 on success.
@@ -800,6 +818,58 @@ static int transfer_spi(const uint8_t *tx_buf, uint8_t *rx_buf, uint16_t len) {
 
     printf("spi rx: "); for (int i = 0; i < len; i++) { printf("%02x ", rx_buf[i]); } printf("\n");
     return 0;
+}
+
+void *process_dio1(void *arg) {
+    assert(dio1 > 0);
+    printf("CHILD: started with arg=%d\n", (int)((intptr_t)arg));
+
+    struct sigevent notify;
+    struct timespec ts;
+    sigset_t set;
+    int signo = 1;
+
+    notify.sigev_notify = SIGEV_SIGNAL;
+    notify.sigev_signo = signo;
+
+    /* Set up to receive signal */
+
+    int ret = ioctl(dio1, GPIOC_REGISTER, (unsigned long)&notify);
+    assert(ret >= 0);
+
+    /* Wait up to 5 seconds for the signal */
+
+    sigemptyset(&set);
+    sigaddset(&set, signo);
+
+    ts.tv_sec = 5;
+    ts.tv_nsec = 0;
+
+    //  Loop forever waiting for the signal (DIO1 rising edge)
+    for (;;) {
+        //  Read the pin value
+        bool invalue;
+        ret = ioctl(dio1, GPIOC_READ, (unsigned long)((uintptr_t)&invalue));
+        assert(ret >= 0);
+        printf("DIO1 Before=%u\n", (unsigned int)invalue);
+
+        //  Wait for the signal
+        ret = sigtimedwait(&set, NULL, &ts);
+        
+        if (ret < 0) {
+            int errcode = errno;
+            if (errcode == EAGAIN) { puts("DIO1 timeout"); }
+            else { fprintf(stderr, "ERROR: Failed to wait signal %d: %d\n", signo, errcode); return NULL; }
+        }
+
+        //  Re-read the pin value
+        ret = ioctl(dio1, GPIOC_READ, (unsigned long)((uintptr_t)&invalue));
+        assert(ret >= 0);
+        printf("DIO1 After=%u\n", (unsigned int)invalue);
+    }
+
+    ////ioctl(fd, GPIOC_UNREGISTER, 0);
+    return NULL;
 }
 
 #endif  //  __NuttX__
