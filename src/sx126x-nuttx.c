@@ -843,13 +843,11 @@ void *process_dio1(void *arg) {
     notify.sigev_notify = SIGEV_SIGNAL;
     notify.sigev_signo = signo;
 
-    /* Set up to receive signal */
-
+    //  Set up to receive signal from GPIO Interrupt (DIO1 rising edge)
     int ret = ioctl(dio1, GPIOC_REGISTER, (unsigned long)&notify);
     assert(ret >= 0);
 
-    /* Wait up to 5 seconds for the signal */
-
+    //  Wait up to 5 seconds for the signal
     sigemptyset(&set);
     sigaddset(&set, signo);
 
@@ -884,7 +882,7 @@ void *process_dio1(void *arg) {
         printf("DIO1 after=%u\n", (unsigned int)invalue);
     }
 
-    ////ioctl(fd, GPIOC_UNREGISTER, 0);
+    ////ioctl(dio1, GPIOC_UNREGISTER, 0);
     return NULL;
 }
 
