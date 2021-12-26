@@ -831,20 +831,16 @@ void *process_dio1(void *arg) {
     #define SIG_DIO1 1
     struct sigevent notify;
     notify.sigev_notify = SIGEV_SIGNAL;
-    notify.sigev_signo = SIG_DIO1;
+    notify.sigev_signo  = SIG_DIO1;
 
     //  Set up to receive signal from GPIO Interrupt (DIO1 rising edge)
     int ret = ioctl(dio1, GPIOC_REGISTER, (unsigned long)&notify);
     assert(ret >= 0);
 
-    //  Wait up to 5 seconds for the signal
+    //  Add the signal to the Signal Set
     sigset_t set;
     sigemptyset(&set);
     sigaddset(&set, SIG_DIO1);
-
-    struct timespec ts;
-    ts.tv_sec = 5;
-    ts.tv_nsec = 0;
 
     //  Loop forever waiting for the signal (DIO1 rising edge)
     for (;;) {
@@ -854,7 +850,10 @@ void *process_dio1(void *arg) {
         assert(ret >= 0);
         printf("DIO1 before=%u\n", (unsigned int)invalue);
 
-        //  Wait up to 5 seconds for the signal
+        //  Wait up to 5 seconds for the Signal Set
+        struct timespec ts;
+        ts.tv_sec = 5;
+        ts.tv_nsec = 0;
         ret = sigtimedwait(&set, NULL, &ts);
 
         if (ret >= 0) {
