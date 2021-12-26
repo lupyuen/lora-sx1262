@@ -827,6 +827,14 @@ void *process_dio1(void *arg) {
     assert(dio1 > 0);
     printf("CHILD: started with arg=%d\n", (int)((intptr_t)arg));
 
+    //  Define the DIO1 Interrupt Event
+    static struct ble_npl_event ev;
+    ble_npl_event_init(   //  Init the Event for...
+        &ev,              //  Event
+        RadioOnDioIrq,    //  Event Handler Function
+        NULL              //  Argument to be passed to Event Handler
+    );
+
     struct sigevent notify;
     struct timespec ts;
     sigset_t set;
@@ -854,12 +862,17 @@ void *process_dio1(void *arg) {
         bool invalue;
         ret = ioctl(dio1, GPIOC_READ, (unsigned long)((uintptr_t)&invalue));
         assert(ret >= 0);
-        printf("DIO1 Before=%u\n", (unsigned int)invalue);
+        printf("DIO1 before=%u\n", (unsigned int)invalue);
 
         //  Wait for the signal
         ret = sigtimedwait(&set, NULL, &ts);
-        
-        if (ret < 0) {
+
+        if (ret >= 0) {
+            //  We were signalled. Add the DIO1 Interrupt Event to the Event Queue.
+            puts("DIO1 add event");
+            ble_npl_eventq_put(&event_queue, &ev);
+        } else {
+            //  We were not signalled
             int errcode = errno;
             if (errcode == EAGAIN) { puts("DIO1 timeout"); }
             else { fprintf(stderr, "ERROR: Failed to wait signal %d: %d\n", signo, errcode); return NULL; }
@@ -868,7 +881,7 @@ void *process_dio1(void *arg) {
         //  Re-read the pin value
         ret = ioctl(dio1, GPIOC_READ, (unsigned long)((uintptr_t)&invalue));
         assert(ret >= 0);
-        printf("DIO1 After=%u\n", (unsigned int)invalue);
+        printf("DIO1 after=%u\n", (unsigned int)invalue);
     }
 
     ////ioctl(fd, GPIOC_UNREGISTER, 0);
