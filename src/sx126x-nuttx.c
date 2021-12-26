@@ -405,7 +405,7 @@ static uint32_t timer_timeout[MAX_TIMERS];  //  Timeout Value (millisecs)
  * \param [IN] millisecs New timer timeout value
  */
 void TimerSetValue( struct ble_npl_callout *timer, uint32_t millisecs ) {
-    printf("TimerSetValue: &d ms\n", millisecs);
+    printf("TimerSetValue: %ld ms\n", millisecs);
     assert(timer != NULL);
     assert(millisecs > 0);
 
@@ -452,7 +452,7 @@ void TimerStart2(
     struct ble_npl_callout *timer,  //  Pointer to timer. Cannot be NULL.
     uint32_t millisecs)             //  The number of milliseconds from now at which the timer will expire.
 {
-    printf("TimerStart2: &d ms\n", millisecs);
+    printf("TimerStart2: %ld ms\n", millisecs);
     assert(timer != NULL);
 
     //  Stop the timer if running
@@ -499,7 +499,7 @@ uint32_t TimerGetCurrentTime(void)
 
     //  Convert ticks to milliseconds
     uint32_t millisecs = ble_npl_time_ticks_to_ms32(ticks);
-    printf("TimerGetCurrentTime: %d ms\n", millisecs);
+    printf("TimerGetCurrentTime: %ld ms\n", millisecs);
 
     //  Return as microseconds
     return millisecs * 1000;
@@ -719,6 +719,15 @@ static int init_spi(void) {
     //  Open GPIO Output for SPI Chip Select
     cs = open("/dev/gpio1", O_RDWR);
     assert(cs > 0);
+
+    //  Verify that SPI Chip Select is GPIO Output (not GPIO Input or GPIO Interrupt)
+    enum gpio_pintype_e pintype;
+    int ret = ioctl(cs, GPIOC_PINTYPE, (unsigned long)((uintptr_t)&pintype));
+    assert(ret >= 0);
+    assert(
+        pintype == GPIO_OUTPUT_PIN || 
+        pintype == GPIO_OUTPUT_PIN_OPENDRAIN
+    );
     return 0;
 }
 
