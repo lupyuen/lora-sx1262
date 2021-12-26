@@ -49,6 +49,9 @@ Gpio_t DbgPinTx;
 Gpio_t DbgPinRx;
 #endif
 
+/// Event Queue containing Events to be processed
+struct ble_npl_eventq event_queue;
+
 /// SX1262 Busy Pin (GPIO Input)
 static int busy = 0;
 
