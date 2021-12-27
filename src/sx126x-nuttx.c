@@ -467,11 +467,11 @@ void TimerStart2(
     struct ble_npl_callout *timer,  //  Pointer to timer. Cannot be NULL.
     uint32_t millisecs)             //  The number of milliseconds from now at which the timer will expire.
 {
-    printf("TimerStart2:   %p, %ld ms\n", timer, millisecs);
     assert(timer != NULL);
 
     //  Stop the timer if running
     TimerStop(timer);
+    printf("TimerStart2:   %p, %ld ms\n", timer, millisecs);
 
     //  Convert milliseconds to ticks
     ble_npl_time_t ticks = ble_npl_time_ms_to_ticks32(
