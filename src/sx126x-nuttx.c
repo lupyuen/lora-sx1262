@@ -381,7 +381,7 @@ void TimerInit(
     struct ble_npl_callout *timer,  //  The timer to initialize. Cannot be NULL.
     ble_npl_event_fn *f)            //  The timer callback function. Cannot be NULL.
 {
-    _info("TimerInit\n");
+    printf("TimerInit: %p\n", timer);
     assert(timer != NULL);
     assert(f != NULL);
 
@@ -398,7 +398,7 @@ void TimerInit(
 void TimerStop(
     struct ble_npl_callout *timer)  //  Pointer to timer to stop. Cannot be NULL.
 {
-    _info("TimerStop\n");
+    printf("TimerStop: %p\n", timer);
     assert(timer != NULL);
 
     //  If Callout Timer is still running...
@@ -420,7 +420,7 @@ static uint32_t timer_timeout[MAX_TIMERS];  //  Timeout Value (millisecs)
  * \param [IN] millisecs New timer timeout value
  */
 void TimerSetValue( struct ble_npl_callout *timer, uint32_t millisecs ) {
-    _info("TimerSetValue: %ld ms\n", millisecs);
+    printf("TimerSetValue: %p, %ld ms\n", timer, millisecs);
     assert(timer != NULL);
     assert(millisecs > 0);
 
@@ -444,7 +444,7 @@ void TimerSetValue( struct ble_npl_callout *timer, uint32_t millisecs ) {
  * \param [IN] obj Structure containing the timer object parameters
  */
 void TimerStart( struct ble_npl_callout *timer ) {
-    _info("TimerStart\n");
+    printf("TimerStart: %p\n", timer);
     assert(timer != NULL);
 
     //  Find the timer in the Timer Table
@@ -467,7 +467,7 @@ void TimerStart2(
     struct ble_npl_callout *timer,  //  Pointer to timer. Cannot be NULL.
     uint32_t millisecs)             //  The number of milliseconds from now at which the timer will expire.
 {
-    _info("TimerStart2: %ld ms\n", millisecs);
+    printf("TimerStart2: %p, %ld ms\n", timer, millisecs);
     assert(timer != NULL);
 
     //  Stop the timer if running
