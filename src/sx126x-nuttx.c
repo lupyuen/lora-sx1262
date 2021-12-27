@@ -867,9 +867,9 @@ void *process_dio1(void *arg) {
         assert(ret >= 0);
         _info("DIO1 before=%u\n", (unsigned int)invalue);
 
-        //  Wait up to 5 seconds for the Signal Set
+        //  Wait up to 60 seconds for the Signal Set
         struct timespec ts;
-        ts.tv_sec = 5;
+        ts.tv_sec  = 60;
         ts.tv_nsec = 0;
         ret = sigtimedwait(&set, NULL, &ts);
 
