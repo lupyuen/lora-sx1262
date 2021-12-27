@@ -1,5 +1,6 @@
 //  LoRa SX1262 Board Functions for NuttX
 #ifdef __NuttX__  //  This file is for NuttX only
+#include <debug.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -78,7 +79,7 @@ static int init_spi(void);
 /// which initialises the GPIO Pins and SPI Port at startup.
 void SX126xIoInit( void )
 {
-    puts("SX126xIoInit");
+    _info("SX126xIoInit\n");
 
     //  Init GPIO Pins
     int rc = init_gpio();
@@ -105,7 +106,7 @@ void SX126xIoIrqInit( DioIrqHandler dioIrq )
 
 void SX126xIoDeInit( void )
 {
-    puts("SX126xIoDeInit");
+    puts("TODO: SX126xIoDeInit");
 }
 
 void SX126xIoDbgInit( void )
@@ -183,7 +184,7 @@ void SX126xReset(void)
 
 void SX126xWaitOnBusy( void )
 {
-    puts("SX126xWaitOnBusy");
+    _info("SX126xWaitOnBusy\n");
     assert(busy > 0);
 
     //  Loop until Busy Pin is Low
@@ -200,7 +201,7 @@ void SX126xWaitOnBusy( void )
 
 void SX126xWakeup( void )
 {
-    puts("SX126xWakeup");
+    _info("SX126xWakeup\n");
     CRITICAL_SECTION_BEGIN( );
 
     // Write RADIO_GET_STATUS command followed by 0
@@ -235,7 +236,7 @@ void SX126xWriteCommand( RadioCommands_t command, uint8_t *buffer, uint16_t size
 
 uint8_t SX126xReadCommand( RadioCommands_t command, uint8_t *buffer, uint16_t size )
 {
-    printf("SX126xReadCommand: command=0x%02x, size=%d\n", command, size);
+    _info("SX126xReadCommand: command=0x%02x, size=%d\n", command, size);
     uint8_t status = 0;
 
     SX126xCheckDeviceReady( );
@@ -247,7 +248,7 @@ uint8_t SX126xReadCommand( RadioCommands_t command, uint8_t *buffer, uint16_t si
     };
     int rc = sx126x_hal_read(NULL, commandStatus, sizeof(commandStatus), buffer, size, &status);
     assert(rc == 0);
-    printf("status=0x%02x\n", status);
+    _info("status=0x%02x\n", status);
 
 #ifdef NOTUSED  //  Previously...
     bl_gpio_output_set( SX126X_SPI_CS_PIN, 0 );
@@ -315,7 +316,7 @@ void SX126xReadBuffer( uint8_t offset, uint8_t *buffer, uint8_t size )
 
 void SX126xSetRfTxPower( int8_t power )
 {
-    puts("SX126xSetRfTxPower");
+    _info("SX126xSetRfTxPower\n");
     ////TODO: SX126xSetTxParams( power, RADIO_RAMP_40_US );
     SX126xSetTxParams( power, RADIO_RAMP_3400_US );////TODO
 }
@@ -323,11 +324,11 @@ void SX126xSetRfTxPower( int8_t power )
 uint8_t SX126xGetDeviceId( void )
 {
     //  For SX1262
-    puts("SX126xGetDeviceId: SX1262");
+    _info("SX126xGetDeviceId: SX1262\n");
     return SX1262;
 
     //  For SX1261
-    //  puts("SX126xGetDeviceId: SX1261");
+    //  _info("SX126xGetDeviceId: SX1261\n");
     //  return SX1261;
 }
 
@@ -380,7 +381,7 @@ void TimerInit(
     struct ble_npl_callout *timer,  //  The timer to initialize. Cannot be NULL.
     ble_npl_event_fn *f)            //  The timer callback function. Cannot be NULL.
 {
-    puts("TimerInit");
+    _info("TimerInit\n");
     assert(timer != NULL);
     assert(f != NULL);
 
@@ -397,7 +398,7 @@ void TimerInit(
 void TimerStop(
     struct ble_npl_callout *timer)  //  Pointer to timer to stop. Cannot be NULL.
 {
-    puts("TimerStop");
+    _info("TimerStop\n");
     assert(timer != NULL);
 
     //  If Callout Timer is still running...
@@ -419,7 +420,7 @@ static uint32_t timer_timeout[MAX_TIMERS];  //  Timeout Value (millisecs)
  * \param [IN] millisecs New timer timeout value
  */
 void TimerSetValue( struct ble_npl_callout *timer, uint32_t millisecs ) {
-    printf("TimerSetValue: %ld ms\n", millisecs);
+    _info("TimerSetValue: %ld ms\n", millisecs);
     assert(timer != NULL);
     assert(millisecs > 0);
 
@@ -443,7 +444,7 @@ void TimerSetValue( struct ble_npl_callout *timer, uint32_t millisecs ) {
  * \param [IN] obj Structure containing the timer object parameters
  */
 void TimerStart( struct ble_npl_callout *timer ) {
-    puts("TimerStart");
+    _info("TimerStart\n");
     assert(timer != NULL);
 
     //  Find the timer in the Timer Table
@@ -466,7 +467,7 @@ void TimerStart2(
     struct ble_npl_callout *timer,  //  Pointer to timer. Cannot be NULL.
     uint32_t millisecs)             //  The number of milliseconds from now at which the timer will expire.
 {
-    printf("TimerStart2: %ld ms\n", millisecs);
+    _info("TimerStart2: %ld ms\n", millisecs);
     assert(timer != NULL);
 
     //  Stop the timer if running
@@ -491,7 +492,6 @@ void TimerStart2(
 /// Wait until ‘millisecs’ milliseconds has elapsed. This is a blocking delay.
 void DelayMs(uint32_t millisecs)  //  The number of milliseconds to wait.
 {
-    puts("DelayMs");  ////
     //  Implement with Timer Functions from NimBLE Porting Layer.
     //  Convert milliseconds to ticks.
     ble_npl_time_t ticks = ble_npl_time_ms_to_ticks32(
@@ -513,7 +513,7 @@ uint32_t TimerGetCurrentTime(void)
 
     //  Convert ticks to milliseconds
     uint32_t millisecs = ble_npl_time_ticks_to_ms32(ticks);
-    printf("TimerGetCurrentTime: %ld ms\n", millisecs);
+    _info("TimerGetCurrentTime: %ld ms\n", millisecs);
 
     //  Return as microseconds
     return millisecs * 1000;
@@ -522,7 +522,6 @@ uint32_t TimerGetCurrentTime(void)
 /// Return elased time in microseconds
 uint32_t TimerGetElapsedTime(uint32_t saved_time)
 {
-    puts("TimerGetElapsedTime");
     return TimerGetCurrentTime() - saved_time;
 }
 
@@ -620,7 +619,7 @@ void *process_dio1(void *arg);
 static int sx126x_hal_write( 
     const void* context, const uint8_t* command, const uint16_t command_length,
     const uint8_t* data, const uint16_t data_length ) {
-    printf("sx126x_hal_write: command_length=%d, data_length=%d\n", command_length, data_length);
+    _info("sx126x_hal_write: command_length=%d, data_length=%d\n", command_length, data_length);
 
     //  Total length is command + data length
     uint16_t len = command_length + data_length;
@@ -660,7 +659,7 @@ static int sx126x_hal_write(
 static int sx126x_hal_read( 
     const void* context, const uint8_t* command, const uint16_t command_length,
     uint8_t* data, const uint16_t data_length, uint8_t *status ) {
-    printf("sx126x_hal_read: command_length=%d, data_length=%d\n", command_length, data_length);
+    _info("sx126x_hal_read: command_length=%d, data_length=%d\n", command_length, data_length);
 
     //  Total length is command + data length
     uint16_t len = command_length + data_length;
@@ -810,7 +809,7 @@ static int transfer_spi(const uint8_t *tx_buf, uint8_t *rx_buf, uint16_t len) {
     assert(cs  > 0);
     assert(len > 0);
     assert(len <= SPI_BUFFER_SIZE);
-    printf("spi tx: "); for (int i = 0; i < len; i++) { printf("%02x ", tx_buf[i]); } printf("\n");
+    _info("spi tx: "); for (int i = 0; i < len; i++) { _info("%02x ", tx_buf[i]); } _info("\n");
 
     //  Set SPI Chip Select to Low
     int ret = ioctl(cs, GPIOC_WRITE, 0);
@@ -828,7 +827,7 @@ static int transfer_spi(const uint8_t *tx_buf, uint8_t *rx_buf, uint16_t len) {
     ret = ioctl(cs, GPIOC_WRITE, 1);
     assert(ret >= 0);
 
-    printf("spi rx: "); for (int i = 0; i < len; i++) { printf("%02x ", rx_buf[i]); } printf("\n");
+    _info("spi rx: "); for (int i = 0; i < len; i++) { _info("%02x ", rx_buf[i]); } _info("\n");
     return 0;
 }
 
@@ -866,7 +865,7 @@ void *process_dio1(void *arg) {
         bool invalue;
         ret = ioctl(dio1, GPIOC_READ, (unsigned long)((uintptr_t)&invalue));
         assert(ret >= 0);
-        printf("DIO1 before=%u\n", (unsigned int)invalue);
+        _info("DIO1 before=%u\n", (unsigned int)invalue);
 
         //  Wait up to 5 seconds for the Signal Set
         struct timespec ts;
@@ -888,7 +887,7 @@ void *process_dio1(void *arg) {
         //  Re-read the pin value
         ret = ioctl(dio1, GPIOC_READ, (unsigned long)((uintptr_t)&invalue));
         assert(ret >= 0);
-        printf("DIO1 after=%u\n", (unsigned int)invalue);
+        _info("DIO1 after=%u\n", (unsigned int)invalue);
     }
 
     ////ioctl(dio1, GPIOC_UNREGISTER, 0);
