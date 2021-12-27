@@ -843,6 +843,7 @@ void *process_dio1(void *arg) {
         RadioOnDioIrq,    //  Event Handler Function
         NULL              //  Argument to be passed to Event Handler
     );
+    printf("process_dio1: event=%p\n", &ev);
 
     //  Define the signal
     #define SIG_DIO1 1
