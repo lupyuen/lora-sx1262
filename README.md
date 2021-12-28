@@ -19,8 +19,34 @@ Read the articles...
 __For Apache NuttX OS:__ To add this driver to an existing NuttX project:
 
 ```bash
+## Assume that spi_test_driver has been installed:
+## https://github.com/lupyuen/incubator-nuttx/blob/master/drivers/rf/spi_test_driver.c
+
+## Add this repo as libsx1262 submodule
 cd nuttx/nuttx/libs
-git submodule add --branch nuttx https://github.com/lupyuen/lora-sx1262 libsx1262
+git submodule add --branch lorawan https://github.com/lupyuen/lora-sx1262 libsx1262
+cd ..
+
+## Preserve the Build Config
+cp .config ../config
+
+## Erase the Build Config and Kconfig files
+make distclean
+
+## For BL602: Configure the build for BL602
+./tools/configure.sh bl602evb:nsh
+
+## For ESP32: Configure the build for ESP32.
+## TODO: Change "esp32-devkitc" to our ESP32 board.
+./tools/configure.sh esp32-devkitc:nsh
+
+## Restore the Build Config
+cp ../config .config
+
+## Edit the Build Config
+make menuconfig 
+
+## In menuconfig, enable the Semtech SX1262 Library under "Libraries".
 ```
 
 __For BL602 / BL604:__ To add this driver to an existing BL602 / BL604 project:
