@@ -8,6 +8,8 @@ Read the articles...
 
 -   ["LoRa SX1262 on Apache NuttX OS"](https://lupyuen.github.io/articles/sx1262)
 
+-   ["SPI on Apache NuttX OS"](https://lupyuen.github.io/articles/spi2)
+
 -   ["Build a Linux Driver for PineDio LoRa SX1262 USB Adapter"](https://lupyuen.github.io/articles/usb)
 
 -   ["LoRaWAN on PineDio Stack BL604 RISC-V Board"](https://lupyuen.github.io/articles/lorawan2)
@@ -19,8 +21,9 @@ Read the articles...
 __For Apache NuttX OS:__ To add this driver to an existing NuttX project:
 
 ```bash
-## Assume that spi_test_driver has been installed:
-## https://github.com/lupyuen/incubator-nuttx/blob/master/drivers/rf/spi_test_driver.c
+## Assume that the dependencies have been installed:
+## nimble-porting-nuttx: https://github.com/lupyuen/nimble-porting-nuttx
+## spi_test_driver: https://github.com/lupyuen/incubator-nuttx/blob/master/drivers/rf/spi_test_driver.c
 
 ## Add this repo as libsx1262 submodule
 cd nuttx/nuttx/libs
