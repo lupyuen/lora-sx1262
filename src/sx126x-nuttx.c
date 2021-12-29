@@ -756,7 +756,7 @@ static int init_gpio(void) {
     ret = ioctl(dio1, GPIOC_SETPINTYPE, (unsigned long) GPIO_INTERRUPT_RISING_PIN);
     assert(ret >= 0);
 
-    //  Set SX1262 DIO1 Pin Type to GPIO Interrupt on Rising Edge
+    //  Get SX1262 DIO1 Pin Type again
     ret = ioctl(dio1, GPIOC_PINTYPE, (unsigned long)((uintptr_t)&pintype));
     assert(ret >= 0);
     printf("DIO1 pintype after=%d\n", pintype);
