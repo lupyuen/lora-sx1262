@@ -250,21 +250,6 @@ uint8_t SX126xReadCommand( RadioCommands_t command, uint8_t *buffer, uint16_t si
     assert(rc == 0);
     _info("status=0x%02x\n", status);
 
-#ifdef NOTUSED  //  Previously...
-    bl_gpio_output_set( SX126X_SPI_CS_PIN, 0 );
-    if (SX126X_DEBUG_CS_PIN >= 0) { bl_gpio_output_set( SX126X_DEBUG_CS_PIN, 0 ); }
-
-    SpiInOut( SX126X_SPI_IDX, ( uint8_t )command );
-    status = SpiInOut( SX126X_SPI_IDX, 0x00 );
-    for( uint16_t i = 0; i < size; i++ )
-    {
-        buffer[i] = SpiInOut( SX126X_SPI_IDX, 0 );
-    }
-
-    bl_gpio_output_set( SX126X_SPI_CS_PIN, 1 );
-    if (SX126X_DEBUG_CS_PIN >= 0) { bl_gpio_output_set( SX126X_DEBUG_CS_PIN, 1 ); }
-#endif  //  NOTUSED
-
     SX126xWaitOnBusy( );
 
     return status;
@@ -317,8 +302,17 @@ void SX126xReadBuffer( uint8_t offset, uint8_t *buffer, uint8_t size )
 void SX126xSetRfTxPower( int8_t power )
 {
     _info("SX126xSetRfTxPower\n");
-    ////TODO: SX126xSetTxParams( power, RADIO_RAMP_40_US );
-    SX126xSetTxParams( power, RADIO_RAMP_3400_US );////TODO
+
+    //  TODO: If we're done with troubleshooting
+    //  the Transmit Power, remember to 
+    //  switch the Power Ramp Up Time from
+    //  3,400 microsecs back to the default 
+    //  40 microsecs.
+    SX126xSetTxParams( power, RADIO_RAMP_3400_US );
+
+    //  Previously:
+    //  Power Ramp Up Time is 40 microsecs
+    //  SX126xSetTxParams( power, RADIO_RAMP_40_US );
 }
 
 uint8_t SX126xGetDeviceId( void )
@@ -354,11 +348,16 @@ bool SX126xCheckRfFrequency( uint32_t frequency )
 
 uint32_t SX126xGetDio1PinState( void )
 {
-    puts("TODO: SX126xGetDio1PinState");
-    return 0;
-#ifdef TODO
-    return bl_gpio_input_get_value( SX126X_DIO1 );
-#endif  //  TODO
+    //  Return the value of DIO1 Pin
+    assert(dio1 > 0);
+
+    //  Read the GPIO Input
+    bool invalue;
+    int ret = ioctl(dio1, GPIOC_READ, (unsigned long)((uintptr_t)&invalue));
+    assert(ret >= 0);
+
+    //  Return the value: 1 or 0
+    return invalue ? 1 : 0;
 }
 
 #if defined( USE_RADIO_DEBUG )
@@ -372,6 +371,7 @@ static void SX126xDbgPinRxWrite( uint8_t state )
     bl_gpio_output_set( SX126X_DBG_PIN_RX, state );
 }
 #endif
+
 
 ///////////////////////////////////////////////////////////////////////////////
 //  Timer Functions
