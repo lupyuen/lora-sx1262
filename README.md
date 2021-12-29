@@ -23,7 +23,10 @@ __For Apache NuttX OS:__ To add this driver to an existing NuttX project:
 ```bash
 ## Assume that the dependencies have been installed:
 ## nimble-porting-nuttx: https://github.com/lupyuen/nimble-porting-nuttx
-## spi_test_driver: https://github.com/lupyuen/incubator-nuttx/blob/master/drivers/rf/spi_test_driver.c
+## spi_test_driver (/dev/spitest0): https://github.com/lupyuen/incubator-nuttx/tree/lorawan/drivers/rf
+## /dev/gpio0: GPIO Input for SX1262 Busy Pin
+## /dev/gpio1: GPIO Output for SX1262 Chip Select
+## /dev/gpio2: GPIO Interrupt for SX1262 DIO1 Pin
 
 ## Add this repo as libsx1262 submodule
 cd nuttx/nuttx/libs
