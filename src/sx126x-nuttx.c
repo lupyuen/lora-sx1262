@@ -100,8 +100,8 @@ void SX126xIoIrqInit( DioIrqHandler dioIrq )
     //  which initialises the GPIO Pins and SPI Port at startup.
     SX126xIoInit();
 
-    //  TODO: Register GPIO Interrupt Handler for DIO1
-    puts("TODO: SX126X interrupt init");
+    //  SX126xIoInit calls init_gpio,
+    //  which starts the DIO1 interrupt handler
 }
 
 void SX126xIoDeInit( void )
