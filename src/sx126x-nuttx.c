@@ -50,9 +50,6 @@ Gpio_t DbgPinTx;
 Gpio_t DbgPinRx;
 #endif
 
-/// Event Queue containing Events to be processed
-struct ble_npl_eventq event_queue;
-
 /// SX1262 Busy Pin (GPIO Input)
 static int busy = 0;
 
@@ -69,6 +66,7 @@ static int sx126x_hal_write(
 static int sx126x_hal_read( 
     const void* context, const uint8_t* command, const uint16_t command_length,
     uint8_t* data, const uint16_t data_length, uint8_t *status );
+static void init_event_queue(void);
 static int init_gpio(void);
 static int init_spi(void);
 
@@ -81,10 +79,12 @@ void SX126xIoInit( void )
 {
     _info("SX126xIoInit\n");
 
-    //  Init the Event Queue
-    ble_npl_eventq_init(&event_queue);
+    //  Init the Event Queue if not initialised. 
+    //  TimerInit is called before SX126xIoInit, 
+    //  so the Event Queue should already be initialised.
+    init_event_queue();
 
-    //  Init GPIO Pins
+    //  Init GPIO Pins. Event Queue must be initialised before this.
     int rc = init_gpio();
     assert(rc == 0);
 
@@ -376,13 +376,23 @@ static void SX126xDbgPinRxWrite( uint8_t state )
 ///////////////////////////////////////////////////////////////////////////////
 //  Timer Functions
 
+/// Timer Table: Maps Timer Address to Timeout Value (millisecs)
+#define MAX_TIMERS 32  //  Max number of timers allowed
+static struct ble_npl_callout *timer_addr[MAX_TIMERS];  //  Timer Address
+static uint32_t timer_timeout[MAX_TIMERS];  //  Timeout Value (millisecs)
+
 /// Initialise a timer
 void TimerInit(
     struct ble_npl_callout *timer,  //  The timer to initialize. Cannot be NULL.
     ble_npl_event_fn *f)            //  The timer callback function. Cannot be NULL.
 {
+    //  Init the Event Queue if not initialised.
+    //  TimerInit is called before SX126xIoInit,
+    //  so we need to init the Event Queue here.
+    init_event_queue();
+
     printf("TimerInit:     %p\n", timer);
-    assert(timer != NULL);
+    assert(timer != NULL); 
     assert(f != NULL);
 
     //  Init the Callout Timer with the Callback Function
@@ -408,18 +418,11 @@ void TimerStop(
     }
 }
 
-/// Timer Table: Maps Timer Address to Timeout Value (millisecs)
-#define MAX_TIMERS 32
-static struct ble_npl_callout *timer_addr[MAX_TIMERS];  //  Timer Address
-static uint32_t timer_timeout[MAX_TIMERS];  //  Timeout Value (millisecs)
-
-/*!
- * \brief Set timer new timeout value
- *
- * \param [IN] obj   Structure containing the timer object parameters
- * \param [IN] millisecs New timer timeout value
- */
-void TimerSetValue( struct ble_npl_callout *timer, uint32_t millisecs ) {
+/// Set timer new timeout value
+void TimerSetValue( 
+    struct ble_npl_callout *timer,  //  Pointer to timer. Cannot be NULL.
+    uint32_t millisecs)             //  The number of milliseconds from now at which the timer will expire.
+{
     printf("TimerSetValue: %p, %ld ms\n", timer, millisecs);
     assert(timer != NULL);
     assert(millisecs > 0);
@@ -438,12 +441,10 @@ void TimerSetValue( struct ble_npl_callout *timer, uint32_t millisecs ) {
     timer_timeout[i] = millisecs;
 }
 
-/*!
- * \brief Starts and adds the timer object to the list of timer events
- *
- * \param [IN] obj Structure containing the timer object parameters
- */
-void TimerStart( struct ble_npl_callout *timer ) {
+/// Start a timer that will expire ‘millisecs’ milliseconds from the current time, as defined by TimerSetValue
+void TimerStart( 
+    struct ble_npl_callout *timer)  //  Pointer to timer. Cannot be NULL.
+{
     printf("TimerStart:    %p\n", timer);
     assert(timer != NULL);
 
@@ -462,7 +463,7 @@ void TimerStart( struct ble_npl_callout *timer ) {
     TimerStart2(timer, millisecs);
 }
 
-/// Sets a timer that will expire ‘millisecs’ milliseconds from the current time.
+/// Start a timer that will expire ‘millisecs’ milliseconds from the current time.
 void TimerStart2(
     struct ble_npl_callout *timer,  //  Pointer to timer. Cannot be NULL.
     uint32_t millisecs)             //  The number of milliseconds from now at which the timer will expire.
@@ -492,7 +493,6 @@ void TimerStart2(
 /// Wait until ‘millisecs’ milliseconds has elapsed. This is a blocking delay.
 void DelayMs(uint32_t millisecs)  //  The number of milliseconds to wait.
 {
-    //  Implement with Timer Functions from NimBLE Porting Layer.
     //  Convert milliseconds to ticks.
     ble_npl_time_t ticks = ble_npl_time_ms_to_ticks32(
         millisecs  //  Duration in milliseconds
@@ -893,6 +893,26 @@ void *process_dio1(void *arg) {
 
     ////ioctl(dio1, GPIOC_UNREGISTER, 0);
     return NULL;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//  Event Queue
+
+/// Event Queue containing Events to be processed. Exposed to NuttX App for Event Loop.
+struct ble_npl_eventq event_queue;
+
+/// True if Event Queue has been initialised
+static bool is_event_queue_initialised = false;
+
+/// Init the Event Queue
+static void init_event_queue(void) {
+    //  Init only once
+    if (is_event_queue_initialised) { return; }
+    is_event_queue_initialised = true;
+    puts("init_event_queue");
+
+    //  Init the Event Queue
+    ble_npl_eventq_init(&event_queue);
 }
 
 #endif  //  __NuttX__
