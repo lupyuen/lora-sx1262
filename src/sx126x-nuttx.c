@@ -81,6 +81,9 @@ void SX126xIoInit( void )
 {
     _info("SX126xIoInit\n");
 
+    //  Init the Event Queue
+    ble_npl_eventq_init(&event_queue);
+
     //  Init GPIO Pins
     int rc = init_gpio();
     assert(rc == 0);
@@ -99,9 +102,6 @@ void SX126xIoIrqInit( DioIrqHandler dioIrq )
     //  Note: This is different from the Reference Implementation,
     //  which initialises the GPIO Pins and SPI Port at startup.
     SX126xIoInit();
-
-    //  SX126xIoInit calls init_gpio,
-    //  which starts the DIO1 interrupt handler
 }
 
 void SX126xIoDeInit( void )
