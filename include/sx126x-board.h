@@ -30,7 +30,7 @@ extern "C"
 
 #include <stdint.h>
 #include <stdbool.h>
-#include "../../libnpl/nimble/include/nimble/nimble_npl.h"  //  For NimBLE Porting Layer (timer functions)
+#include "../libs/libnpl/nimble/include/nimble/nimble_npl.h"  //  For NimBLE Porting Layer (timer functions)
 #include "sx126x.h"
 
 #define SX126X_TCXO_WAKEUP_TIME  5  //  Time required for the TCXO to wakeup (milliseconds)
