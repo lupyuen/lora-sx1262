@@ -29,6 +29,7 @@ __For Apache NuttX OS:__ To add this driver to an existing NuttX project:
 ## /dev/gpio0: GPIO Input for SX1262 Busy Pin
 ## /dev/gpio1: GPIO Output for SX1262 Chip Select
 ## /dev/gpio2: GPIO Interrupt for SX1262 DIO1 Pin
+## Disable the Assertion Check for GPIO Pin Type: https://lupyuen.github.io/articles/sx1262#appendix-gpio-pin-type-issue
 
 ## Add this repo as libsx1262 submodule
 cd nuttx/nuttx/libs
@@ -54,7 +55,7 @@ cp ../config .config
 ## Edit the Build Config
 make menuconfig 
 
-## In menuconfig, enable the Semtech SX1262 Library under "Libraries".
+## In menuconfig, enable the Semtech SX1262 Library under "Library Routines".
 ```
 
 __For BL602 / BL604:__ To add this driver to an existing BL602 / BL604 project:
