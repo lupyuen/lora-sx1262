@@ -187,8 +187,8 @@ void SX126xWaitOnBusy( void )
     _info("SX126xWaitOnBusy\n");
     assert(busy > 0);
 
-    //  Loop until Busy Pin is Low
-    for (;;) {
+    //  Loop until Busy Pin is Low, but stop after 1,000 tries so we won't get stuck here
+    for (int i = 0; i < 1000; i++) {
         //  Read Busy Pin
         bool invalue;
         int ret = ioctl(busy, GPIOC_READ, (unsigned long)((uintptr_t)&invalue));
