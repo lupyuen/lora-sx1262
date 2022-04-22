@@ -15,6 +15,34 @@
 #include "../include/sx126x.h"
 #include "../include/sx126x-board.h"
 
+//  Define the SPI Test Driver for SX1262. (Not the regular SPI Driver)
+
+#ifdef CONFIG_LIBSX1262_SPI_DEVPATH
+#define SPI_DEVPATH CONFIG_LIBSX1262_SPI_DEVPATH
+#else
+#define SPI_DEVPATH "/dev/spitest0"
+#endif  //  CONFIG_LIBSX1262_SPI_DEVPATH
+
+//  Define the GPIOs for SX1262 Chip Select (Output), Busy (Input) and DIO1 (Interrupt)
+
+#ifdef CONFIG_LIBSX1262_CS_DEVPATH
+#define CS_DEVPATH CONFIG_LIBSX1262_CS_DEVPATH
+#else
+#define CS_DEVPATH "/dev/gpio1"
+#endif  //  CONFIG_LIBSX1262_CS_DEVPATH
+
+#ifdef CONFIG_LIBSX1262_BUSY_DEVPATH
+#define BUSY_DEVPATH CONFIG_LIBSX1262_BUSY_DEVPATH
+#else
+#define BUSY_DEVPATH "/dev/gpio0"
+#endif  //  CONFIG_LIBSX1262_BUSY_DEVPATH
+
+#ifdef CONFIG_LIBSX1262_DIO1_DEVPATH
+#define DIO1_DEVPATH CONFIG_LIBSX1262_DIO1_DEVPATH
+#else
+#define DIO1_DEVPATH "/dev/gpio2"
+#endif  //  CONFIG_LIBSX1262_DIO1_DEVPATH
+
 #if defined( USE_RADIO_DEBUG )
 /*!
  * \brief Writes new Tx debug pin state
@@ -727,7 +755,7 @@ static int init_gpio(void) {
     puts("init_gpio");
 
     //  Open GPIO Input for SX1262 Busy Pin
-    busy = open("/dev/gpio0", O_RDWR);
+    busy = open(BUSY_DEVPATH, O_RDWR);
     assert(busy > 0);
 
     //  Get SX1262 Busy Pin Type
@@ -739,7 +767,7 @@ static int init_gpio(void) {
     assert(pintype == GPIO_INPUT_PIN);  //  No pullup / pulldown
 
     //  Open GPIO Interrupt for SX1262 DIO1 Pin
-    dio1 = open("/dev/gpio2", O_RDWR);
+    dio1 = open(DIO1_DEVPATH, O_RDWR);
     assert(dio1 > 0);
 
     //  Get SX1262 DIO1 Pin Type
@@ -784,11 +812,11 @@ static int init_spi(void) {
     puts("init_spi");
 
     //  Open the SPI Bus (SPI Test Driver)
-    spi = open("/dev/spitest0", O_RDWR);
+    spi = open(SPI_DEVPATH, O_RDWR);
     assert(spi > 0);
 
     //  Open GPIO Output for SPI Chip Select
-    cs = open("/dev/gpio1", O_RDWR);
+    cs = open(CS_DEVPATH, O_RDWR);
     assert(cs > 0);
 
     //  Get SPI Chip Select Pin Type
