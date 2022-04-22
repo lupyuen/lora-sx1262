@@ -43,6 +43,13 @@
 #define DIO1_DEVPATH "/dev/gpio2"
 #endif  //  CONFIG_LIBSX1262_DIO1_DEVPATH
 
+//  Disable logging by default
+
+#ifndef CONFIG_LIBSX1262_DEBUG
+#undef  _info
+#define _info(...)
+#endif  //  CONFIG_LIBSX1262_DEBUG
+
 #if defined( USE_RADIO_DEBUG )
 /*!
  * \brief Writes new Tx debug pin state
