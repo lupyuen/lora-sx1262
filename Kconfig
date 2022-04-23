@@ -12,16 +12,33 @@ menuconfig LIBSX1262
 if LIBSX1262
 
 config LIBSX1262_DEBUG
-	bool "Libsx1262 debugging"
+	bool "Semtech SX1262 debugging"
 	default n
 	---help---
-		Enable debugging for libsx1262
+		Enable debugging for Semtech SX1262
 
-config LIBSX1262_PRECISION
-	int "Libsx1262 precision [0/1/2]"
-	default 0
+config LIBSX1262_SPI_DEVPATH
+	string "Semtech SX1262 SPI Test device path"
+	default "/dev/spitest0"
+	---help---
+		Path to the SPI Test Driver for Semtech SX1262 Chip Select. (Not the regular SPI Driver) Default: "/dev/spitest0"
 
-config LIBSX1262_FOC_VABC
-	bool "Libsx1262 FOC includes voltage abc frame"
+config LIBSX1262_CS_DEVPATH
+	string "Semtech SX1262 Chip Select device path"
+	default "/dev/gpio1"
+	---help---
+		Path to the GPIO Output for Semtech SX1262 Chip Select. Default: "/dev/gpio1"
+
+config LIBSX1262_BUSY_DEVPATH
+	string "Semtech SX1262 Busy device path"
+	default "/dev/gpio0"
+	---help---
+		Path to the GPIO Input for Semtech SX1262 Busy. Default: "/dev/gpio0"
+
+config LIBSX1262_DIO1_DEVPATH
+	string "Semtech SX1262 DIO1 device path"
+	default "/dev/gpio2"
+	---help---
+		Path to the GPIO Interrupt for Semtech SX1262 DIO1. Default: "/dev/gpio2"
 
 endif # LIBSX1262
