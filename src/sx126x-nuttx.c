@@ -119,10 +119,8 @@ static int init_spi(void);
 void SX126xIoInit( void )
 {
 #ifdef __clang__
-#warning Compiled with zig cc
     puts("SX126xIoInit: Compiled with zig cc");
 #else
-#warning Compiled with gcc
     puts("SX126xIoInit: Compiled with gcc");
 #endif  //  __clang__
     _info("SX126xIoInit\n");
