@@ -1115,7 +1115,7 @@ void RadioStandby( void )
 
 void RadioRx( uint32_t timeout )
 {
-    printf("RadioRx\r\n");
+    printf("RadioRx: timeout=%lu\r\n", timeout);
     SX126xSetDioIrqParams( IRQ_RADIO_ALL, //IRQ_RX_DONE | IRQ_RX_TX_TIMEOUT,
                            IRQ_RADIO_ALL, //IRQ_RX_DONE | IRQ_RX_TX_TIMEOUT,
                            IRQ_RADIO_NONE,
