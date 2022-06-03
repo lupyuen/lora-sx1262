@@ -1,5 +1,11 @@
 //  LoRa SX1262 Board Functions for NuttX
 #ifdef __NuttX__  //  This file is for NuttX only
+
+#if defined(__NuttX__) && defined(__clang__)  //  Workaround for NuttX with zig cc
+#include <arch/types.h>
+#include "../../nuttx/include/limits.h"
+#endif  //  defined(__NuttX__) && defined(__clang__)
+
 #include <debug.h>
 #include <stdio.h>
 #include <string.h>
@@ -112,6 +118,13 @@ static int init_spi(void);
 /// which initialises the GPIO Pins and SPI Port at startup.
 void SX126xIoInit( void )
 {
+#ifdef __clang__
+#warning Compiled with zig cc
+    puts("SX126xIoInit: Compiled with zig cc");
+#else
+#warning Compiled with gcc
+    puts("SX126xIoInit: Compiled with gcc");
+#endif  //  __clang__
     _info("SX126xIoInit\n");
 
     //  Init the Event Queue if not initialised. 

@@ -20,7 +20,11 @@
  *
  * \author    Gregory Cristian ( Semtech )
  */
-#include <math.h>
+#if defined(__NuttX__) && defined(__clang__)  //  Workaround for NuttX with zig cc
+#include <arch/types.h>
+#include "../../nuttx/include/limits.h"
+#endif  //  defined(__NuttX__) && defined(__clang__)
+
 #include <string.h>
 #include <assert.h>
 #include <stdio.h>

@@ -30,7 +30,6 @@ extern "C"
 
 #include <stdint.h>
 #include <stdbool.h>
-#include <math.h>
 #include "radio.h"
 
 //  GPIO and SPI definitions for BL602

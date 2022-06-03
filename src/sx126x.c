@@ -20,6 +20,11 @@
  *
  * \author    Gregory Cristian ( Semtech )
  */
+#if defined(__NuttX__) && defined(__clang__)  //  Workaround for NuttX with zig cc
+#include <arch/types.h>
+#include "../../nuttx/include/limits.h"
+#endif  //  defined(__NuttX__) && defined(__clang__)
+
 #include <stdio.h>
 #include <string.h>
 #include "../include/sx126x-utilities.h"
