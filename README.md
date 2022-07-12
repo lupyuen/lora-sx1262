@@ -12,7 +12,15 @@ Read the articles...
 
 -   ["SPI on Apache NuttX OS"](https://lupyuen.github.io/articles/spi2)
 
+-   ["PineDio Stack BL604 runs Apache NuttX RTOS"](https://lupyuen.github.io/articles/pinedio2)
+
+-   ["Build an IoT App with Zig and LoRaWAN"](https://lupyuen.github.io/articles/iot)
+
+For PineDio USB Adapter...
+
 -   ["Build a Linux Driver for PineDio LoRa SX1262 USB Adapter"](https://lupyuen.github.io/articles/usb)
+
+For BL602 IoT SDK...
 
 -   ["LoRaWAN on PineDio Stack BL604 RISC-V Board"](https://lupyuen.github.io/articles/lorawan2)
 
