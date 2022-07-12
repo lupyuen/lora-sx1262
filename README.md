@@ -2,6 +2,8 @@
 
 ![PineDio LoRa USB Adapter](https://lupyuen.github.io/images/usb-pinedio.jpg)
 
+[__For SX1262 on Apache NuttX RTOS, see the `lorawan` branch__](https://github.com/lupyuen/lora-sx1262/tree/lorawan)
+
 Read the articles...
 
 -   ["Build a Linux Driver for PineDio LoRa SX1262 USB Adapter"](https://lupyuen.github.io/articles/usb)
